@@ -304,18 +304,6 @@ export default function ClientDetail() {
                   <div className="mt-6">
                     <SustainabilityBadges clientId={client.id} />
                   </div>
-                  
-                  {/* Quick Upload */}
-                  <div className="mt-6">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>Subir Documento</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <FileUploader clientId={client.id} />
-                      </CardContent>
-                    </Card>
-                  </div>
                 </div>
               </div>
             </TabsContent>
