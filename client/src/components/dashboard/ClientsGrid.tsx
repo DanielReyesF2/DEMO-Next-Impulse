@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Building2, FileText, ChevronRight, BarChart2, AlertTriangle } from 'lucide-react';
+import { Building2, FileText, ChevronRight, BarChart2, AlertTriangle, RecycleIcon, Percent } from 'lucide-react';
 import { Client } from '@shared/schema';
 import { Link } from 'wouter';
 
@@ -49,6 +49,7 @@ export default function ClientsGrid({ selectedCategory, selectedPeriod }: Client
     inorganicWaste: number;
     recyclableWaste: number;
     totalWaste: number;
+    deviation: number;
     rawData: Record<string, any[]>;
   }
 
@@ -81,6 +82,19 @@ export default function ClientsGrid({ selectedCategory, selectedPeriod }: Client
   const getClientTotalWaste = (clientId: number) => {
     const clientWasteData = wasteData.filter((data) => data.clientId === clientId);
     return clientWasteData.reduce((sum: number, item) => sum + item.totalWaste, 0);
+  };
+  
+  const getClientDeviation = (clientId: number) => {
+    const clientWasteData = wasteData.filter((data) => data.clientId === clientId);
+    // If no data, return null
+    if (clientWasteData.length === 0) return null;
+    
+    // Get the latest waste data entry's deviation
+    const sortedData = [...clientWasteData].sort((a, b) => 
+      new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+    
+    return sortedData[0].deviation;
   };
 
   if (isLoading) {
@@ -123,6 +137,7 @@ export default function ClientsGrid({ selectedCategory, selectedPeriod }: Client
         const documentsCount = getClientDocumentsCount(client.id);
         const alertsCount = getClientAlertsCount(client.id);
         const totalWaste = getClientTotalWaste(client.id);
+        const deviation = getClientDeviation(client.id);
         
         return (
           <Card key={client.id} className="overflow-hidden transition-shadow hover:shadow-lg">
@@ -136,19 +151,16 @@ export default function ClientsGrid({ selectedCategory, selectedPeriod }: Client
               <CardDescription className="line-clamp-2">{client.description}</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 gap-4 my-2">
+              <div className="grid grid-cols-1 gap-4 my-2">
                 <div className="flex items-center">
-                  <FileText className="h-4 w-4 mr-2 text-blue-500" />
+                  <Percent className="h-5 w-5 mr-2 text-lime-500" />
                   <div>
-                    <p className="text-xs text-gray-500">Documentos</p>
-                    <p className="font-semibold">{documentsCount}</p>
-                  </div>
-                </div>
-                <div className="flex items-center">
-                  <BarChart2 className="h-4 w-4 mr-2 text-green-500" />
-                  <div>
-                    <p className="text-xs text-gray-500">Residuos</p>
-                    <p className="font-semibold">{totalWaste > 0 ? `${totalWaste.toFixed(1)} ton` : 'Sin datos'}</p>
+                    <p className="text-xs text-gray-500">Desviación de relleno sanitario</p>
+                    <p className="font-semibold">
+                      {deviation !== null 
+                        ? `${deviation}%` 
+                        : 'Sin datos'}
+                    </p>
                   </div>
                 </div>
               </div>
