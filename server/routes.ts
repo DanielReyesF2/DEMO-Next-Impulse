@@ -6,14 +6,12 @@ import path from "path";
 import fs from "fs";
 import { insertDocumentSchema, insertWasteDataSchema, insertAlertSchema } from "@shared/schema";
 import { z } from "zod";
+import { processPDFDocument } from './pdf-processor';
 
 // Simple type for error handling
 type ProcessingError = {
   message: string;
 }
-
-// Use a different PDF parsing approach for now to avoid PDF.js ES module issues
-// This is a simplified version that just uses text extraction
 
 // Configure multer for file uploads
 const upload = multer({
@@ -43,45 +41,6 @@ const upload = multer({
     cb(null, true);
   }
 });
-
-// Function to process uploaded documents
-// For now, we're using a simple approach without PDF.js to avoid ES module issues
-async function processDocument(filePath: string): Promise<{
-  organicWaste: number;
-  inorganicWaste: number;
-  recyclableWaste: number;
-  totalWaste: number;
-  date: Date;
-  rawData: Record<string, [string]>;
-}> {
-  try {
-    // For now, return simulated data based on file size
-    // In a production system, this would use a proper PDF parsing library
-    const fileStats = fs.statSync(filePath);
-    const fileSizeKB = Math.floor(fileStats.size / 1024);
-    
-    // Generate some basic sample data proportional to file size
-    const organicWaste = Math.floor(fileSizeKB * 0.4);
-    const inorganicWaste = Math.floor(fileSizeKB * 0.3);
-    const recyclableWaste = Math.floor(fileSizeKB * 0.2);
-    const totalWaste = organicWaste + inorganicWaste + recyclableWaste;
-    
-    return {
-      organicWaste,
-      inorganicWaste,
-      recyclableWaste,
-      totalWaste,
-      date: new Date(),
-      // Format rawData to match schema requirements
-      rawData: {
-        fileInfo: [`Processed file: ${path.basename(filePath)}, size: ${fileSizeKB}KB`]
-      }
-    };
-  } catch (error) {
-    console.error("Error processing document:", error);
-    throw new Error(`Failed to process document: ${(error as Error).message}`);
-  }
-}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get all clients
@@ -141,27 +100,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Start document processing
       try {
-        const wasteData = await processDocument(req.file.path);
+        // Usar nuestro nuevo procesador de PDF
+        const wasteData = await processPDFDocument(req.file.path, clientId, document.id);
         
-        // Save extracted waste data
-        const savedWasteData = await storage.createWasteData({
-          organicWaste: wasteData.organicWaste,
-          inorganicWaste: wasteData.inorganicWaste,
-          recyclableWaste: wasteData.recyclableWaste,
-          totalWaste: wasteData.totalWaste,
-          documentId: document.id,
-          clientId,
-          date: wasteData.date,
-          rawData: wasteData.rawData
-        });
+        if (!wasteData) {
+          throw new Error("No se pudieron extraer datos del documento");
+        }
         
         // Mark document as processed
         await storage.updateDocument(document.id, { processed: true });
         
         res.status(201).json({ 
           document, 
-          wasteData: savedWasteData,
-          message: "Document uploaded and processed successfully" 
+          wasteData,
+          message: "Documento subido y procesado exitosamente" 
         });
         
       } catch (error) {
