@@ -154,12 +154,12 @@ export default function ClientsGrid({ selectedCategory, selectedPeriod }: Client
               </div>
             </CardContent>
             <CardFooter className="bg-gray-50 border-t border-gray-100">
-              <Link href={`/clients/${client.id}`} className="w-full">
-                <Button variant="ghost" className="w-full justify-between">
+              <Button variant="ghost" className="w-full justify-between" asChild>
+                <Link href={`/clients/${client.id}`}>
                   <span>Ver detalles del cliente</span>
                   <ChevronRight className="h-4 w-4" />
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </CardFooter>
           </Card>
         );

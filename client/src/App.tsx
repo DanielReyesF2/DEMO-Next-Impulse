@@ -10,6 +10,7 @@ import Analysis from "@/pages/analysis";
 import Reports from "@/pages/reports";
 import Clients from "@/pages/clients";
 import Settings from "@/pages/settings";
+import ClientDetail from "@/pages/ClientDetail";
 
 function Router() {
   return (
@@ -19,6 +20,7 @@ function Router() {
       <Route path="/analysis" component={Analysis} />
       <Route path="/reports" component={Reports} />
       <Route path="/clients" component={Clients} />
+      <Route path="/clients/:id" component={ClientDetail} />
       <Route path="/settings" component={Settings} />
       <Route component={NotFound} />
     </Switch>

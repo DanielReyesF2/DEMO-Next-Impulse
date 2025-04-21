@@ -18,15 +18,13 @@ interface SidebarItemProps {
 
 const SidebarItem = ({ to, icon, children, isActive }: SidebarItemProps) => {
   return (
-    <Link href={to}>
-      <a className={`flex items-center px-6 py-3 ${
-        isActive 
-          ? "text-gray-100 bg-navy-light" 
-          : "text-gray-300 hover:bg-navy-light hover:text-white transition-colors"
-      }`}>
-        <span className="mr-3">{icon}</span>
-        <span>{children}</span>
-      </a>
+    <Link href={to} className={`flex items-center px-6 py-3 ${
+      isActive 
+        ? "text-gray-100 bg-navy-light" 
+        : "text-gray-300 hover:bg-navy-light hover:text-white transition-colors"
+    }`}>
+      <span className="mr-3">{icon}</span>
+      <span>{children}</span>
     </Link>
   );
 };
