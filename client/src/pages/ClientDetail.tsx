@@ -175,9 +175,9 @@ export default function ClientDetail() {
             {/* Tarjeta principal con desviación de relleno sanitario */}
             <Card className="md:col-span-2 bg-gradient-to-r from-navy to-navy-light">
               <CardHeader className="pb-2">
-                <CardTitle className="flex items-center text-white">
-                  <Percent className="h-5 w-5 mr-2" />
-                  <span className="uppercase">Desviación de Relleno Sanitario</span>
+                <CardTitle className="flex items-center">
+                  <Percent className="h-5 w-5 mr-2 text-lime-300" />
+                  <span className="uppercase text-lime-200 font-bold">Desviación de Relleno Sanitario</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -192,7 +192,7 @@ export default function ClientDetail() {
                       <RecycleIcon className="h-16 w-16 text-lime opacity-75" />
                     </div>
                   </div>
-                  <p className="text-base text-white font-medium">
+                  <p className="text-base text-lime-200 font-medium">
                     Porcentaje de residuos desviados del relleno sanitario
                   </p>
                 </div>
