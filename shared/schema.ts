@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, timestamp, json } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, json, real } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -37,11 +37,11 @@ export const wasteData = pgTable("waste_data", {
   documentId: integer("document_id").references(() => documents.id),
   clientId: integer("client_id").references(() => clients.id),
   date: timestamp("date").notNull(),
-  organicWaste: integer("organic_waste"), // in kg
-  inorganicWaste: integer("inorganic_waste"), // in kg
-  recyclableWaste: integer("recyclable_waste"), // in kg
-  totalWaste: integer("total_waste"), // in kg
-  deviation: integer("deviation"), // percentage deviation
+  organicWaste: real("organic_waste"), // in kg
+  inorganicWaste: real("inorganic_waste"), // in kg
+  recyclableWaste: real("recyclable_waste"), // in kg
+  totalWaste: real("total_waste"), // in kg
+  deviation: real("deviation"), // percentage deviation
   notes: text("notes"),
   rawData: json("raw_data").$type<Record<string, any>>(), // Store raw extracted data
 });

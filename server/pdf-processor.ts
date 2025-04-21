@@ -97,14 +97,7 @@ export async function processPDFDocument(filePath: string, clientId: number, doc
       recyclableWaste,
       totalWaste,
       deviation,
-      rawData: {
-        source: 'pdf-bitacora',
-        dataPoints: {
-          organic: organicWaste,
-          inorganic: inorganicWaste,
-          recyclable: recyclableWaste
-        }
-      },
+      rawData: {} as Record<string, any>,
       notes: `Datos para ${pdfData.month} ${pdfData.year}`
     };
 
