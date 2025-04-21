@@ -1,6 +1,8 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import { processPDFDocument } from './pdf-processor';
+import { storage } from './storage';
+import { InsertDocument } from '@shared/schema';
 
 // Directorio donde se encuentran los PDFs
 const assetsDir = path.resolve(process.cwd(), 'attached_assets');
@@ -35,9 +37,21 @@ async function testPDFProcessor() {
     // Procesar el PDF
     try {
       const clientId = 4; // ID del cliente Club Campestre
-      const documentId = Math.floor(Math.random() * 1000) + 100; // ID de documento aleatorio para pruebas
       
-      const wasteData = await processPDFDocument(destPath, clientId, documentId);
+      // Primero, crear el documento en la base de datos
+      const fileStats = fs.statSync(destPath);
+      const documentData = {
+        fileName: file,
+        fileSize: fileStats.size,
+        clientId
+      };
+      
+      // Crear el documento
+      const document = await storage.createDocument(documentData);
+      console.log(`Documento creado con ID: ${document.id}`);
+      
+      // Procesar el PDF con el ID de documento correcto
+      const wasteData = await processPDFDocument(destPath, clientId, document.id);
       
       if (wasteData) {
         console.log('Archivo procesado con éxito:');
