@@ -183,7 +183,7 @@ export default function ClientDetail() {
               <CardContent>
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="text-4xl font-bold">
+                    <div className="text-4xl font-bold text-white">
                       {latestDeviation !== null 
                         ? `${latestDeviation}%` 
                         : 'No disponible'}
