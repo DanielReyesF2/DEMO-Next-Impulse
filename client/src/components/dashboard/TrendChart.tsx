@@ -327,13 +327,13 @@ export default function TrendChart({ data }: TrendChartProps) {
               )}
               wrapperStyle={{ paddingBottom: '10px' }}
             />
-            <Area 
-              type="monotone"
+            <Line 
+              type="monotone" 
               dataKey="organicWaste" 
               name="organicWaste"
               stroke="#b5e951" 
               strokeWidth={3}
-              fill="url(#organicGradient)"
+              dot={{ r: 4, strokeWidth: 2, fill: 'white' }}
               activeDot={{ r: 7, stroke: '#b5e951', strokeWidth: 2, fill: 'white' }}
               animationDuration={1500}
               animationEasing="ease-out"
