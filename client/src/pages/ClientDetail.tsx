@@ -249,7 +249,7 @@ export default function ClientDetail() {
               <div className="flex items-baseline mt-1">
                 <div className="text-2xl font-bold">
                   {latestDeviation !== null ? 
-                    `${latestDeviation}%` : 
+                    `${new Intl.NumberFormat('es-MX', { maximumFractionDigits: 2 }).format(latestDeviation)}%` : 
                     '0%'}
                 </div>
                 <div className="ml-auto text-xs text-lime">
@@ -259,11 +259,11 @@ export default function ClientDetail() {
               <div className="mt-2 h-1 bg-gray-100 rounded-full">
                 <div 
                   className="h-1 bg-orange-500 rounded-full" 
-                  style={{ width: '42%' }}
+                  style={{ width: `${Math.min(100, (latestDeviation || 0) * 2)}%` }}
                 />
               </div>
               <div className="text-xs text-gray-400 mt-1">
-                42% del máximo permitido
+                {Math.round((latestDeviation || 0) * 2)}% del máximo permitido
               </div>
             </div>
           </div>
