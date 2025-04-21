@@ -84,6 +84,21 @@ export default function ClientsGrid({ selectedCategory, selectedPeriod }: Client
     return clientWasteData.reduce((sum: number, item) => sum + item.totalWaste, 0);
   };
   
+  const getClientOrganicWaste = (clientId: number) => {
+    const clientWasteData = wasteData.filter((data) => data.clientId === clientId);
+    return clientWasteData.reduce((sum: number, item) => sum + item.organicWaste, 0);
+  };
+  
+  const getClientInorganicWaste = (clientId: number) => {
+    const clientWasteData = wasteData.filter((data) => data.clientId === clientId);
+    return clientWasteData.reduce((sum: number, item) => sum + item.inorganicWaste, 0);
+  };
+  
+  const getClientRecyclableWaste = (clientId: number) => {
+    const clientWasteData = wasteData.filter((data) => data.clientId === clientId);
+    return clientWasteData.reduce((sum: number, item) => sum + item.recyclableWaste, 0);
+  };
+  
   const getClientDeviation = (clientId: number) => {
     const clientWasteData = wasteData.filter((data) => data.clientId === clientId);
     // If no data, return null
@@ -95,6 +110,50 @@ export default function ClientsGrid({ selectedCategory, selectedPeriod }: Client
     );
     
     return sortedData[0].deviation;
+  };
+  
+  // Calculate the growth percentage compared to previous period
+  const calculateGrowth = (clientId: number, type: 'organic' | 'inorganic' | 'total' | 'deviation') => {
+    const clientWasteData = wasteData.filter((data) => data.clientId === clientId);
+    if (clientWasteData.length < 2) return { value: 0, positive: false };
+    
+    // Sort by date descending
+    const sortedData = [...clientWasteData].sort((a, b) => 
+      new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+    
+    const current = sortedData[0];
+    const previous = sortedData[1];
+    
+    let currentValue = 0;
+    let previousValue = 0;
+    
+    switch (type) {
+      case 'organic':
+        currentValue = current.organicWaste;
+        previousValue = previous.organicWaste;
+        break;
+      case 'inorganic':
+        currentValue = current.inorganicWaste;
+        previousValue = previous.inorganicWaste;
+        break;
+      case 'total':
+        currentValue = current.totalWaste;
+        previousValue = previous.totalWaste;
+        break;
+      case 'deviation':
+        currentValue = current.deviation;
+        previousValue = previous.deviation;
+        break;
+    }
+    
+    if (previousValue === 0) return { value: 0, positive: false };
+    
+    const growthPercent = ((currentValue - previousValue) / previousValue) * 100;
+    return {
+      value: Math.abs(growthPercent).toFixed(1),
+      positive: growthPercent > 0
+    };
   };
 
   if (isLoading) {
@@ -139,6 +198,14 @@ export default function ClientsGrid({ selectedCategory, selectedPeriod }: Client
         const totalWaste = getClientTotalWaste(client.id);
         const deviation = getClientDeviation(client.id);
         
+        // Get metrics
+        const organicWaste = getClientOrganicWaste(client.id);
+        const inorganicWaste = getClientInorganicWaste(client.id);
+        const organicGrowth = calculateGrowth(client.id, 'organic');
+        const inorganicGrowth = calculateGrowth(client.id, 'inorganic');
+        const totalGrowth = calculateGrowth(client.id, 'total');
+        const deviationGrowth = calculateGrowth(client.id, 'deviation');
+        
         return (
           <Card key={client.id} className="overflow-hidden transition-shadow hover:shadow-lg">
             <CardHeader className="pb-2">
@@ -150,18 +217,106 @@ export default function ClientsGrid({ selectedCategory, selectedPeriod }: Client
               </div>
               <CardDescription className="line-clamp-2">{client.description}</CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 gap-4 my-2">
-                <div className="flex flex-col">
-                  <div className="flex items-center gap-2">
-                    <Percent className="h-6 w-6 text-navy" />
-                    <p className="text-sm font-medium text-navy">Desviación de relleno sanitario</p>
+            <CardContent className="p-0">
+              {/* Metric Cards Grid - Similar to screenshot */}
+              <div className="grid grid-cols-2 gap-px bg-gray-200">
+                {/* Organic Waste */}
+                <div className="bg-white p-4">
+                  <div className="text-gray-500 text-xs uppercase">Residuos Orgánicos</div>
+                  <div className="flex items-baseline mt-1">
+                    <div className="text-xl font-bold">
+                      {organicWaste ? 
+                        new Intl.NumberFormat('es-MX', { maximumFractionDigits: 2 }).format(organicWaste) : 
+                        '0'} 
+                      <span className="text-sm font-normal ml-1">kg</span>
+                    </div>
+                    <div className={`ml-auto text-xs ${organicGrowth.positive ? 'text-lime' : 'text-red-500'}`}>
+                      {organicGrowth.positive ? '↑' : '↓'} {organicGrowth.value}%
+                    </div>
                   </div>
-                  <p className="font-bold text-lime-600 text-2xl mt-2">
-                    {deviation !== null 
-                      ? `${deviation}%` 
-                      : 'Sin datos'}
-                  </p>
+                  <div className="mt-2 h-1 bg-gray-100 rounded-full">
+                    <div 
+                      className="h-1 bg-lime rounded-full" 
+                      style={{ width: '78%' }}
+                    />
+                  </div>
+                  <div className="text-xs text-gray-400 mt-1">
+                    78% de la meta mensual
+                  </div>
+                </div>
+                
+                {/* Inorganic Waste */}
+                <div className="bg-white p-4">
+                  <div className="text-gray-500 text-xs uppercase">Residuos Inorgánicos</div>
+                  <div className="flex items-baseline mt-1">
+                    <div className="text-xl font-bold">
+                      {inorganicWaste ? 
+                        new Intl.NumberFormat('es-MX', { maximumFractionDigits: 2 }).format(inorganicWaste) : 
+                        '0'} 
+                      <span className="text-sm font-normal ml-1">kg</span>
+                    </div>
+                    <div className={`ml-auto text-xs ${!inorganicGrowth.positive ? 'text-lime' : 'text-red-500'}`}>
+                      {inorganicGrowth.positive ? '↑' : '↓'} {inorganicGrowth.value}%
+                    </div>
+                  </div>
+                  <div className="mt-2 h-1 bg-gray-100 rounded-full">
+                    <div 
+                      className="h-1 bg-navy rounded-full" 
+                      style={{ width: '92%' }}
+                    />
+                  </div>
+                  <div className="text-xs text-gray-400 mt-1">
+                    92% de la meta mensual
+                  </div>
+                </div>
+                
+                {/* Total Waste */}
+                <div className="bg-white p-4">
+                  <div className="text-gray-500 text-xs uppercase">Total Residuos</div>
+                  <div className="flex items-baseline mt-1">
+                    <div className="text-xl font-bold">
+                      {totalWaste ? 
+                        new Intl.NumberFormat('es-MX', { maximumFractionDigits: 2 }).format(totalWaste) : 
+                        '0'} 
+                      <span className="text-sm font-normal ml-1">kg</span>
+                    </div>
+                    <div className={`ml-auto text-xs ${!totalGrowth.positive ? 'text-lime' : 'text-red-500'}`}>
+                      {totalGrowth.positive ? '↑' : '↓'} {totalGrowth.value}%
+                    </div>
+                  </div>
+                  <div className="mt-2 h-1 bg-gray-100 rounded-full">
+                    <div 
+                      className="h-1 bg-gray-500 rounded-full" 
+                      style={{ width: '86%' }}
+                    />
+                  </div>
+                  <div className="text-xs text-gray-400 mt-1">
+                    86% de la meta mensual
+                  </div>
+                </div>
+                
+                {/* Deviation */}
+                <div className="bg-white p-4">
+                  <div className="text-gray-500 text-xs uppercase">Desviación</div>
+                  <div className="flex items-baseline mt-1">
+                    <div className="text-xl font-bold">
+                      {deviation !== null ? 
+                        `${deviation}%` : 
+                        '0%'}
+                    </div>
+                    <div className={`ml-auto text-xs ${deviationGrowth.positive ? 'text-lime' : 'text-red-500'}`}>
+                      {deviationGrowth.positive ? '↑' : '↓'} {deviationGrowth.value}%
+                    </div>
+                  </div>
+                  <div className="mt-2 h-1 bg-gray-100 rounded-full">
+                    <div 
+                      className="h-1 bg-orange-500 rounded-full" 
+                      style={{ width: '42%' }}
+                    />
+                  </div>
+                  <div className="text-xs text-gray-400 mt-1">
+                    42% del máximo permitido
+                  </div>
                 </div>
               </div>
             </CardContent>
