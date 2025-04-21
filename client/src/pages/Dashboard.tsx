@@ -87,11 +87,12 @@ export default function Dashboard() {
       ];
     }
     
-    // Filtrar datos desde enero 2024 hasta ahora
+    // Filtrar datos desde enero 2024 hasta marzo 2025
     const startDate = new Date('2024-01-01');
+    const endDate = new Date('2025-04-01'); // Para asegurar que incluya marzo 2025
     const filteredData = wasteData.filter(item => {
       const itemDate = new Date(item.date);
-      return itemDate >= startDate;
+      return itemDate >= startDate && itemDate < endDate;
     });
     
     // Mapeo de números de mes a abreviaturas en español

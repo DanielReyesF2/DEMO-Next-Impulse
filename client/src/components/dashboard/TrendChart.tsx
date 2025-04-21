@@ -115,23 +115,33 @@ export default function TrendChart({ data }: TrendChartProps) {
       .sort((a, b) => a.sortKey - b.sortKey);
   };
   
+  // Función que se usará con los datos filtrados
+  
+  // Filtrar datos para mostrar solo desde enero 2024 en adelante
+  const filteredData = data.filter(item => {
+    const parts = item.month.split(' ');
+    const year = parseInt('20' + parts[1], 10);
+    const month = parts[0];
+    
+    // Solo fechas de enero 2024 en adelante
+    return !(year === 2023 || (year === 2024 && month === 'Dic'));
+  });
+  
+  console.log("Datos originales filtrados:", filteredData);
+  
   // Determinar qué datos mostrar según el período seleccionado
-  const getDisplayData = () => {
-    switch (period) {
-      case 'quarterly':
-        return groupByQuarter(data);
-      case 'yearly':
-        return groupByYear(data);
-      case 'monthly':
-      default:
-        return data;
-    }
-  };
-  
-  // Agregar depuración para ver qué datos se están procesando
-  console.log("Datos originales recibidos:", data);
-  
-  const displayData = getDisplayData();
+  let displayData;
+  switch (period) {
+    case 'quarterly':
+      displayData = groupByQuarter(filteredData);
+      break;
+    case 'yearly':
+      displayData = groupByYear(filteredData);
+      break;
+    case 'monthly':
+    default:
+      displayData = filteredData;
+  }
   console.log("Datos procesados para mostrar:", displayData, "Periodo:", period);
   
   return (

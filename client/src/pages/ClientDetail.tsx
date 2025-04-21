@@ -211,11 +211,13 @@ export default function ClientDetail() {
             
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-gray-500 uppercase">Documentos</CardTitle>
+                <CardTitle className="text-sm text-gray-500 uppercase">Desviación</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold">{documents.length}</div>
-                <p className="text-sm text-gray-500 mt-1">Archivos procesados</p>
+                <div className="text-3xl font-bold">
+                  {wasteData.length > 0 && wasteData[0].deviation ? wasteData[0].deviation.toFixed(2) : "0.00"}%
+                </div>
+                <p className="text-sm text-gray-500 mt-1">Relleno sanitario</p>
               </CardContent>
             </Card>
           </div>
@@ -252,30 +254,26 @@ export default function ClientDetail() {
                 <div>
                   <Card>
                     <CardHeader>
-                      <CardTitle>Información del Cliente</CardTitle>
+                      <CardTitle>CO2 Total Generado</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="space-y-4">
-                        <div>
-                          <p className="text-sm font-medium text-gray-500">ID</p>
-                          <p>{client.id}</p>
+                      <div className="flex flex-col items-center justify-center py-6">
+                        <div className="text-4xl font-bold text-navy mb-2">
+                          {Math.round(totalWaste * 0.87).toLocaleString('es-ES')} kg
                         </div>
-                        <div>
-                          <p className="text-sm font-medium text-gray-500">Nombre</p>
-                          <p>{client.name}</p>
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium text-gray-500">Descripción</p>
-                          <p>{client.description || "No disponible"}</p>
-                        </div>
-                        <Separator />
-                        <div>
-                          <p className="text-sm font-medium text-gray-500">Último documento</p>
-                          <p>
-                            {documents.length > 0 
-                              ? formatDate(new Date(documents[0].uploadDate)) 
-                              : "No hay documentos"}
-                          </p>
+                        <p className="text-sm text-gray-500 mt-1">Emisiones estimadas de CO2</p>
+                        
+                        <div className="mt-4 w-full space-y-2">
+                          <div className="flex justify-between text-xs">
+                            <span className="text-gray-600">Impacto bajo</span>
+                            <span className="text-gray-600">Impacto alto</span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2.5">
+                            <div 
+                              className="bg-lime h-2.5 rounded-full" 
+                              style={{ width: `${Math.min(totalWaste / 15000 * 100, 100)}%` }}
+                            ></div>
+                          </div>
                         </div>
                       </div>
                     </CardContent>
@@ -550,9 +548,10 @@ function processWasteDataForChart(wasteData: WasteData[]): any[] {
   
   // Filtrar datos desde enero 2024 hasta ahora
   const startDate = new Date('2024-01-01');
+  const endDate = new Date('2025-04-01'); // Para asegurar que incluya marzo 2025
   const filteredData = wasteData.filter(item => {
     const itemDate = new Date(item.date);
-    return itemDate >= startDate;
+    return itemDate >= startDate && itemDate < endDate;
   });
   
   // Mapeo de números de mes a abreviaturas en español
