@@ -6,6 +6,7 @@ interface TrendChartProps {
     month: string;
     organicWaste: number;
     inorganicWaste: number;
+    recyclableWaste?: number;
   }>;
 }
 
@@ -79,7 +80,11 @@ export default function TrendChart({ data }: TrendChartProps) {
               height={36}
               formatter={(value) => (
                 <span style={{ color: '#64748b', fontSize: 12 }}>
-                  {value === 'organicWaste' ? 'Orgánicos' : 'Inorgánicos'}
+                  {value === 'organicWaste' 
+                    ? 'Orgánicos' 
+                    : value === 'inorganicWaste' 
+                      ? 'Inorgánicos' 
+                      : 'Reciclables'}
                 </span>
               )}
             />
@@ -96,6 +101,14 @@ export default function TrendChart({ data }: TrendChartProps) {
               dataKey="inorganicWaste" 
               name="inorganicWaste"
               stroke="#273949" 
+              strokeWidth={3}
+              activeDot={{ r: 6 }}
+            />
+            <Line 
+              type="monotone" 
+              dataKey="recyclableWaste" 
+              name="recyclableWaste"
+              stroke="#ff9933" 
               strokeWidth={3}
               activeDot={{ r: 6 }}
             />
