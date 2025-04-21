@@ -365,6 +365,11 @@ export default function ClientDetail() {
                     </CardContent>
                   </Card>
                   
+                  {/* Sustainability Badges */}
+                  <div className="mt-6">
+                    <SustainabilityBadges clientId={client.id} />
+                  </div>
+                  
                   {/* Quick Upload */}
                   <div className="mt-6">
                     <Card>
