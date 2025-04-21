@@ -8,6 +8,7 @@ import {
   Settings, 
   LogOut 
 } from "lucide-react";
+import logoEconova from "../../assets/Logo-ECONOVA-OF_Blanco.png";
 
 interface SidebarItemProps {
   to: string;
@@ -46,9 +47,9 @@ export default function Sidebar() {
       <div className="flex items-center justify-center h-24 px-4 border-b border-navy-light">
         <div className="flex items-center">
           <img 
-            src="/assets/logo.png" 
+            src={logoEconova} 
             alt="Logo ECONOVA" 
-            className="h-16 w-auto" 
+            className="h-20 w-auto" 
           />
         </div>
       </div>

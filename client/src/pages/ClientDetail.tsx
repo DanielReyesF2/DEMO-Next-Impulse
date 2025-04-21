@@ -181,20 +181,20 @@ export default function ClientDetail() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-4xl font-bold text-lime">
+                <div className="flex flex-col">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="text-5xl font-bold text-lime">
                       {latestDeviation !== null 
                         ? `${latestDeviation}%` 
                         : 'No disponible'}
                     </div>
-                    <p className="text-sm text-white mt-1">
-                      Porcentaje de residuos desviados del relleno sanitario
-                    </p>
+                    <div className="hidden md:block">
+                      <RecycleIcon className="h-16 w-16 text-lime opacity-75" />
+                    </div>
                   </div>
-                  <div className="hidden md:block">
-                    <RecycleIcon className="h-16 w-16 text-lime opacity-75" />
-                  </div>
+                  <p className="text-base text-white font-medium">
+                    Porcentaje de residuos desviados del relleno sanitario
+                  </p>
                 </div>
               </CardContent>
             </Card>
