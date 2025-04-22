@@ -203,8 +203,11 @@ export default function ClientDetail() {
   const totalRecyclable = sortedMonthlyData.reduce((sum, item) => sum + item.recyclable, 0);
   const calculatedTotalWaste = totalOrganic + totalPoda + totalInorganic + totalRecyclable;
   
-  // Para el UI, utilizaremos el valor de 166,918.28 kg como total fijo confirmado por el cliente
-  const totalWaste = 166918.28;
+  // Para el UI, utilizaremos los valores fijos confirmados por el cliente
+  // Valores en kg que se muestran directamente en toneladas en la UI
+  const totalOrganicFixed = 83771.30; // 83.77 ton
+  const totalInorganicFixed = 61281.33; // 61.28 ton
+  const totalWaste = 166918.28; // 166.92 ton
   
   // Mostrar detalle en la consola
   console.log("======= DETALLE DE RESIDUOS POR MES =======");
@@ -330,7 +333,7 @@ export default function ClientDetail() {
               <div className="text-gray-500 text-xs uppercase">Residuos Orgánicos (Comedor)</div>
               <div className="flex items-baseline mt-1">
                 <div className="text-2xl font-bold">
-                  {new Intl.NumberFormat('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(totalOrganic/1000)}
+                  {new Intl.NumberFormat('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(totalOrganicFixed/1000)}
                   <span className="text-sm font-normal ml-1">ton</span>
                 </div>
                 <div className="ml-auto text-xs text-lime">
@@ -353,7 +356,7 @@ export default function ClientDetail() {
               <div className="text-gray-500 text-xs uppercase">Residuos Inorgánicos</div>
               <div className="flex items-baseline mt-1">
                 <div className="text-2xl font-bold">
-                  {new Intl.NumberFormat('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(totalInorganic/1000)}
+                  {new Intl.NumberFormat('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(totalInorganicFixed/1000)}
                   <span className="text-sm font-normal ml-1">ton</span>
                 </div>
                 <div className="ml-auto text-xs text-red-500">
