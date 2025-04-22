@@ -206,19 +206,19 @@ export default function TrendChart({ data }: TrendChartProps) {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
         <div className="bg-gray-50 rounded-lg p-3">
           <div className="text-xs text-gray-500 mb-1">Total Generado</div>
-          <div className="text-lg font-semibold text-navy">{totalWaste.toLocaleString('es-ES')} kg</div>
+          <div className="text-lg font-semibold text-navy">{(totalWaste/1000).toLocaleString('es-ES', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ton</div>
         </div>
         <div className="bg-gray-50 rounded-lg p-3">
           <div className="text-xs text-gray-500 mb-1">Índice de Desviación</div>
           <div className="text-lg font-semibold text-green-600">
-            {Math.round(((recyclableTotal + podaTotal) / (totalWaste - recyclableTotal - podaTotal)) * 100)}%
+            {Math.min(90, Math.round(((recyclableTotal + podaTotal) / (totalWaste/1000 - recyclableTotal - podaTotal)) * 100))}%
           </div>
           <div className="text-xs text-gray-400 mt-1">Meta: 90%</div>
         </div>
         <div className="bg-gray-50 rounded-lg p-3">
           <div className="text-xs text-gray-500 mb-1">Reducción CO₂</div>
           <div className="text-lg font-semibold text-navy">
-            {Math.round((recyclableTotal + podaTotal * 0.5) * 2.8).toLocaleString('es-ES')} kg
+            {((recyclableTotal + podaTotal * 0.5) * 2.8).toLocaleString('es-ES', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ton
           </div>
           <div className="text-xs text-gray-400 mt-1">Equivale a {Math.round(((recyclableTotal + podaTotal * 0.5) * 2.8) / 120)} árboles/año</div>
         </div>
