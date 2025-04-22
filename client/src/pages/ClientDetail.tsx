@@ -143,7 +143,22 @@ export default function ClientDetail() {
   const totalOrganic = wasteData.reduce((sum, item) => sum + (item.organicWaste || 0), 0);
   const totalInorganic = wasteData.reduce((sum, item) => sum + (item.inorganicWaste || 0), 0);
   const totalRecyclable = wasteData.reduce((sum, item) => sum + (item.recyclableWaste || 0), 0);
-  const totalWaste = wasteData.reduce((sum, item) => sum + (item.totalWaste || 0), 0);
+  
+  // Suma total de todos los residuos (orgánico + inorgánico + reciclable)
+  const calculateTotalWaste = totalOrganic + totalInorganic + totalRecyclable;
+  
+  // El valor de totalWaste que viene de la base de datos podría incluir o no los reciclables,
+  // así que usamos nuestro cálculo para asegurar consistencia
+  const totalWaste = calculateTotalWaste;
+  
+  // Para debugging - ver la discrepancia
+  console.log("Datos de suma total:", {
+    totalOrganic,
+    totalInorganic,
+    totalRecyclable,
+    calcTotal: calculateTotalWaste,
+    dbTotal: wasteData.reduce((sum, item) => sum + (item.totalWaste || 0), 0)
+  });
   
   // Usar el valor calculado de 2024 de 22.16% que es el valor real verificado
   const calculate2024Deviation = () => {
@@ -700,8 +715,26 @@ function processWasteDataForChart(wasteData: WasteData[]): any[] {
     groupedData[item.monthLabel].recyclableWaste += (item.recyclableWaste || 0); // Mantener en kilogramos
   });
   
+  // Calcular el total de todos los valores para debugging
+  let totalOrganicChart = 0;
+  let totalInorganicChart = 0;
+  let totalRecyclableChart = 0;
+  
+  for (const month in groupedData) {
+    totalOrganicChart += groupedData[month].organicWaste;
+    totalInorganicChart += groupedData[month].inorganicWaste;
+    totalRecyclableChart += groupedData[month].recyclableWaste;
+  }
+  
+  console.log("Datos de totales de gráfica:", {
+    totalOrganicChart,
+    totalInorganicChart,
+    totalRecyclableChart,
+    totalChart: totalOrganicChart + totalInorganicChart + totalRecyclableChart
+  });
+  
   // Convertir a array y ordenar cronológicamente
-  return Object.entries(groupedData)
+  const result = Object.entries(groupedData)
     .map(([month, data]) => ({
       month,
       organicWaste: Number(data.organicWaste.toFixed(1)),
@@ -710,4 +743,9 @@ function processWasteDataForChart(wasteData: WasteData[]): any[] {
       sortKey: data.sortKey
     }))
     .sort((a, b) => a.sortKey - b.sortKey);
+    
+  console.log("Datos originales filtrados:", filteredData);
+  console.log("Datos procesados para mostrar:", result);
+  
+  return result;
 }
