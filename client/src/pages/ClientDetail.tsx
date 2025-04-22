@@ -486,23 +486,45 @@ export default function ClientDetail() {
                                     (year === 2025 && month <= 2) // Hasta marzo (0-2)
                                   );
                                 })
-                                .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) // Ordenar de más antiguo a más reciente
-                                .map((data) => {
+                                .reduce((result, data) => {
                                   const date = new Date(data.date);
                                   const monthYear = `${getMonthName(date).slice(0, 3)} ${date.getFullYear().toString().slice(2)}`;
                                   
                                   // Debugging
                                   console.log(`Procesando dato: ${date.toISOString()} - ${monthYear} - orgánico: ${data.organicWaste}, inorgánico: ${data.inorganicWaste}, reciclable: ${data.recyclableWaste}`);
                                   
-                                  return {
-                                    name: monthYear,
-                                    organicos: data.organicWaste || 0,
-                                    inorganicos: data.inorganicWaste || 0,
-                                    reciclables: data.recyclableWaste || 0,
-                                    desviacion: data.deviation || 0,
-                                    date: date
-                                  };
-                                })
+                                  // Buscar si ya existe un item para este mes/año
+                                  const existingIndex = result.findIndex(item => item.name === monthYear);
+                                  
+                                  if (existingIndex >= 0) {
+                                    // Sumar a los datos existentes
+                                    result[existingIndex].organicos += (data.organicWaste || 0);
+                                    result[existingIndex].inorganicos += (data.inorganicWaste || 0);
+                                    result[existingIndex].reciclables += (data.recyclableWaste || 0);
+                                    
+                                    // Para la desviación usamos un promedio o el valor más alto
+                                    if (data.deviation && data.deviation > result[existingIndex].desviacion) {
+                                      result[existingIndex].desviacion = data.deviation;
+                                    }
+                                    
+                                    console.log(`Agregando a ${monthYear} - Nuevos totales: orgánico: ${result[existingIndex].organicos}, inorgánico: ${result[existingIndex].inorganicos}, reciclable: ${result[existingIndex].reciclables}`);
+                                  } else {
+                                    // Añadir nuevo registro
+                                    result.push({
+                                      name: monthYear,
+                                      organicos: data.organicWaste || 0,
+                                      inorganicos: data.inorganicWaste || 0,
+                                      reciclables: data.recyclableWaste || 0,
+                                      desviacion: data.deviation || 0,
+                                      date: date,
+                                      sortKey: date.getFullYear() * 100 + date.getMonth()
+                                    });
+                                  }
+                                  
+                                  return result;
+                                }, [])
+                                // Ordenar cronológicamente
+                                .sort((a, b) => a.sortKey - b.sortKey)
                               }
                               margin={{ top: 20, right: 30, left: 20, bottom: 70 }}
                             >
