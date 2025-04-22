@@ -193,6 +193,14 @@ export default function TrendChart({ data }: TrendChartProps) {
     // Un valor negativo significa reducción (deseable), un valor positivo significa aumento (indeseable)
     const percentChange = ((secondHalfAvg - firstHalfAvg) / firstHalfAvg) * 100;
     
+    // Imprimimos los datos de la tendencia para verificar
+    console.log('Cálculo de tendencia:');
+    console.log('Primera mitad meses:', displayData.slice(0, midPoint).map(d => d.month).join(', '));
+    console.log('Segunda mitad meses:', displayData.slice(midPoint).map(d => d.month).join(', '));
+    console.log('Promedio primera mitad:', firstHalfAvg);
+    console.log('Promedio segunda mitad:', secondHalfAvg);
+    console.log('Cambio porcentual:', percentChange);
+    
     // Para el sistema de tendencia, consideramos "positivo" una reducción (valor negativo)
     return {
       value: Math.abs(percentChange).toFixed(1),
