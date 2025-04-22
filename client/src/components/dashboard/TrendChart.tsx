@@ -82,6 +82,7 @@ export default function TrendChart({ data }: TrendChartProps) {
   const groupByYear = (data: any[]): any[] => {
     const years: Record<string, { 
       organicWaste: number,
+      podaWaste: number,
       inorganicWaste: number,
       recyclableWaste: number,
       sortKey: number
@@ -96,6 +97,7 @@ export default function TrendChart({ data }: TrendChartProps) {
       if (!years[yearLabel]) {
         years[yearLabel] = {
           organicWaste: 0,
+          podaWaste: 0,
           inorganicWaste: 0,
           recyclableWaste: 0,
           sortKey: year
@@ -103,6 +105,7 @@ export default function TrendChart({ data }: TrendChartProps) {
       }
       
       years[yearLabel].organicWaste += item.organicWaste;
+      years[yearLabel].podaWaste += item.podaWaste;
       years[yearLabel].inorganicWaste += item.inorganicWaste;
       years[yearLabel].recyclableWaste += item.recyclableWaste;
     });
@@ -112,6 +115,7 @@ export default function TrendChart({ data }: TrendChartProps) {
       .map(([year, data]) => ({
         month: year,  // Usamos el mismo campo "month" para mantener compatibilidad
         organicWaste: Number(data.organicWaste.toFixed(1)),
+        podaWaste: Number(data.podaWaste.toFixed(1)),
         inorganicWaste: Number(data.inorganicWaste.toFixed(1)),
         recyclableWaste: Number(data.recyclableWaste.toFixed(1)),
         sortKey: data.sortKey
@@ -139,11 +143,13 @@ export default function TrendChart({ data }: TrendChartProps) {
   
   // Calcular los promedios para la línea de referencia
   const avgOrganicWaste = displayData.reduce((sum, item) => sum + item.organicWaste, 0) / displayData.length;
+  const avgPodaWaste = displayData.reduce((sum, item) => sum + item.podaWaste, 0) / displayData.length;
   const avgInorganicWaste = displayData.reduce((sum, item) => sum + item.inorganicWaste, 0) / displayData.length;
   const avgRecyclableWaste = displayData.reduce((sum, item) => sum + (item.recyclableWaste || 0), 0) / displayData.length;
   
   // Calcular datos adicionales para estadísticas
   const organicTotal = displayData.reduce((sum, month) => sum + month.organicWaste, 0);
+  const podaTotal = displayData.reduce((sum, month) => sum + month.podaWaste, 0);
   const inorganicTotal = displayData.reduce((sum, month) => sum + month.inorganicWaste, 0);
   const recyclableTotal = displayData.reduce((sum, month) => sum + (month.recyclableWaste || 0), 0);
   
@@ -199,16 +205,16 @@ export default function TrendChart({ data }: TrendChartProps) {
         <div className="bg-gray-50 rounded-lg p-3">
           <div className="text-xs text-gray-500 mb-1">Índice de Desviación</div>
           <div className="text-lg font-semibold text-green-600">
-            {Math.round((recyclableTotal / (totalWaste - recyclableTotal)) * 100)}%
+            {Math.round(((recyclableTotal + podaTotal) / (totalWaste - recyclableTotal - podaTotal)) * 100)}%
           </div>
           <div className="text-xs text-gray-400 mt-1">Meta: 90%</div>
         </div>
         <div className="bg-gray-50 rounded-lg p-3">
           <div className="text-xs text-gray-500 mb-1">Reducción CO₂</div>
           <div className="text-lg font-semibold text-navy">
-            {Math.round(recyclableTotal * 2.8).toLocaleString('es-ES')} kg
+            {Math.round((recyclableTotal + podaTotal * 0.5) * 2.8).toLocaleString('es-ES')} kg
           </div>
-          <div className="text-xs text-gray-400 mt-1">Equivale a {Math.round((recyclableTotal * 2.8) / 120)} árboles/año</div>
+          <div className="text-xs text-gray-400 mt-1">Equivale a {Math.round(((recyclableTotal + podaTotal * 0.5) * 2.8) / 120)} árboles/año</div>
         </div>
         <div className="bg-gray-50 rounded-lg p-3">
           <div className="text-xs text-gray-500 mb-1">Tendencia</div>
@@ -237,6 +243,10 @@ export default function TrendChart({ data }: TrendChartProps) {
               <linearGradient id="organicGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#b5e951" stopOpacity={0.3}/>
                 <stop offset="95%" stopColor="#b5e951" stopOpacity={0}/>
+              </linearGradient>
+              <linearGradient id="podaGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#20b2aa" stopOpacity={0.3}/>
+                <stop offset="95%" stopColor="#20b2aa" stopOpacity={0}/>
               </linearGradient>
               <linearGradient id="inorganicGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#273949" stopOpacity={0.2}/>
@@ -286,7 +296,8 @@ export default function TrendChart({ data }: TrendChartProps) {
               formatter={(value) => (
                 <span style={{ 
                   color: value === 'organicWaste' ? '#3a5a14' : 
-                         value === 'inorganicWaste' ? '#273949' : '#b25a0c',
+                         value === 'inorganicWaste' ? '#273949' : 
+                         value === 'podaWaste' ? '#20b2aa' : '#b25a0c',
                   fontSize: 12,
                   fontWeight: 500,
                   padding: '3px 6px',
@@ -295,7 +306,9 @@ export default function TrendChart({ data }: TrendChartProps) {
                     ? 'Orgánicos (Comedor)' 
                     : value === 'inorganicWaste' 
                       ? 'Inorgánicos' 
-                      : 'Reciclables'}
+                      : value === 'podaWaste'
+                        ? 'Orgánicos (PODA)'
+                        : 'Reciclables'}
                 </span>
               )}
               wrapperStyle={{ paddingBottom: '10px' }}
@@ -319,6 +332,17 @@ export default function TrendChart({ data }: TrendChartProps) {
               strokeWidth={3}
               dot={{ r: 4, strokeWidth: 2, fill: 'white' }}
               activeDot={{ r: 7, stroke: '#273949', strokeWidth: 2, fill: 'white' }}
+              animationDuration={1500}
+              animationEasing="ease-out"
+            />
+            <Line 
+              type="monotone" 
+              dataKey="podaWaste" 
+              name="podaWaste"
+              stroke="#20b2aa" 
+              strokeWidth={3}
+              dot={{ r: 4, strokeWidth: 2, fill: 'white' }}
+              activeDot={{ r: 7, stroke: '#20b2aa', strokeWidth: 2, fill: 'white' }}
               animationDuration={1500}
               animationEasing="ease-out"
             />
@@ -350,6 +374,20 @@ export default function TrendChart({ data }: TrendChartProps) {
             />
             
             <ReferenceLine 
+              y={avgPodaWaste} 
+              stroke="#20b2aa" 
+              strokeDasharray="3 3" 
+              strokeWidth={2}
+              label={{ 
+                value: `Promedio: ${Math.round(avgPodaWaste).toLocaleString('es-ES')} kg`, 
+                position: 'insideBottomLeft',
+                fill: '#20b2aa',
+                fontSize: 10,
+                offset: 10,
+              }}
+            />
+            
+            <ReferenceLine 
               y={avgInorganicWaste} 
               stroke="#273949" 
               strokeDasharray="3 3" 
@@ -359,7 +397,7 @@ export default function TrendChart({ data }: TrendChartProps) {
                 position: 'insideBottomLeft',
                 fill: '#273949',
                 fontSize: 10,
-                offset: 10,
+                offset: 30,
               }}
             />
             
