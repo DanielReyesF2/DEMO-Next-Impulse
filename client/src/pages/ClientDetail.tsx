@@ -198,7 +198,7 @@ export default function ClientDetail() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-gray-200 rounded-lg overflow-hidden mb-6">
             {/* Desviación - Ahora es el primer elemento */}
             <div className="bg-white p-4">
-              <div className="text-gray-500 text-xs uppercase">Desviación de Relleno Sanitario</div>
+              <div className="text-gray-500 text-xs uppercase">Índice de desviación</div>
               <div className="flex items-baseline mt-1">
                 <div className="text-2xl font-bold">
                   {latestDeviation !== null ? 
