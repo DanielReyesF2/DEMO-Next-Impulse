@@ -7,7 +7,7 @@ import { Building2, FileText, ChevronRight, BarChart2, AlertTriangle, RecycleIco
 import { Client } from '@shared/schema';
 import { Link } from 'wouter';
 import { generateClientReport } from '@/lib/reportGenerator';
-import { generateAndDownloadPDFReport } from '@/lib/pdfGenerator';
+import { generateAndDownloadPDFReport } from '@/lib/jsPdfGenerator';
 
 interface ClientsGridProps {
   selectedCategory?: string;
@@ -332,16 +332,16 @@ export default function ClientsGrid({ selectedCategory, selectedPeriod }: Client
               <Button 
                 variant="outline" 
                 size="sm"
-                className="w-full text-blue-600 border-blue-200 hover:bg-blue-50"
+                className="w-full text-green-600 border-green-200 hover:bg-green-50"
                 onClick={() => {
                   // Filtrar datos de este cliente específico
                   const clientWasteData = wasteData.filter(item => item.clientId === client.id);
-                  // Generar reporte
-                  generateClientReport(client, clientWasteData);
+                  // Generar PDF
+                  generateAndDownloadPDFReport(client, clientWasteData);
                 }}
               >
                 <FileDown className="h-4 w-4 mr-2" />
-                <span>Descargar Reporte</span>
+                <span>Descargar PDF</span>
               </Button>
             </CardFooter>
           </Card>

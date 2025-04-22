@@ -10,7 +10,7 @@ import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { User, FileText, BarChart2, AlertTriangle, ChevronLeft, Download, Edit, Trash2, Percent, RecycleIcon, Leaf, FileDown } from 'lucide-react';
 import { generateClientReport } from '@/lib/reportGenerator';
-import { generateAndDownloadPDFReport } from '@/lib/pdfGenerator';
+import { generateAndDownloadPDFReport } from '@/lib/jsPdfGenerator';
 import FileUploader from '@/components/FileUploader';
 import TrendChart from '@/components/dashboard/TrendChart';
 import SustainabilityBadges from '@/components/dashboard/SustainabilityBadges';
@@ -275,11 +275,11 @@ export default function ClientDetail() {
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="text-blue-600 border-blue-200 hover:bg-blue-50"
-                onClick={() => generateClientReport(client, wasteData)}
+                className="text-green-600 border-green-200 hover:bg-green-50"
+                onClick={() => generateAndDownloadPDFReport(client, wasteData)}
               >
-                <Download className="h-4 w-4 mr-2" />
-                Descargar Reporte
+                <FileDown className="h-4 w-4 mr-2" />
+                Descargar PDF
               </Button>
               <Button variant="outline" size="sm">
                 <Edit className="h-4 w-4 mr-2" />
