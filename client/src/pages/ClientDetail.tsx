@@ -275,10 +275,10 @@ export default function ClientDetail() {
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="text-green-600 border-green-200 hover:bg-green-50"
+                className="text-blue-600 border-blue-200 hover:bg-blue-50"
                 onClick={() => generateClientReport(client, wasteData)}
               >
-                <FileDown className="h-4 w-4 mr-2" />
+                <Download className="h-4 w-4 mr-2" />
                 Descargar Reporte
               </Button>
               <Button variant="outline" size="sm">

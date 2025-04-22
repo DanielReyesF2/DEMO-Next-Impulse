@@ -1,5 +1,7 @@
-import PDFDocument from 'pdfkit';
-import blobStream from 'blob-stream';
+// Por ahora, deshabilitamos el generador de PDF hasta resolver problemas de compatibilidad
+// @ts-ignore
+// import PDFDocument from 'pdfkit/js/pdfkit.standalone.js';
+// import blobStream from 'blob-stream';
 import { Client, WasteData } from '@shared/schema';
 
 interface ReportData {
