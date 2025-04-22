@@ -3,9 +3,10 @@ import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Building2, FileText, ChevronRight, BarChart2, AlertTriangle, RecycleIcon, Percent } from 'lucide-react';
+import { Building2, FileText, ChevronRight, BarChart2, AlertTriangle, RecycleIcon, Percent, FileDown } from 'lucide-react';
 import { Client } from '@shared/schema';
 import { Link } from 'wouter';
+import { generateClientReport } from '@/lib/reportGenerator';
 
 interface ClientsGridProps {
   selectedCategory?: string;
@@ -320,12 +321,25 @@ export default function ClientsGrid({ selectedCategory, selectedPeriod }: Client
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="bg-gray-50 border-t border-gray-100">
+            <CardFooter className="bg-gray-50 border-t border-gray-100 flex flex-col gap-2">
               <Button variant="ghost" className="w-full justify-between" asChild>
                 <Link href={`/clients/${client.id}`}>
                   <span>Ver detalles del cliente</span>
                   <ChevronRight className="h-4 w-4" />
                 </Link>
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="w-full text-green-600 border-green-200 hover:bg-green-50"
+                onClick={() => {
+                  // Filtrar datos de este cliente específico
+                  const clientWasteData = wasteData.filter(item => item.clientId === client.id);
+                  generateClientReport(client, clientWasteData);
+                }}
+              >
+                <FileDown className="h-4 w-4 mr-2" />
+                <span>Descargar reporte</span>
               </Button>
             </CardFooter>
           </Card>

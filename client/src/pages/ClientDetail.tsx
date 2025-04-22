@@ -8,7 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { User, FileText, BarChart2, AlertTriangle, ChevronLeft, Download, Edit, Trash2, Percent, RecycleIcon, Leaf } from 'lucide-react';
+import { User, FileText, BarChart2, AlertTriangle, ChevronLeft, Download, Edit, Trash2, Percent, RecycleIcon, Leaf, FileDown } from 'lucide-react';
+import { generateClientReport } from '@/lib/reportGenerator';
 import FileUploader from '@/components/FileUploader';
 import TrendChart from '@/components/dashboard/TrendChart';
 import SustainabilityBadges from '@/components/dashboard/SustainabilityBadges';
@@ -270,6 +271,15 @@ export default function ClientDetail() {
               <p className="mt-1 text-sm text-gray-500">{client.description}</p>
             </div>
             <div className="mt-4 flex gap-2 md:mt-0">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="text-green-600 border-green-200 hover:bg-green-50"
+                onClick={() => generateClientReport(client, wasteData)}
+              >
+                <FileDown className="h-4 w-4 mr-2" />
+                Descargar Reporte
+              </Button>
               <Button variant="outline" size="sm">
                 <Edit className="h-4 w-4 mr-2" />
                 Editar
