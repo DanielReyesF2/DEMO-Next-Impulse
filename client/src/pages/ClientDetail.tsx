@@ -381,8 +381,8 @@ export default function ClientDetail() {
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="mb-6">
               <TabsTrigger value="overview">General</TabsTrigger>
-              <TabsTrigger value="documents">Documentos</TabsTrigger>
               <TabsTrigger value="analysis">Análisis</TabsTrigger>
+              <TabsTrigger value="documents">Documentos</TabsTrigger>
             </TabsList>
             <TabsContent value="overview">
               <div className="flex flex-col gap-6">
