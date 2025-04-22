@@ -307,7 +307,7 @@ export default function ClientDetail() {
           </div>
           
           {/* Stats Cards - Diseño simplificado según solicitud */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-gray-200 rounded-lg overflow-hidden mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-px bg-gray-200 rounded-lg overflow-hidden mb-6">
             {/* Desviación - Primer elemento */}
             <div className="bg-white p-4">
               <div className="text-gray-500 text-xs uppercase">ÍNDICE DE DESVIACIÓN</div>
@@ -369,6 +369,29 @@ export default function ClientDetail() {
                 <div 
                   className="h-1 bg-lime rounded-full" 
                   style={{ width: '63%' }}
+                />
+              </div>
+              <div className="text-xs text-gray-400 mt-1">
+                &nbsp;
+              </div>
+            </div>
+            
+            {/* Total Residuos */}
+            <div className="bg-white p-4">
+              <div className="text-gray-500 text-xs uppercase">TOTAL RESIDUOS</div>
+              <div className="flex items-baseline mt-1">
+                <div className="text-2xl font-bold">
+                  {new Intl.NumberFormat('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(totalWaste/1000)}
+                  <span className="text-sm font-normal ml-1">ton</span>
+                </div>
+                <div className="ml-auto text-xs text-red-500">
+                  ↑ 2.8%
+                </div>
+              </div>
+              <div className="mt-2 h-1 bg-gray-100 rounded-full">
+                <div 
+                  className="h-1 bg-gray-500 rounded-full" 
+                  style={{ width: '86%' }}
                 />
               </div>
               <div className="text-xs text-gray-400 mt-1">
