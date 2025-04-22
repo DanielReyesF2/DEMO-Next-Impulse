@@ -26,18 +26,8 @@ export default function QuartingAnalysis({ wasteData, clientId }: QuartingAnalys
     { name: 'No aprovechable', value: 22, color: '#ee5253' }
   ];
   
-  // Calcular potencial de reciclaje basado en auditoría
-  const recyclablePotential = quartingResults.reduce((sum, item) => {
-    // Consideramos como potencialmente reciclables: PET, Papel, Cartón, Metal y Vidrio
-    if (['Plástico PET', 'Papel', 'Cartón', 'Metal', 'Vidrio'].includes(item.name)) {
-      return sum + item.value;
-    }
-    return sum;
-  }, 0);
-  
-  // Factor de rendimiento (ratio entre reciclaje actual y potencial)
-  const actualRecyclingPercentage = 37;  // Este es el índice de desviación actual
-  const efficiencyFactor = Math.round((actualRecyclingPercentage / recyclablePotential) * 100);
+  // Potencial reciclable según análisis (valor fijo)
+  const recyclablePotential = 78;
   
   // Fecha de la última auditoría
   const lastAuditDate = new Date(2025, 2, 15);  // 15 de marzo de 2025
@@ -91,14 +81,10 @@ export default function QuartingAnalysis({ wasteData, clientId }: QuartingAnalys
               </ResponsiveContainer>
             </div>
             
-            <div className="grid grid-cols-2 gap-3 mt-4">
+            <div className="mt-4">
               <div className="bg-gray-50 p-3 rounded-lg">
                 <div className="text-xs text-gray-500">Potencial Reciclable</div>
                 <div className="text-lg font-semibold text-navy">{recyclablePotential.toFixed(1)}%</div>
-              </div>
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <div className="text-xs text-gray-500">Factor de Eficiencia</div>
-                <div className="text-lg font-semibold text-navy">{efficiencyFactor}%</div>
               </div>
             </div>
           </div>
