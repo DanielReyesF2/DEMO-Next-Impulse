@@ -547,7 +547,7 @@ export default function ClientDetail() {
                               <div className="flex items-center justify-between">
                                 <div>
                                   <p className="text-sm text-gray-500">Inorgánicos</p>
-                                  <p className="text-2xl font-bold">{formatNumber(totalInorganic)} kg</p>
+                                  <p className="text-2xl font-bold">{formatNumber(totalInorganic)} ton</p>
                                 </div>
                                 <div className="bg-blue-100 p-2 rounded-full">
                                   <div className="w-3 h-3 rounded-full bg-blue-500"></div>
@@ -560,7 +560,7 @@ export default function ClientDetail() {
                               <div className="flex items-center justify-between">
                                 <div>
                                   <p className="text-sm text-gray-500">Reciclables</p>
-                                  <p className="text-2xl font-bold">{formatNumber(totalRecyclable)} kg</p>
+                                  <p className="text-2xl font-bold">{formatNumber(totalRecyclable)} ton</p>
                                 </div>
                                 <div className="bg-yellow-100 p-2 rounded-full">
                                   <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
@@ -653,7 +653,7 @@ export default function ClientDetail() {
                               <YAxis 
                                 yAxisId="left"
                                 tick={{ fontSize: 11 }}
-                                tickFormatter={(value: number) => `${value.toLocaleString('es-ES')} kg`}
+                                tickFormatter={(value: number) => `${(value/1000).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ton`}
                                 width={80}
                               />
                               <YAxis 
@@ -669,9 +669,9 @@ export default function ClientDetail() {
                                     return [`${Number(value).toFixed(1)}%`, 'Índice de desviación'];
                                   }
                                   if (typeof name === 'string') {
-                                    return [`${Number(value).toLocaleString('es-ES')} kg`, name.charAt(0).toUpperCase() + name.slice(1)];
+                                    return [`${(Number(value)/1000).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ton`, name.charAt(0).toUpperCase() + name.slice(1)];
                                   }
-                                  return [`${Number(value).toLocaleString('es-ES')} kg`, name];
+                                  return [`${(Number(value)/1000).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ton`, name];
                                 }}
                                 labelFormatter={(label: string, payload: any) => {
                                   if (payload && payload.length > 0 && payload[0].payload.date) {
