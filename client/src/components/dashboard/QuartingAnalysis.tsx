@@ -84,7 +84,7 @@ export default function QuartingAnalysis({ wasteData, clientId }: QuartingAnalys
             <div className="mt-4">
               <div className="bg-gray-50 p-3 rounded-lg">
                 <div className="text-xs text-gray-500">Potencial Reciclable</div>
-                <div className="text-lg font-semibold text-navy">{recyclablePotential.toFixed(1)}%</div>
+                <div className="text-lg font-semibold text-navy">{recyclablePotential}%</div>
               </div>
             </div>
           </div>
