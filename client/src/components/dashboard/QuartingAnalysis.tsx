@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 interface QuartingAnalysisProps {
   wasteData: any[];
@@ -24,18 +24,10 @@ export default function QuartingAnalysis({ wasteData, clientId }: QuartingAnalys
   const nonRecyclableValue = quartingResults.find(item => item.name === 'No reciclable')?.value || 0;
   const recyclablePotential = 100 - nonRecyclableValue;
   
-  // Fecha de la última auditoría
-  const lastAuditDate = new Date(2025, 2, 15);  // 15 de marzo de 2025
-  
   return (
     <Card>
       <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-800 pb-3">
-        <div className="flex justify-between items-center">
-          <CardTitle className="text-white text-xl">Análisis de Cuarteo</CardTitle>
-          <div className="px-2 py-1 bg-white/20 rounded-full text-xs text-white font-semibold">
-            Última auditoría: {lastAuditDate.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' })}
-          </div>
-        </div>
+        <CardTitle className="text-white text-xl">Análisis de Cuarteo</CardTitle>
       </CardHeader>
       
       <CardContent className="pt-5">
