@@ -14,6 +14,21 @@ import TrendChart from '@/components/dashboard/TrendChart';
 import SustainabilityBadges from '@/components/dashboard/SustainabilityBadges';
 import EnvironmentalImpact from '@/components/dashboard/EnvironmentalImpact';
 import { Client, Document, WasteData, Alert as AlertType } from '@shared/schema';
+import { 
+  ResponsiveContainer, 
+  BarChart, 
+  Bar, 
+  PieChart, 
+  Pie, 
+  Cell,
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip as RechartsTooltip, 
+  Line, 
+  ReferenceLine,
+  Legend as RechartsLegend
+} from 'recharts';
 
 export default function ClientDetail() {
   const [_, params] = useRoute<{ id: string }>('/clients/:id');
@@ -454,119 +469,89 @@ export default function ClientDetail() {
                         </div>
                       </div>
                       
-                      {/* Waste Data Table - Versión mejorada */}
+                      {/* Gráfico de barras para registros mensuales */}
                       <div>
                         <h3 className="text-lg font-semibold mb-4">Detalle de Registros Mensuales</h3>
-                        <div className="overflow-x-auto">
-                          <table className="w-full text-sm">
-                            <thead className="text-xs text-white uppercase bg-navy rounded-t-lg">
-                              <tr>
-                                <th className="px-4 py-3 rounded-tl-lg">Periodo</th>
-                                <th className="px-4 py-3 text-center">
-                                  <div className="flex flex-col items-center">
-                                    <span>Orgánicos</span>
-                                    <span className="text-xs font-normal opacity-80">kg</span>
-                                  </div>
-                                </th>
-                                <th className="px-4 py-3 text-center">
-                                  <div className="flex flex-col items-center">
-                                    <span>Inorgánicos</span>
-                                    <span className="text-xs font-normal opacity-80">kg</span>
-                                  </div>
-                                </th>
-                                <th className="px-4 py-3 text-center">
-                                  <div className="flex flex-col items-center">
-                                    <span>Reciclables</span>
-                                    <span className="text-xs font-normal opacity-80">kg</span>
-                                  </div>
-                                </th>
-                                <th className="px-4 py-3 text-center">
-                                  <div className="flex flex-col items-center">
-                                    <span>Total</span>
-                                    <span className="text-xs font-normal opacity-80">kg</span>
-                                  </div>
-                                </th>
-                                <th className="px-4 py-3 text-center rounded-tr-lg">
-                                  <div className="flex flex-col items-center">
-                                    <span>Índice Desviación</span>
-                                    <span className="text-xs font-normal opacity-80">%</span>
-                                  </div>
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {/* Ordenar datos por fecha descendente (más reciente primero) */}
-                              {[...wasteData]
+                        <div className="h-[400px]">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <BarChart
+                              data={[...wasteData]
                                 .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                                .slice(0, 6) // Mostrar solo los últimos 6 meses para mayor claridad
                                 .map((data) => {
                                   const date = new Date(data.date);
-                                  
-                                  // Calcular porcentaje para barras visuales
-                                  const maxValue = Math.max(
-                                    data.organicWaste || 0,
-                                    data.inorganicWaste || 0,
-                                    data.recyclableWaste || 0
-                                  );
-                                  
-                                  const organicPercent = maxValue ? (data.organicWaste || 0) / maxValue * 100 : 0;
-                                  const inorganicPercent = maxValue ? (data.inorganicWaste || 0) / maxValue * 100 : 0;
-                                  const recyclablePercent = maxValue ? (data.recyclableWaste || 0) / maxValue * 100 : 0;
-                                  
-                                  return (
-                                    <tr key={data.id} className="border-b hover:bg-gray-50">
-                                      <td className="px-4 py-3 font-medium">
-                                        <div className="flex flex-col">
-                                          <span>{formatDate(date)}</span>
-                                          <span className="text-xs text-gray-500">{getMonthName(date)} {date.getFullYear()}</span>
-                                        </div>
-                                      </td>
-                                      
-                                      <td className="px-4 py-3">
-                                        <div className="flex flex-col">
-                                          <span className="font-medium text-right mb-1">{formatNumber(data.organicWaste || 0)}</span>
-                                          <div className="w-full bg-gray-200 rounded-full h-1.5">
-                                            <div className="bg-lime h-1.5 rounded-full" style={{ width: `${organicPercent}%` }}></div>
-                                          </div>
-                                        </div>
-                                      </td>
-                                      
-                                      <td className="px-4 py-3">
-                                        <div className="flex flex-col">
-                                          <span className="font-medium text-right mb-1">{formatNumber(data.inorganicWaste || 0)}</span>
-                                          <div className="w-full bg-gray-200 rounded-full h-1.5">
-                                            <div className="bg-navy h-1.5 rounded-full" style={{ width: `${inorganicPercent}%` }}></div>
-                                          </div>
-                                        </div>
-                                      </td>
-                                      
-                                      <td className="px-4 py-3">
-                                        <div className="flex flex-col">
-                                          <span className="font-medium text-right mb-1">{formatNumber(data.recyclableWaste || 0)}</span>
-                                          <div className="w-full bg-gray-200 rounded-full h-1.5">
-                                            <div className="bg-yellow-500 h-1.5 rounded-full" style={{ width: `${recyclablePercent}%` }}></div>
-                                          </div>
-                                        </div>
-                                      </td>
-                                      
-                                      <td className="px-4 py-3">
-                                        <div className="flex justify-center font-bold">
-                                          {formatNumber(data.totalWaste || 0)}
-                                        </div>
-                                      </td>
-                                      
-                                      <td className="px-4 py-3">
-                                        <div className="flex justify-center">
-                                          <div className="bg-green-100 px-2 py-1 rounded-lg font-bold text-green-800">
-                                            {data.deviation ? data.deviation.toFixed(1) : 0}%
-                                          </div>
-                                        </div>
-                                      </td>
-                                    </tr>
-                                  );
+                                  const monthYear = `${getMonthName(date).slice(0, 3)} ${date.getFullYear().toString().slice(2)}`;
+                                  return {
+                                    name: monthYear,
+                                    organicos: data.organicWaste || 0,
+                                    inorganicos: data.inorganicWaste || 0,
+                                    reciclables: data.recyclableWaste || 0,
+                                    desviacion: data.deviation || 0,
+                                    date: date
+                                  };
                                 })
+                                .reverse() // Invertir para mostrar de más antiguo a más reciente
                               }
-                            </tbody>
-                          </table>
+                              margin={{ top: 20, right: 30, left: 20, bottom: 70 }}
+                            >
+                              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                              <XAxis 
+                                dataKey="name" 
+                                tick={{ fontSize: 12 }}
+                                height={60}
+                              />
+                              <YAxis 
+                                yAxisId="left"
+                                tick={{ fontSize: 11 }}
+                                tickFormatter={(value: number) => `${value.toLocaleString('es-ES')} kg`}
+                                width={80}
+                              />
+                              <YAxis 
+                                yAxisId="right" 
+                                orientation="right" 
+                                domain={[0, 100]}
+                                tickFormatter={(value: number) => `${value}%`}
+                                width={40}
+                              />
+                              <RechartsTooltip 
+                                formatter={(value: any, name: string) => {
+                                  if (name === 'desviacion') {
+                                    return [`${Number(value).toFixed(1)}%`, 'Índice de desviación'];
+                                  }
+                                  if (typeof name === 'string') {
+                                    return [`${Number(value).toLocaleString('es-ES')} kg`, name.charAt(0).toUpperCase() + name.slice(1)];
+                                  }
+                                  return [`${Number(value).toLocaleString('es-ES')} kg`, name];
+                                }}
+                                labelFormatter={(label: string, payload: any) => {
+                                  if (payload && payload.length > 0 && payload[0].payload.date) {
+                                    const date = payload[0].payload.date;
+                                    return `${getMonthName(date)} ${date.getFullYear()}`;
+                                  }
+                                  return label;
+                                }}
+                              />
+                              <RechartsLegend verticalAlign="top" height={36} />
+                              <Bar yAxisId="left" dataKey="organicos" name="Orgánicos" fill="#b5e951" radius={[4, 4, 0, 0]} />
+                              <Bar yAxisId="left" dataKey="inorganicos" name="Inorgánicos" fill="#273949" radius={[4, 4, 0, 0]} />
+                              <Bar yAxisId="left" dataKey="reciclables" name="Reciclables" fill="#ff9933" radius={[4, 4, 0, 0]} />
+                              <Line 
+                                yAxisId="right"
+                                type="monotone"
+                                dataKey="desviacion"
+                                name="Índice de desviación"
+                                stroke="#00a86b"
+                                strokeWidth={2}
+                                dot={{ r: 5, strokeWidth: 2, fill: 'white' }}
+                              />
+                              <ReferenceLine y={90} yAxisId="right" stroke="#00a86b" strokeDasharray="3 3" label={{
+                                value: 'Meta: 90%',
+                                position: 'insideBottomRight',
+                                fill: '#00a86b',
+                                fontSize: 11
+                              }} />
+                            </BarChart>
+                          </ResponsiveContainer>
                         </div>
                         
                         <div className="mt-3 text-xs text-gray-500 italic text-center">
