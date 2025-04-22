@@ -172,27 +172,35 @@ export default function TrendChart({ data }: TrendChartProps) {
     return total > max.total ? { name: month.month, total } : max;
   }, { name: '', total: 0 });
   
-  // Calcular evolución respecto al período anterior
-  const getLastPeriodTrend = () => {
-    if (displayData.length < 2) return { value: 0, isPositive: false };
+  // Calcular evolución respecto a los períodos anteriores con análisis de tendencia
+  const calculateTrend = () => {
+    // Si no hay suficientes datos, no podemos calcular tendencia
+    if (displayData.length < 3) return { value: 0, isPositive: false };
     
-    const lastIndex = displayData.length - 1;
-    const currentTotal = displayData[lastIndex].organicWaste + 
-                        displayData[lastIndex].inorganicWaste + 
-                        (displayData[lastIndex].recyclableWaste || 0);
+    // Separamos los datos en dos mitades para comparar: primera mitad y segunda mitad del período
+    const midPoint = Math.floor(displayData.length / 2);
     
-    const previousTotal = displayData[lastIndex - 1].organicWaste + 
-                         displayData[lastIndex - 1].inorganicWaste + 
-                         (displayData[lastIndex - 1].recyclableWaste || 0);
+    // Calculamos el promedio de generación total por período (incluyendo PODA) para cada mitad
+    const firstHalfAvg = displayData.slice(0, midPoint).reduce((sum, period) => {
+      return sum + period.organicWaste + period.inorganicWaste + period.podaWaste + (period.recyclableWaste || 0);
+    }, 0) / midPoint;
     
-    const change = ((currentTotal - previousTotal) / previousTotal) * 100;
+    const secondHalfAvg = displayData.slice(midPoint).reduce((sum, period) => {
+      return sum + period.organicWaste + period.inorganicWaste + period.podaWaste + (period.recyclableWaste || 0);
+    }, 0) / (displayData.length - midPoint);
+    
+    // Calculamos el cambio porcentual entre las dos mitades
+    // Un valor negativo significa reducción (deseable), un valor positivo significa aumento (indeseable)
+    const percentChange = ((secondHalfAvg - firstHalfAvg) / firstHalfAvg) * 100;
+    
+    // Para el sistema de tendencia, consideramos "positivo" una reducción (valor negativo)
     return {
-      value: Math.abs(change).toFixed(1),
-      isPositive: change > 0
+      value: Math.abs(percentChange).toFixed(1),
+      isPositive: percentChange > 0  // true = aumento (mal), false = reducción (bien)
     };
   };
   
-  const trend = getLastPeriodTrend();
+  const trend = calculateTrend();
 
   return (
     <div className="bg-white shadow rounded-lg p-5 relative overflow-hidden">
@@ -215,7 +223,7 @@ export default function TrendChart({ data }: TrendChartProps) {
         <div className="bg-gray-50 rounded-lg p-3">
           <div className="text-xs text-gray-500 mb-1">Índice de Desviación</div>
           <div className="text-lg font-semibold text-green-600">
-            {Math.min(90, Math.round(37))}%
+            {Math.min(90, Math.round(((totalRecyclableFixed + totalPodaFixed) / totalWaste) * 100))}%
           </div>
           <div className="text-xs text-gray-400 mt-1">Meta: 90%</div>
         </div>
