@@ -13,6 +13,30 @@ const MARGINS = {
   right: 15
 };
 
+// Función auxiliar para añadir el encabezado minimalista de Econova
+function addMinimalistHeader(doc: jsPDF, title: string = 'REPORTE DE GESTIÓN DE RESIDUOS') {
+  // Barra superior azul 
+  doc.setFillColor(parseInt(COLORS.navy.slice(1, 3), 16), parseInt(COLORS.navy.slice(3, 5), 16), parseInt(COLORS.navy.slice(5, 7), 16));
+  doc.rect(0, 0, 210, 20, 'F');
+  
+  // Línea verde característica
+  doc.setFillColor(parseInt(COLORS.lime.slice(1, 3), 16), parseInt(COLORS.lime.slice(3, 5), 16), parseInt(COLORS.lime.slice(5, 7), 16));
+  doc.rect(0, 20, 210, 2, 'F');
+  
+  // Logo en el encabezado
+  try {
+    doc.addImage(logoPath, 'PNG', 10, 2, 30, 15, undefined, 'FAST');
+  } catch (error) {
+    console.error('Error al añadir el logo en el encabezado:', error);
+  }
+  
+  // Título
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(12);
+  doc.text(title, 105, 13, { align: 'center' });
+}
+
 interface ReportData {
   client: Client;
   wasteData: WasteData[];
@@ -24,15 +48,15 @@ interface ReportData {
   period: string;
 }
 
-// Colores corporativos
+// Colores corporativos de Econova
 const COLORS = {
-  navy: '#273949',
-  lime: '#b5e951',
-  lightGray: '#f8f9fa',
-  darkGray: '#495057',
-  green: '#2b8a3e',
-  orange: '#e67700',
-  red: '#e03131',
+  navy: '#273949',      // Azul marino corporativo
+  lime: '#b5e951',      // Verde lima corporativo
+  lightGray: '#f8f9fa', // Fondo claro
+  darkGray: '#495057',  // Texto secundario
+  green: '#74c278',     // Verde para orgánicos
+  blue: '#3e8cbe',      // Azul para elementos decorativos
+  accent: '#e9f5d8',    // Color de acento suave
 };
 
 // Función para formatear números con separador de miles
@@ -48,134 +72,133 @@ export async function generateClientPDF(data: ReportData): Promise<Blob> {
     format: 'a4'
   });
   
-  // ===== PORTADA =====
-  // Fondo de la portada con gradiente
-  doc.setFillColor(39, 57, 73); // Navy
+  // ===== PORTADA MINIMALISTA =====
+  // Fondo blanco limpio para mayor minimalismo
+  doc.setFillColor(255, 255, 255);
   doc.rect(0, 0, 210, 297, 'F');
   
-  // Crear franja de color degradado en la parte superior
-  createGradientPattern(doc, 0, 0, 210, 90, '#273949', '#1a2a3c', 'vertical');
+  // Barra superior con color corporativo
+  doc.setFillColor(parseInt(COLORS.navy.slice(1, 3), 16), parseInt(COLORS.navy.slice(3, 5), 16), parseInt(COLORS.navy.slice(5, 7), 16));
+  doc.rect(0, 0, 210, 70, 'F');
   
-  // Elementos decorativos - círculos con degradado
-  doc.setFillColor(181, 233, 81, 0.3); // Lime con transparencia
-  doc.circle(180, 30, 40, 'F');
-  doc.setFillColor(181, 233, 81, 0.2); // Lime con más transparencia
-  doc.circle(20, 260, 35, 'F');
+  // Línea decorativa verde
+  doc.setFillColor(parseInt(COLORS.lime.slice(1, 3), 16), parseInt(COLORS.lime.slice(3, 5), 16), parseInt(COLORS.lime.slice(5, 7), 16));
+  doc.rect(0, 70, 210, 3, 'F');
   
-  // Añadir imagen del logo (centrado en la parte superior)
+  // Añadir imagen del logo centrado
   try {
-    doc.addImage(logoPath, 'PNG', 60, 40, 90, 45, undefined, 'FAST');
+    doc.addImage(logoPath, 'PNG', 70, 15, 70, 35, undefined, 'FAST');
   } catch (error) {
     console.error('Error al añadir el logo:', error);
   }
   
-  // Título del reporte
+  // Título del reporte con aspecto minimalista
   doc.setFont('helvetica', 'bold');
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(28);
-  doc.text('REPORTE DE GESTIÓN', 105, 120, { align: 'center' });
-  doc.text('DE RESIDUOS', 105, 135, { align: 'center' });
+  doc.setTextColor(parseInt(COLORS.navy.slice(1, 3), 16), parseInt(COLORS.navy.slice(3, 5), 16), parseInt(COLORS.navy.slice(5, 7), 16));
+  doc.setFontSize(24);
+  doc.text('REPORTE DE GESTIÓN DE RESIDUOS', 105, 100, { align: 'center' });
   
-  // Información del periodo
-  doc.setFontSize(18);
-  doc.text(data.period.toUpperCase(), 105, 155, { align: 'center' });
+  // Línea decorativa para separar el título
+  doc.setDrawColor(parseInt(COLORS.lime.slice(1, 3), 16), parseInt(COLORS.lime.slice(3, 5), 16), parseInt(COLORS.lime.slice(5, 7), 16));
+  doc.setLineWidth(1);
+  doc.line(60, 105, 150, 105);
   
   // Cliente
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16);
+  doc.text(data.client.name, 105, 125, { align: 'center' });
+  
+  // Información del periodo
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(14);
-  doc.text(data.client.name, 105, 180, { align: 'center' });
+  doc.text(data.period, 105, 140, { align: 'center' });
   
-  // Diseño gráfico: elementos decorativos y visuales de impacto
-  // Panel con datos clave para destacar
-  doc.setFillColor(20, 40, 60, 0.8); // Fondo azul oscuro semi-transparente
-  doc.roundedRect(25, 195, 160, 60, 5, 5, 'F');
+  // Destacar el índice de desviación - métrica clave
+  doc.setFillColor(245, 247, 250);
+  doc.roundedRect(30, 160, 150, 80, 3, 3, 'F');
+  
+  // Título de la métrica clave
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(parseInt(COLORS.navy.slice(1, 3), 16), parseInt(COLORS.navy.slice(3, 5), 16), parseInt(COLORS.navy.slice(5, 7), 16));
+  doc.text('INDICADORES CLAVE', 105, 175, { align: 'center' });
   
   // Círculo verde para el índice de desviación
-  doc.setFillColor(181, 233, 81); // Lime
-  doc.circle(60, 225, 25, 'F');
+  doc.setFillColor(parseInt(COLORS.lime.slice(1, 3), 16), parseInt(COLORS.lime.slice(3, 5), 16), parseInt(COLORS.lime.slice(5, 7), 16));
+  doc.circle(60, 200, 18, 'F');
   
-  // Índice de desviación destacado
-  doc.setTextColor(39, 57, 73); // Navy
+  // Valor de desviación destacado
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(24);
-  doc.text(`${data.deviation.toFixed(1)}%`, 60, 230, { align: 'center' });
+  doc.setFontSize(16);
+  doc.setTextColor(parseInt(COLORS.navy.slice(1, 3), 16), parseInt(COLORS.navy.slice(3, 5), 16), parseInt(COLORS.navy.slice(5, 7), 16));
+  doc.text(`${data.deviation.toFixed(1)}%`, 60, 204, { align: 'center' });
   
+  // Etiqueta de desviación
+  doc.setFont('helvetica', 'normal');
   doc.setFontSize(10);
-  doc.setTextColor(255, 255, 255);
-  doc.text('ÍNDICE DE DESVIACIÓN', 60, 250, { align: 'center' });
+  doc.text('ÍNDICE DE DESVIACIÓN', 60, 225, { align: 'center' });
   
   // Información adicional destacada para la portada
   const portalTotalTons = data.totalWaste / 1000;
   const portalRecyclableTons = data.recyclableTotal / 1000;
   
-  // Toneladas totales
+  // Total toneladas
+  doc.setFillColor(parseInt(COLORS.blue.slice(1, 3), 16), parseInt(COLORS.blue.slice(3, 5), 16), parseInt(COLORS.blue.slice(5, 7), 16), 0.8);
+  doc.circle(150, 200, 18, 'F');
+  
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(18);
+  doc.setFontSize(16);
   doc.setTextColor(255, 255, 255);
-  doc.text(formatNumber(portalTotalTons), 150, 215);
+  doc.text(formatNumber(portalTotalTons), 150, 200, { align: 'center' });
   
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(10);
-  doc.text('TONELADAS GESTIONADAS', 150, 225);
+  doc.setTextColor(parseInt(COLORS.darkGray.slice(1, 3), 16), parseInt(COLORS.darkGray.slice(3, 5), 16), parseInt(COLORS.darkGray.slice(5, 7), 16));
+  doc.text('TONELADAS TOTALES', 150, 225, { align: 'center' });
   
-  // Toneladas recicladas
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(18);
-  doc.setTextColor(181, 233, 81); // Lime
-  doc.text(formatNumber(portalRecyclableTons), 150, 245);
-  
+  // Pie de página minimalista
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(10);
-  doc.setTextColor(255, 255, 255);
-  doc.text('TONELADAS RECICLADAS', 150, 255);
-  
-  // Pie de página de la portada
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(10);
-  doc.setTextColor(200, 200, 200);
+  doc.setFontSize(9);
+  doc.setTextColor(100, 100, 100);
   doc.text('ECONOVA © 2025 | Innovando en Gestión Ambiental', 105, 280, { align: 'center' });
   
-  // ===== CONTENIDO PRINCIPAL =====
+  // ===== CONTENIDO PRINCIPAL - RESUMEN EJECUTIVO =====
   doc.addPage();
   
-  // Encabezado con color de fondo
-  doc.setFillColor(39, 57, 73); // Navy
-  doc.rect(0, 0, 210, 25, 'F');
+  // Usar la función auxiliar para crear el encabezado
+  addMinimalistHeader(doc);
   
-  // Logo pequeño en el encabezado
-  try {
-    doc.addImage(logoPath, 'PNG', 10, 5, 30, 15, undefined, 'FAST');
-  } catch (error) {
-    console.error('Error al añadir el logo en el encabezado:', error);
-  }
+  // Información del cliente con estilo minimalista
+  doc.setFillColor(245, 247, 250);
+  doc.rect(0, 22, 210, 18, 'F');
   
-  // Título en el encabezado
   doc.setFont('helvetica', 'bold');
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(14);
-  doc.text('REPORTE DE GESTIÓN DE RESIDUOS', 105, 15, { align: 'center' });
+  doc.setFontSize(10);
+  doc.setTextColor(parseInt(COLORS.navy.slice(1, 3), 16), parseInt(COLORS.navy.slice(3, 5), 16), parseInt(COLORS.navy.slice(5, 7), 16));
+  doc.text(`Cliente: ${data.client.name}`, 15, 33);
   
-  // Información del cliente
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(12);
-  doc.setTextColor(39, 57, 73); // Navy
-  doc.text(`Cliente: ${data.client.name}`, 15, 40);
-  doc.text(`Período: ${data.period}`, 15, 48);
+  doc.text(`Período: ${data.period}`, 105, 33);
   
   // ==== RESUMEN EJECUTIVO ====
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(16);
-  doc.setTextColor(39, 57, 73); // Navy
-  doc.text('RESUMEN EJECUTIVO', 15, 60);
+  doc.setFontSize(14);
+  doc.setTextColor(parseInt(COLORS.navy.slice(1, 3), 16), parseInt(COLORS.navy.slice(3, 5), 16), parseInt(COLORS.navy.slice(5, 7), 16));
+  doc.text('RESUMEN EJECUTIVO', 105, 50, { align: 'center' });
   
-  // Crear fondo para el resumen ejecutivo
-  doc.setFillColor(245, 250, 255); // Light blue background
-  doc.roundedRect(15, 65, 180, 45, 3, 3, 'F');
+  // Línea decorativa
+  doc.setDrawColor(parseInt(COLORS.lime.slice(1, 3), 16), parseInt(COLORS.lime.slice(3, 5), 16), parseInt(COLORS.lime.slice(5, 7), 16));
+  doc.setLineWidth(1);
+  doc.line(65, 53, 145, 53);
+  
+  // Panel minimalista para el resumen
+  doc.setFillColor(parseInt(COLORS.accent.slice(1, 3), 16), parseInt(COLORS.accent.slice(3, 5), 16), parseInt(COLORS.accent.slice(5, 7), 16));
+  doc.roundedRect(MARGINS.left, 60, 210 - MARGINS.left - MARGINS.right, 55, 2, 2, 'F');
   
   // Texto del resumen ejecutivo
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(10);
-  doc.setTextColor(60, 60, 60);
+  doc.setTextColor(parseInt(COLORS.darkGray.slice(1, 3), 16), parseInt(COLORS.darkGray.slice(3, 5), 16), parseInt(COLORS.darkGray.slice(5, 7), 16));
   
   // Cálculos para el resumen ejecutivo (valores en toneladas para más impacto)
   const organicTons = data.organicTotal / 1000;
@@ -309,22 +332,8 @@ export async function generateClientPDF(data: ReportData): Promise<Blob> {
   // Añadir nueva página para el resto del contenido
   doc.addPage();
   
-  // Encabezado con color de fondo (consistente en todas las páginas)
-  doc.setFillColor(39, 57, 73); // Navy
-  doc.rect(0, 0, 210, 25, 'F');
-  
-  // Logo pequeño en el encabezado
-  try {
-    doc.addImage(logoPath, 'PNG', 10, 5, 30, 15, undefined, 'FAST');
-  } catch (error) {
-    console.error('Error al añadir el logo en el encabezado:', error);
-  }
-  
-  // Título en el encabezado
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(14);
-  doc.text('REPORTE DE GESTIÓN DE RESIDUOS', 105, 15, { align: 'center' });
+  // Usar la función auxiliar para crear el encabezado
+  addMinimalistHeader(doc);
   
   // Título de la sección
   doc.setFont('helvetica', 'bold');
@@ -392,22 +401,8 @@ export async function generateClientPDF(data: ReportData): Promise<Blob> {
   // Añadir nueva página para el impacto ambiental
   doc.addPage();
   
-  // Encabezado consistente
-  doc.setFillColor(39, 57, 73); // Navy
-  doc.rect(0, 0, 210, 25, 'F');
-  
-  // Logo pequeño en el encabezado
-  try {
-    doc.addImage(logoPath, 'PNG', 10, 5, 30, 15, undefined, 'FAST');
-  } catch (error) {
-    console.error('Error al añadir el logo en el encabezado:', error);
-  }
-  
-  // Título en el encabezado
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(14);
-  doc.text('REPORTE DE GESTIÓN DE RESIDUOS', 105, 15, { align: 'center' });
+  // Usar la función auxiliar para crear el encabezado
+  addMinimalistHeader(doc);
   
   // Título de la sección con fondo degradado para destacar
   doc.setFillColor(39, 57, 73); // Navy
@@ -516,22 +511,8 @@ export async function generateClientPDF(data: ReportData): Promise<Blob> {
   // ==== DETALLE MENSUAL ====
   doc.addPage();
   
-  // Encabezado consistente
-  doc.setFillColor(39, 57, 73); // Navy
-  doc.rect(0, 0, 210, 25, 'F');
-  
-  // Logo pequeño en el encabezado
-  try {
-    doc.addImage(logoPath, 'PNG', 10, 5, 30, 15, undefined, 'FAST');
-  } catch (error) {
-    console.error('Error al añadir el logo en el encabezado:', error);
-  }
-  
-  // Título en el encabezado
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(14);
-  doc.text('REPORTE DE GESTIÓN DE RESIDUOS', 105, 15, { align: 'center' });
+  // Usar la función auxiliar para crear el encabezado
+  addMinimalistHeader(doc);
   
   // Título de la sección
   doc.setFont('helvetica', 'bold');
