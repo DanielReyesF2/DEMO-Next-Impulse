@@ -176,29 +176,29 @@ const formatNumber = (num: number): string => {
 };
 
 export async function generateClientPDF(data: ReportData): Promise<Blob> {
-  // Crear documento PDF
+  // Crear documento PDF - exactamente 3 páginas
   const doc = new jsPDF({
     orientation: 'portrait',
     unit: 'mm',
     format: 'a4'
   });
-  
-  // ===== PORTADA MINIMALISTA =====
+
+  // ===== PÁGINA 1: PORTADA Y RESUMEN EJECUTIVO =====
   // Fondo blanco limpio para mayor minimalismo
   doc.setFillColor(255, 255, 255);
   doc.rect(0, 0, 210, 297, 'F');
   
-  // Barra superior con color corporativo
+  // Barra superior con color corporativo - más compacta
   doc.setFillColor(parseInt(COLORS.navy.slice(1, 3), 16), parseInt(COLORS.navy.slice(3, 5), 16), parseInt(COLORS.navy.slice(5, 7), 16));
-  doc.rect(0, 0, 210, 70, 'F');
+  doc.rect(0, 0, 210, 50, 'F');
   
   // Línea decorativa verde
   doc.setFillColor(parseInt(COLORS.lime.slice(1, 3), 16), parseInt(COLORS.lime.slice(3, 5), 16), parseInt(COLORS.lime.slice(5, 7), 16));
-  doc.rect(0, 70, 210, 3, 'F');
+  doc.rect(0, 50, 210, 3, 'F');
   
   // Añadir imagen del logo centrado
   try {
-    doc.addImage(logoPath, 'PNG', 70, 15, 70, 35, undefined, 'FAST');
+    doc.addImage(logoPath, 'PNG', 70, 8, 70, 35, undefined, 'FAST');
   } catch (error) {
     console.error('Error al añadir el logo:', error);
   }
@@ -206,72 +206,81 @@ export async function generateClientPDF(data: ReportData): Promise<Blob> {
   // Título del reporte con aspecto minimalista
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(parseInt(COLORS.navy.slice(1, 3), 16), parseInt(COLORS.navy.slice(3, 5), 16), parseInt(COLORS.navy.slice(5, 7), 16));
-  doc.setFontSize(24);
-  doc.text('REPORTE DE GESTIÓN DE RESIDUOS', 105, 100, { align: 'center' });
+  doc.setFontSize(22);
+  doc.text('REPORTE DE GESTIÓN DE RESIDUOS', 105, 70, { align: 'center' });
   
   // Línea decorativa para separar el título
   doc.setDrawColor(parseInt(COLORS.lime.slice(1, 3), 16), parseInt(COLORS.lime.slice(3, 5), 16), parseInt(COLORS.lime.slice(5, 7), 16));
   doc.setLineWidth(1);
-  doc.line(60, 105, 150, 105);
+  doc.line(60, 75, 150, 75);
   
   // Cliente
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(16);
-  doc.text(data.client.name, 105, 125, { align: 'center' });
+  doc.text(data.client.name, 105, 90, { align: 'center' });
   
   // Información del periodo
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(14);
-  doc.text(data.period, 105, 140, { align: 'center' });
+  doc.text(data.period, 105, 105, { align: 'center' });
   
-  // Destacar el índice de desviación - métrica clave
+  // INDICADORES CLAVE - Panel más compacto
   doc.setFillColor(245, 247, 250);
-  doc.roundedRect(30, 160, 150, 80, 3, 3, 'F');
+  doc.roundedRect(15, 115, 180, 40, 3, 3, 'F');
   
   // Título de la métrica clave
   doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12);
+  doc.setTextColor(parseInt(COLORS.navy.slice(1, 3), 16), parseInt(COLORS.navy.slice(3, 5), 16), parseInt(COLORS.navy.slice(5, 7), 16));
+  doc.text('INDICADORES CLAVE', 105, 125, { align: 'center' });
+  
+  // Mostrar tres indicadores clave en línea
+  // 1. Desviación
+  doc.setFillColor(parseInt(COLORS.lime.slice(1, 3), 16), parseInt(COLORS.lime.slice(3, 5), 16), parseInt(COLORS.lime.slice(5, 7), 16));
+  doc.circle(45, 140, 12, 'F');
+  
+  doc.setFont('helvetica', 'bold');
   doc.setFontSize(14);
   doc.setTextColor(parseInt(COLORS.navy.slice(1, 3), 16), parseInt(COLORS.navy.slice(3, 5), 16), parseInt(COLORS.navy.slice(5, 7), 16));
-  doc.text('INDICADORES CLAVE', 105, 175, { align: 'center' });
+  doc.text(`${data.deviation.toFixed(1)}%`, 45, 143, { align: 'center' });
   
-  // Círculo verde para el índice de desviación
-  doc.setFillColor(parseInt(COLORS.lime.slice(1, 3), 16), parseInt(COLORS.lime.slice(3, 5), 16), parseInt(COLORS.lime.slice(5, 7), 16));
-  doc.circle(60, 200, 18, 'F');
-  
-  // Valor de desviación destacado
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(16);
-  doc.setTextColor(parseInt(COLORS.navy.slice(1, 3), 16), parseInt(COLORS.navy.slice(3, 5), 16), parseInt(COLORS.navy.slice(5, 7), 16));
-  doc.text(`${data.deviation.toFixed(1)}%`, 60, 204, { align: 'center' });
-  
-  // Etiqueta de desviación
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(10);
-  doc.text('ÍNDICE DE DESVIACIÓN', 60, 225, { align: 'center' });
+  doc.setFontSize(8);
+  doc.text('ÍNDICE DE DESVIACIÓN', 45, 155, { align: 'center' });
   
-  // Información adicional destacada para la portada
-  const portalTotalTons = data.totalWaste / 1000;
-  const portalRecyclableTons = data.recyclableTotal / 1000;
+  // Calcular valores en toneladas
+  const organicTons = data.organicTotal / 1000;
+  const inorganicTons = data.inorganicTotal / 1000;
+  const recyclableTons = data.recyclableTotal / 1000;
+  const totalTons = data.totalWaste / 1000;
   
-  // Total toneladas
+  // 2. Total toneladas
   doc.setFillColor(parseInt(COLORS.blue.slice(1, 3), 16), parseInt(COLORS.blue.slice(3, 5), 16), parseInt(COLORS.blue.slice(5, 7), 16), 0.8);
-  doc.circle(150, 200, 18, 'F');
+  doc.circle(105, 140, 12, 'F');
   
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(16);
+  doc.setFontSize(14);
   doc.setTextColor(255, 255, 255);
-  doc.text(formatNumber(portalTotalTons), 150, 200, { align: 'center' });
+  doc.text(formatNumber(totalTons), 105, 143, { align: 'center' });
   
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(10);
+  doc.setFontSize(8);
   doc.setTextColor(parseInt(COLORS.darkGray.slice(1, 3), 16), parseInt(COLORS.darkGray.slice(3, 5), 16), parseInt(COLORS.darkGray.slice(5, 7), 16));
-  doc.text('TONELADAS TOTALES', 150, 225, { align: 'center' });
+  doc.text('TONELADAS TOTALES', 105, 155, { align: 'center' });
   
-  // Pie de página minimalista
+  // 3. Reciclaje
+  doc.setFillColor(parseInt(COLORS.green.slice(1, 3), 16), parseInt(COLORS.green.slice(3, 5), 16), parseInt(COLORS.green.slice(5, 7), 16), 0.8);
+  doc.circle(165, 140, 12, 'F');
+  
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(255, 255, 255);
+  doc.text(formatNumber(recyclableTons), 165, 143, { align: 'center' });
+  
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(9);
-  doc.setTextColor(100, 100, 100);
-  doc.text('ECONOVA © 2025 | Innovando en Gestión Ambiental', 105, 280, { align: 'center' });
+  doc.setFontSize(8);
+  doc.setTextColor(parseInt(COLORS.darkGray.slice(1, 3), 16), parseInt(COLORS.darkGray.slice(3, 5), 16), parseInt(COLORS.darkGray.slice(5, 7), 16));
+  doc.text('TONELADAS RECICLADAS', 165, 155, { align: 'center' });
   
   // ===== CONTENIDO PRINCIPAL - RESUMEN EJECUTIVO =====
   doc.addPage();
@@ -311,11 +320,7 @@ export async function generateClientPDF(data: ReportData): Promise<Blob> {
   doc.setFontSize(10);
   doc.setTextColor(parseInt(COLORS.darkGray.slice(1, 3), 16), parseInt(COLORS.darkGray.slice(3, 5), 16), parseInt(COLORS.darkGray.slice(5, 7), 16));
   
-  // Cálculos para el resumen ejecutivo (valores en toneladas para más impacto)
-  const organicTons = data.organicTotal / 1000;
-  const inorganicTons = data.inorganicTotal / 1000;
-  const recyclableTons = data.recyclableTotal / 1000;
-  const totalTons = data.totalWaste / 1000;
+  // Calcular toneladas a relleno sanitario (ya tenemos los valores por separado)
   const landfillTons = organicTons + inorganicTons;
   
   const recyclablePercentage = (data.recyclableTotal / data.totalWaste * 100).toFixed(1);
@@ -697,8 +702,8 @@ export async function generateClientPDF(data: ReportData): Promise<Blob> {
   // Cabina
   doc.setFillColor(32, 184, 93);
   doc.roundedRect(122, 234, 4, 2, 1, 1, 'F');
-  // Ruedas
-  doc.setFillColor(30, 30, 30);
+  // Ruedas - cambiando de negro a gris oscuro
+  doc.setFillColor(80, 90, 100);
   doc.circle(121.5, 239, 1, 'F');
   doc.circle(126.5, 239, 1, 'F');
   
