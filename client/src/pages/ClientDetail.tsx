@@ -17,6 +17,8 @@ import SustainabilityBadges from '@/components/dashboard/SustainabilityBadges';
 import EnvironmentalImpact from '@/components/dashboard/EnvironmentalImpact';
 import QuartingAnalysis from '@/components/dashboard/QuartingAnalysis';
 import ReportPeriodSelector from '@/components/dashboard/ReportPeriodSelector';
+import WasteDataForm from '@/components/wastedata/WasteDataForm';
+import WasteDataHistory from '@/components/wastedata/WasteDataHistory';
 import { Client, Document, WasteData, Alert as AlertType } from '@shared/schema';
 import { 
   ResponsiveContainer, 
@@ -413,6 +415,7 @@ export default function ClientDetail() {
               <TabsTrigger value="overview">General</TabsTrigger>
               <TabsTrigger value="analysis">Análisis</TabsTrigger>
               <TabsTrigger value="documents">Documentos</TabsTrigger>
+              <TabsTrigger value="wastedata">Registro de Residuos</TabsTrigger>
             </TabsList>
             <TabsContent value="overview">
               <div className="flex flex-col gap-6">
@@ -515,6 +518,38 @@ export default function ClientDetail() {
                   )}
                 </CardContent>
               </Card>
+            </TabsContent>
+            
+            <TabsContent value="wastedata">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Registro Manual de Residuos</CardTitle>
+                    <CardDescription>Captura datos de generación de residuos sin necesidad de subir documentos</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {client && (
+                      <WasteDataForm 
+                        clients={[client]} 
+                        onSuccess={() => {
+                          // Refrescar datos después del registro exitoso
+                          window.location.reload();
+                        }}
+                      />
+                    )}
+                  </CardContent>
+                </Card>
+                
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Historial de Registros</CardTitle>
+                    <CardDescription>Últimos registros de residuos ingresados</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <WasteDataHistory clientId={clientId} limit={10} />
+                  </CardContent>
+                </Card>
+              </div>
             </TabsContent>
             
             <TabsContent value="analysis">
