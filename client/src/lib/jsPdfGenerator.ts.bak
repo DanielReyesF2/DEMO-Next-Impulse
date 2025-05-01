@@ -13,22 +13,6 @@ const MARGINS = {
   right: 15
 };
 
-// Colores corporativos de Econova
-const COLORS = {
-  navy: '#273949',      // Azul marino corporativo
-  lime: '#b5e951',      // Verde lima corporativo
-  lightGray: '#f8f9fa', // Fondo claro
-  darkGray: '#495057',  // Texto secundario
-  green: '#74c278',     // Verde para orgánicos
-  blue: '#3e8cbe',      // Azul para elementos decorativos
-  accent: '#e9f5d8',    // Color de acento suave
-};
-
-// Función para formatear números con separador de miles
-const formatNumber = (num: number): string => {
-  return new Intl.NumberFormat('es-MX', { maximumFractionDigits: 2 }).format(num);
-};
-
 // Función auxiliar para añadir el encabezado minimalista de Econova
 function addMinimalistHeader(doc: jsPDF, title: string = 'REPORTE DE GESTIÓN DE RESIDUOS') {
   // Barra superior azul 
@@ -96,6 +80,8 @@ function drawWaterDropIcon(doc: jsPDF, x: number, y: number, size: number = 1) {
 function drawLightningIcon(doc: jsPDF, x: number, y: number, size: number = 1) {
   const boltWidth = 10 * size;
   const boltHeight = 16 * size;
+  
+  // Puntos para un rayo detallado - Usando triángulos en su lugar ya que jsPDF no tiene polygon nativo
   
   // Forma principal del rayo - dibujarlo manualmente con triángulos
   doc.setFillColor(241, 196, 15); // Amarillo brillante
@@ -172,6 +158,22 @@ interface ReportData {
   deviation: number;
   period: string;
 }
+
+// Colores corporativos de Econova
+const COLORS = {
+  navy: '#273949',      // Azul marino corporativo
+  lime: '#b5e951',      // Verde lima corporativo
+  lightGray: '#f8f9fa', // Fondo claro
+  darkGray: '#495057',  // Texto secundario
+  green: '#74c278',     // Verde para orgánicos
+  blue: '#3e8cbe',      // Azul para elementos decorativos
+  accent: '#e9f5d8',    // Color de acento suave
+};
+
+// Función para formatear números con separador de miles
+const formatNumber = (num: number): string => {
+  return new Intl.NumberFormat('es-MX', { maximumFractionDigits: 2 }).format(num);
+};
 
 export async function generateClientPDF(data: ReportData): Promise<Blob> {
   // Crear documento PDF - exactamente 3 páginas
@@ -251,7 +253,6 @@ export async function generateClientPDF(data: ReportData): Promise<Blob> {
   const inorganicTons = data.inorganicTotal / 1000;
   const recyclableTons = data.recyclableTotal / 1000;
   const totalTons = data.totalWaste / 1000;
-  const landfillTons = organicTons + inorganicTons;
   
   // 2. Total toneladas
   doc.setFillColor(parseInt(COLORS.blue.slice(1, 3), 16), parseInt(COLORS.blue.slice(3, 5), 16), parseInt(COLORS.blue.slice(5, 7), 16), 0.8);
@@ -280,21 +281,50 @@ export async function generateClientPDF(data: ReportData): Promise<Blob> {
   doc.setFontSize(8);
   doc.setTextColor(parseInt(COLORS.darkGray.slice(1, 3), 16), parseInt(COLORS.darkGray.slice(3, 5), 16), parseInt(COLORS.darkGray.slice(5, 7), 16));
   doc.text('TONELADAS RECICLADAS', 165, 155, { align: 'center' });
-
+  
+  // ===== CONTENIDO PRINCIPAL - RESUMEN EJECUTIVO =====
+  doc.addPage();
+  
+  // Usar la función auxiliar para crear el encabezado
+  addMinimalistHeader(doc);
+  
+  // Información del cliente con estilo minimalista
+  doc.setFillColor(245, 247, 250);
+  doc.rect(0, 22, 210, 18, 'F');
+  
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10);
+  doc.setTextColor(parseInt(COLORS.navy.slice(1, 3), 16), parseInt(COLORS.navy.slice(3, 5), 16), parseInt(COLORS.navy.slice(5, 7), 16));
+  doc.text(`Cliente: ${data.client.name}`, 15, 33);
+  
+  doc.setFont('helvetica', 'normal');
+  doc.text(`Período: ${data.period}`, 105, 33);
+  
   // ==== RESUMEN EJECUTIVO ====
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(14);
   doc.setTextColor(parseInt(COLORS.navy.slice(1, 3), 16), parseInt(COLORS.navy.slice(3, 5), 16), parseInt(COLORS.navy.slice(5, 7), 16));
-  doc.text('RESUMEN EJECUTIVO', 105, 175, { align: 'center' });
+  doc.text('RESUMEN EJECUTIVO', 105, 50, { align: 'center' });
   
   // Línea decorativa
   doc.setDrawColor(parseInt(COLORS.lime.slice(1, 3), 16), parseInt(COLORS.lime.slice(3, 5), 16), parseInt(COLORS.lime.slice(5, 7), 16));
   doc.setLineWidth(1);
-  doc.line(65, 178, 145, 178);
+  doc.line(65, 53, 145, 53);
   
   // Panel minimalista para el resumen
   doc.setFillColor(parseInt(COLORS.accent.slice(1, 3), 16), parseInt(COLORS.accent.slice(3, 5), 16), parseInt(COLORS.accent.slice(5, 7), 16));
-  doc.roundedRect(15, 185, 180, 65, 2, 2, 'F');
+  doc.roundedRect(MARGINS.left, 60, 210 - MARGINS.left - MARGINS.right, 55, 2, 2, 'F');
+  
+  // Texto del resumen ejecutivo
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.setTextColor(parseInt(COLORS.darkGray.slice(1, 3), 16), parseInt(COLORS.darkGray.slice(3, 5), 16), parseInt(COLORS.darkGray.slice(5, 7), 16));
+  
+  // Calcular toneladas a relleno sanitario (ya tenemos los valores por separado)
+  const landfillTons = organicTons + inorganicTons;
+  
+  const recyclablePercentage = (data.recyclableTotal / data.totalWaste * 100).toFixed(1);
+  const organicPercentage = (data.organicTotal / data.totalWaste * 100).toFixed(1);
   
   // Calcular tendencia (comparando primera mitad con segunda mitad del período)
   const sortedData = [...data.wasteData].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
@@ -314,203 +344,184 @@ export async function generateClientPDF(data: ReportData): Promise<Blob> {
   // Crear texto del resumen ejecutivo
   const summaryText = [
     `• Durante el período ${data.period}, ${data.client.name} generó un total de ${formatNumber(totalTons)} toneladas de residuos.`,
-    `• El Índice de Desviación de Relleno Sanitario fue de ${data.deviation.toFixed(1)}%.`,
-    `• Del total de residuos, ${formatNumber(landfillTons)} toneladas fueron enviadas a relleno sanitario y ${formatNumber(recyclableTons)} a reciclaje.`,
+    `• El Índice de Desviación de Relleno Sanitario fue de ${data.deviation.toFixed(1)}%, lo que indica que esta proporción`,
+    `  de residuos fueron recuperados para reciclaje en lugar de enviarse al relleno sanitario.`,
+    `• Del total de residuos, ${formatNumber(landfillTons)} toneladas fueron enviadas a relleno sanitario y`,
+    `  ${formatNumber(recyclableTons)} toneladas a reciclaje.`,
     `• Se observa una ${trendDescription} en la generación de residuos del ${Math.abs(percentChange).toFixed(1)}% durante el período.`,
     `• El impacto ambiental positivo equivale a ${formatNumber((recyclableTons * 0.3) * 17)} árboles salvados.`
   ];
   
   // Posicionar el texto del resumen
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(10);
-  doc.setTextColor(parseInt(COLORS.darkGray.slice(1, 3), 16), parseInt(COLORS.darkGray.slice(3, 5), 16), parseInt(COLORS.darkGray.slice(5, 7), 16));
-  
-  let yPos = 197;
+  let yPos = 72;
   summaryText.forEach(line => {
     doc.text(line, 20, yPos);
-    yPos += 10;
+    yPos += 6;
   });
   
-  // Pie de página minimalista
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(9);
-  doc.setTextColor(100, 100, 100);
-  doc.text('ECONOVA © 2025 | Innovando en Gestión Ambiental', 105, 280, { align: 'center' });
-  doc.text('Página 1 de 3', 185, 290, { align: 'right' });
-
-  // ===== PÁGINA 2: ANÁLISIS VISUAL DE RESIDUOS + ÍNDICE DE DESVIACIÓN =====
-  doc.addPage();
-  
-  // Usar la función auxiliar para crear el encabezado
-  addMinimalistHeader(doc);
-  
-  // Información del cliente con estilo minimalista
-  doc.setFillColor(245, 247, 250);
-  doc.rect(0, 22, 210, 18, 'F');
-  
+  // ==== VISUALIZACIÓN DE DATOS ====
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(10);
-  doc.setTextColor(parseInt(COLORS.navy.slice(1, 3), 16), parseInt(COLORS.navy.slice(3, 5), 16), parseInt(COLORS.navy.slice(5, 7), 16));
-  doc.text(`Cliente: ${data.client.name}`, 15, 33);
-  
-  doc.setFont('helvetica', 'normal');
-  doc.text(`Período: ${data.period}`, 105, 33);
-
-  // ==== ANÁLISIS VISUAL DE RESIDUOS ====
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(14);
-  doc.setTextColor(parseInt(COLORS.navy.slice(1, 3), 16), parseInt(COLORS.navy.slice(3, 5), 16), parseInt(COLORS.navy.slice(5, 7), 16));
-  doc.text('ANÁLISIS VISUAL DE RESIDUOS', 105, 50, { align: 'center' });
-  
-  // Línea decorativa
-  doc.setDrawColor(parseInt(COLORS.lime.slice(1, 3), 16), parseInt(COLORS.lime.slice(3, 5), 16), parseInt(COLORS.lime.slice(5, 7), 16));
-  doc.setLineWidth(1);
-  doc.line(65, 53, 145, 53);
+  doc.setFontSize(16);
+  doc.setTextColor(39, 57, 73); // Navy
+  doc.text('ANÁLISIS VISUAL DE RESIDUOS', 15, 120);
   
   // Visualizar proporciones con gráficos simples
+  
   // Gráfico de barras horizontal para tipos de residuos
   doc.setFillColor(108, 185, 71); // Verde para orgánicos
-  doc.rect(25, 65, (data.organicTotal / data.totalWaste) * 160, 12, 'F');
+  doc.rect(20, 130, (data.organicTotal / data.totalWaste) * 160, 12, 'F');
   
-  doc.setFillColor(120, 120, 120); // Gris para inorgánicos (evitando negro)
-  doc.rect(25, 82, (data.inorganicTotal / data.totalWaste) * 160, 12, 'F');
+  doc.setFillColor(156, 156, 156); // Gris para inorgánicos
+  doc.rect(20, 147, (data.inorganicTotal / data.totalWaste) * 160, 12, 'F');
   
-  doc.setFillColor(181, 233, 81); // Lima para reciclables
-  doc.rect(25, 99, (data.recyclableTotal / data.totalWaste) * 160, 12, 'F');
+  doc.setFillColor(181, 233, 81); // Lime para reciclables
+  doc.rect(20, 164, (data.recyclableTotal / data.totalWaste) * 160, 12, 'F');
   
   // Etiquetas para el gráfico
-  const organicPercentage = (data.organicTotal / data.totalWaste * 100).toFixed(1);
-  const inorganicPercentage = (data.inorganicTotal / data.totalWaste * 100).toFixed(1);
-  const recyclablePercentage = (data.recyclableTotal / data.totalWaste * 100).toFixed(1);
-  
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(9);
   doc.setTextColor(60, 60, 60);
-  doc.text('Orgánicos (Comedor)', 25, 63);
-  doc.text(`${formatNumber(organicTons)} ton (${organicPercentage}%)`, 182, 71, { align: 'right' });
+  doc.text('Orgánicos (Comedor)', 20, 128);
+  doc.text(`${formatNumber(data.organicTotal/1000)} ton (${organicPercentage}%)`, 182, 136, { align: 'right' });
   
-  doc.text('Inorgánicos', 25, 80);
-  doc.text(`${formatNumber(inorganicTons)} ton (${inorganicPercentage}%)`, 182, 88, { align: 'right' });
+  doc.text('Inorgánicos', 20, 145);
+  doc.text(`${formatNumber(data.inorganicTotal/1000)} ton (${(data.inorganicTotal / data.totalWaste * 100).toFixed(1)}%)`, 182, 153, { align: 'right' });
   
-  doc.text('Reciclables', 25, 97);
-  doc.text(`${formatNumber(recyclableTons)} ton (${recyclablePercentage}%)`, 182, 105, { align: 'right' });
-
-  // ==== DESTINO DE RESIDUOS E ÍNDICE DE DESVIACIÓN ====
-  // Utilizando una representación visual más compacta y clara
+  doc.text('Reciclables', 20, 162);
+  doc.text(`${formatNumber(data.recyclableTotal/1000)} ton (${recyclablePercentage}%)`, 182, 170, { align: 'right' });
   
-  // Título de la sección
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(14);
-  doc.setTextColor(parseInt(COLORS.navy.slice(1, 3), 16), parseInt(COLORS.navy.slice(3, 5), 16), parseInt(COLORS.navy.slice(5, 7), 16));
-  doc.text('DESTINO DE RESIDUOS E ÍNDICE DE DESVIACIÓN', 105, 130, { align: 'center' });
-  
-  // Línea decorativa
-  doc.setDrawColor(parseInt(COLORS.lime.slice(1, 3), 16), parseInt(COLORS.lime.slice(3, 5), 16), parseInt(COLORS.lime.slice(5, 7), 16));
-  doc.setLineWidth(1);
-  doc.line(55, 133, 155, 133);
-
-  // Panel para la visualización
-  doc.setFillColor(245, 250, 255);
-  doc.roundedRect(15, 140, 180, 140, 3, 3, 'F');
-  
-  // 1. Destino de residuos (gráfico circular simplificado)
+  // Gráfico circular para destino de residuos (Relleno sanitario vs Reciclaje)
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(12);
-  doc.setTextColor(60, 60, 60);
-  doc.text('Destino de Residuos', 60, 155);
+  doc.setTextColor(39, 57, 73);
+  doc.text('Destino de Residuos', 105, 190, { align: 'center' });
   
-  // Porcentajes para relleno sanitario y reciclaje
+  // Dibujar un círculo dividido (simplificado)
+  const centerX = 105;
+  const centerY = 215;
+  const radius = 25;
+  
+  // Porcentaje a relleno sanitario (orgánico + inorgánico)
   const landfillPercentage = (data.organicTotal + data.inorganicTotal) / data.totalWaste;
   const recyclePercentage = data.recyclableTotal / data.totalWaste;
   
-  // Dibujar círculo base (relleno sanitario)
-  const centerX = 60;
-  const centerY = 185;
-  const radius = 25;
-  
-  doc.setFillColor(120, 120, 120); // Gris para relleno sanitario
+  // Dibujar sector para relleno sanitario
+  doc.setFillColor(156, 156, 156); // Gris
   doc.circle(centerX, centerY, radius, 'F');
   
-  // Dibujar segmento para reciclaje (aproximación)
-  doc.setFillColor(181, 233, 81); // Lima para reciclables
+  // Dibujar sector para reciclaje
+  doc.setFillColor(181, 233, 81); // Lime
+  doc.setDrawColor(255, 255, 255);
+  doc.setLineWidth(0.5);
   
-  // Ángulo para el segmento de reciclaje (en radianes)
+  // Crear un "pie slice" simulado
   const angle = recyclePercentage * Math.PI * 2;
+  doc.ellipse(centerX, centerY, radius, radius, 'F');
+  doc.setFillColor(156, 156, 156);
   
-  // Simular segmento circular con triángulos
-  for (let i = 0; i < 20; i++) {
-    const startAngle = i / 20 * angle;
-    const endAngle = (i + 1) / 20 * angle;
-    
-    if (endAngle <= angle) {
-      doc.triangle(
-        centerX,
-        centerY,
-        centerX + radius * Math.cos(startAngle),
-        centerY + radius * Math.sin(startAngle),
-        centerX + radius * Math.cos(endAngle),
-        centerY + radius * Math.sin(endAngle),
-        'F'
-      );
-    }
-  }
+  // Método simplificado para dibujar un sector circular
+  // (Esta es una aproximación simplificada para jsPDF)
+  doc.triangle(
+    centerX, 
+    centerY, 
+    centerX + radius * Math.cos(0), 
+    centerY + radius * Math.sin(0), 
+    centerX + radius * Math.cos(angle), 
+    centerY + radius * Math.sin(angle), 
+    'F'
+  );
   
-  // Leyenda del gráfico circular
-  doc.setFillColor(120, 120, 120); // Gris para relleno
-  doc.rect(35, 220, 8, 8, 'F');
+  // Dibujar dos rectángulos para la leyenda
+  doc.setFillColor(156, 156, 156);
+  doc.rect(centerX - 50, centerY + 35, 10, 5, 'F');
+  doc.setFillColor(181, 233, 81);
+  doc.rect(centerX + 10, centerY + 35, 10, 5, 'F');
   
-  doc.setFillColor(181, 233, 81); // Lima para reciclaje
-  doc.rect(35, 235, 8, 8, 'F');
-  
+  // Agregar texto para la leyenda
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(9);
-  doc.text(`Relleno Sanitario (${(landfillPercentage * 100).toFixed(1)}%)`, 48, 225);
-  doc.text(`Reciclaje (${(recyclePercentage * 100).toFixed(1)}%)`, 48, 240);
-  
-  // 2. Índice de desviación (medidor de progreso)
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(12);
   doc.setTextColor(60, 60, 60);
-  doc.text('Índice de Desviación', 150, 155);
+  doc.text(`Relleno Sanitario (${(landfillPercentage * 100).toFixed(1)}%)`, centerX - 35, centerY + 39);
+  doc.text(`Reciclaje (${(recyclePercentage * 100).toFixed(1)}%)`, centerX + 25, centerY + 39);
   
-  // Barra de progreso
-  doc.setDrawColor(230, 230, 230);
-  doc.setLineWidth(15);
-  doc.line(110, 185, 190, 185);
-  
-  // Progreso actual
-  const progressWidth = Math.min(80, (data.deviation / 100) * 80);
-  doc.setDrawColor(parseInt(COLORS.lime.slice(1, 3), 16), parseInt(COLORS.lime.slice(3, 5), 16), parseInt(COLORS.lime.slice(5, 7), 16));
-  doc.setLineWidth(15);
-  doc.line(110, 185, 110 + progressWidth, 185);
-  
-  // Valor actual
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(16);
-  doc.setTextColor(60, 60, 60);
-  doc.text(`${data.deviation.toFixed(1)}%`, 150, 185, { align: 'center' });
-  
-  // Marcas de referencia
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(8);
-  doc.text('0%', 110, 200);
-  doc.text('100%', 190, 200);
-  
-  // Explicación
-  doc.setFontSize(9);
-  doc.text('El Índice de Desviación representa el porcentaje de residuos que se recuperan', 25, 260);
-  doc.text('para reciclaje en lugar de enviarse al relleno sanitario.', 25, 270);
-  
-  doc.setFontSize(9);
-  doc.text('Página 2 de 3', 185, 290, { align: 'right' });
-
-  // ===== PÁGINA 3: IMPACTO AMBIENTAL + DATOS MENSUALES =====
+  // ==== ÍNDICE DE DESVIACIÓN ====
+  // Añadir nueva página para el resto del contenido
   doc.addPage();
   
   // Usar la función auxiliar para crear el encabezado
   addMinimalistHeader(doc);
-
+  
+  // Título de la sección
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(20);
+  doc.setTextColor(39, 57, 73); // Navy
+  doc.text('ÍNDICE DE DESVIACIÓN', 105, 40, { align: 'center' });
+  
+  // Elemento decorativo
+  doc.setDrawColor(181, 233, 81); // Lime
+  doc.setLineWidth(2);
+  doc.line(75, 45, 135, 45);
+  
+  // Subtítulo
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(12);
+  doc.text('Medición del desempeño en la gestión de residuos', 105, 55, { align: 'center' });
+  
+  // Crear un indicador visual para el índice de desviación
+  doc.setDrawColor(220, 220, 220);
+  doc.setLineWidth(15);
+  doc.line(40, 80, 160, 80);
+  
+  // Dibujar la línea de progreso
+  const deviationWidth = Math.min(120, (data.deviation / 100) * 120);
+  doc.setDrawColor(181, 233, 81);
+  doc.setLineWidth(15);
+  doc.line(40, 80, 40 + deviationWidth, 80);
+  
+  // Añadir marcadores
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.setTextColor(100, 100, 100);
+  
+  // Marcadores de porcentaje
+  doc.text('0%', 40, 95);
+  doc.text('25%', 70, 95);
+  doc.text('50%', 100, 95);
+  doc.text('75%', 130, 95);
+  doc.text('100%', 160, 95);
+  
+  // Valor actual
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(24);
+  doc.setTextColor(39, 57, 73);
+  doc.text(`${data.deviation.toFixed(1)}%`, 105, 75, { align: 'center' });
+  
+  // Explicación
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.setTextColor(60, 60, 60);
+  const deviationExplanation = [
+    'El Índice de Desviación representa el porcentaje de residuos que son desviados del relleno sanitario',
+    'mediante el reciclaje. Un mayor índice indica un mejor desempeño ambiental.',
+    '',
+    'Cálculo: (Residuos Reciclables / Residuos Totales) × 100'
+  ];
+  
+  let yPosDeviation = 110;
+  deviationExplanation.forEach(line => {
+    doc.text(line, 15, yPosDeviation);
+    yPosDeviation += 5;
+  });
+  
+  // ==== IMPACTO AMBIENTAL ====
+  // Añadir nueva página para el impacto ambiental
+  doc.addPage();
+  
+  // Usar la función auxiliar para crear el encabezado
+  addMinimalistHeader(doc);
+  
   // Banner del impacto ambiental con degradado atractivo
+  // Crear un rectángulo con degradado verde a azul marino para la sección de impacto
   createGradientPattern(doc, 0, 30, 210, 25, COLORS.lime, COLORS.navy, 'horizontal');
   
   // Título con mayor impacto visual
@@ -519,107 +530,238 @@ export async function generateClientPDF(data: ReportData): Promise<Blob> {
   doc.setTextColor(255, 255, 255);
   doc.text('IMPACTO AMBIENTAL POSITIVO', 105, 47, { align: 'center' });
   
-  // Fondo para los indicadores visuales
-  doc.setFillColor(250, 252, 255);
-  doc.rect(0, 55, 210, 120, 'F');
-  
-  // Marco para los indicadores
-  doc.setDrawColor(181, 233, 81); // Verde lima
+  // Línea decorativa bajo el título
+  doc.setDrawColor(255, 255, 255);
   doc.setLineWidth(1);
-  doc.roundedRect(15, 65, 180, 100, 4, 4, 'S');
+  doc.line(65, 51, 145, 51);
+  
+  // Añadir un fondo con textura suave para toda la página
+  doc.setFillColor(250, 252, 255);
+  doc.rect(0, 55, 210, 242, 'F');
+  
+  // Marco para los indicadores visuales
+  doc.setDrawColor(181, 233, 81); // Verde lima
+  doc.setLineWidth(1.5);
+  doc.roundedRect(15, 65, 180, 120, 5, 5, 'S');
   
   // Calcular impacto ambiental
   const paperRecycled = data.recyclableTotal * 0.3; // Asumiendo que el 30% de los reciclables es papel
-  const treesSaved = (paperRecycled / 1000) * 17; // 17 árboles salvados por tonelada de papel
+  const treesSaved = (paperRecycled / 1000) * 17; // 17 árboles salvados por tonelada de papel reciclado
   const waterSaved = (paperRecycled / 1000) * 26000; // 26,000 litros de agua por tonelada de papel
   const energySaved = data.recyclableTotal * 5.3; // 5.3 kWh por kg de reciclables
-  const co2Reduced = data.recyclableTotal * 2.5; // 2.5 kg de CO2 por kg de residuos
+  const co2Reduced = data.recyclableTotal * 2.5; // 2.5 kg de CO2 por kg de residuos reciclados
   
-  // PANEL DE IMPACTO AMBIENTAL CON 4 INDICADORES EN CUADRÍCULA 2x2
+  // Título de impacto con degradado suave
+  doc.setFillColor(parseInt(COLORS.navy.slice(1, 3), 16), parseInt(COLORS.navy.slice(3, 5), 16), parseInt(COLORS.navy.slice(5, 7), 16), 0.1);
+  doc.roundedRect(20, 70, 170, 20, 3, 3, 'F');
   
-  // Fila superior - Árboles y Agua
-  // Panel de árboles
-  doc.setFillColor(240, 248, 240);
-  doc.roundedRect(25, 75, 75, 35, 3, 3, 'F');
-  
-  // Icono de árbol
-  drawTreeIcon(doc, 40, 93, 0.7);
-  
-  // Valor y etiqueta
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(15);
-  doc.setTextColor(60, 60, 60);
-  doc.text(formatNumber(Math.round(treesSaved)), 85, 90, { align: 'right' });
-  
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(10);
-  doc.text('ÁRBOLES SALVADOS', 85, 100, { align: 'right' });
-  
-  // Panel de agua
-  doc.setFillColor(235, 245, 255);
-  doc.roundedRect(110, 75, 75, 35, 3, 3, 'F');
-  
-  // Icono de agua
-  drawWaterDropIcon(doc, 125, 93, 0.7);
-  
-  // Valor y etiqueta
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(15);
-  doc.setTextColor(60, 60, 60);
-  const waterKL = Math.round(waterSaved / 1000);
-  doc.text(formatNumber(waterKL), 170, 90, { align: 'right' });
-  
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(10);
-  doc.text('MILES LITROS AHORRADOS', 170, 100, { align: 'right' });
-  
-  // Fila inferior - Energía y CO2
-  // Panel de energía
-  doc.setFillColor(255, 248, 230);
-  doc.roundedRect(25, 120, 75, 35, 3, 3, 'F');
-  
-  // Icono de rayo
-  drawLightningIcon(doc, 40, 138, 0.7);
-  
-  // Valor y etiqueta
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(15);
-  doc.setTextColor(60, 60, 60);
-  const energyMWh = Math.round(energySaved / 1000);
-  doc.text(formatNumber(energyMWh), 85, 135, { align: 'right' });
-  
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(10);
-  doc.text('MWh ENERGÍA AHORRADOS', 85, 145, { align: 'right' });
-  
-  // Panel de CO2
-  doc.setFillColor(235, 250, 240);
-  doc.roundedRect(110, 120, 75, 35, 3, 3, 'F');
-  
-  // Icono de hoja
-  drawLeafIcon(doc, 125, 138, 0.7);
-  
-  // Valor y etiqueta
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(15);
-  doc.setTextColor(60, 60, 60);
-  const co2Tons = Math.round(co2Reduced / 1000);
-  doc.text(formatNumber(co2Tons), 170, 135, { align: 'right' });
-  
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(10);
-  doc.text('TON CO₂ NO EMITIDAS', 170, 145, { align: 'right' });
-
-  // ==== DETALLE MENSUAL ====
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(14);
-  doc.setTextColor(parseInt(COLORS.navy.slice(1, 3), 16), parseInt(COLORS.navy.slice(3, 5), 16), parseInt(COLORS.navy.slice(5, 7), 16));
-  doc.text('DETALLE MENSUAL', 105, 175, { align: 'center' });
+  doc.setTextColor(39, 57, 73);
+  doc.text('BENEFICIOS AMBIENTALES DE LA RECUPERACIÓN', 105, 82, { align: 'center' });
   
-  // Línea decorativa
+  // ÁREA DE ICONOS E INDICADORES - CUATRO PANELES VISUALES
+  // Primer panel - Árboles salvados
+  doc.setFillColor(230, 245, 230); // Fondo verde claro
+  doc.roundedRect(25, 100, 75, 35, 3, 3, 'F');
+  
+  // Usar la función para dibujar un árbol
+  const treeX = 40;
+  const treeY = 118;
+  drawTreeIcon(doc, treeX, treeY, 0.8);
+  
+  // Valor y etiqueta
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16);
+  doc.setTextColor(39, 57, 73);
+  const treesValue = Math.round(treesSaved);
+  doc.text(formatNumber(treesValue), 85, 115, { align: 'right' });
+  
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.text('ÁRBOLES SALVADOS', 85, 125, { align: 'right' });
+  
+  // Segundo panel - Agua ahorrada
+  doc.setFillColor(230, 240, 250); // Fondo azul claro
+  doc.roundedRect(110, 100, 75, 35, 3, 3, 'F');
+  
+  // Dibujar un icono de gota de agua
+  const dropX = 125;
+  const dropY = 118;
+  
+  // Usar la función para dibujar una gota de agua detallada
+  drawWaterDropIcon(doc, dropX, dropY, 0.8);
+  
+  // Valor y etiqueta
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16);
+  doc.setTextColor(39, 57, 73);
+  // Convertir a miles de litros para una presentación más limpia
+  const waterKL = Math.round(waterSaved / 1000);
+  doc.text(formatNumber(waterKL), 170, 115, { align: 'right' });
+  
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.text('MILES DE LITROS AHORRADOS', 170, 125, { align: 'right' });
+  
+  // Tercer panel - Energía ahorrada
+  doc.setFillColor(255, 248, 225); // Fondo amarillo claro
+  doc.roundedRect(25, 145, 75, 35, 3, 3, 'F');
+  
+  // Dibujar un icono de rayo usando nuestra función auxiliar
+  const boltX = 40;
+  const boltY = 162;
+  drawLightningIcon(doc, boltX, boltY, 0.8);
+  
+  // Valor y etiqueta
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16);
+  doc.setTextColor(39, 57, 73);
+  const energyMWh = Math.round(energySaved / 1000); // Convertir a MWh para números más limpios
+  doc.text(formatNumber(energyMWh), 85, 162, { align: 'right' });
+  
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.text('MWh DE ENERGÍA AHORRADOS', 85, 172, { align: 'right' });
+  
+  // Cuarto panel - CO2 reducido
+  doc.setFillColor(231, 245, 241); // Fondo verde-azulado claro
+  doc.roundedRect(110, 145, 75, 35, 3, 3, 'F');
+  
+  // Dibujar un icono de hoja para representar CO2 usando nuestra función auxiliar
+  const leafX = 125;
+  const leafY = 162;
+  drawLeafIcon(doc, leafX, leafY, 0.8);
+  
+  // Valor y etiqueta
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16);
+  doc.setTextColor(39, 57, 73);
+  const co2Tons = Math.round(co2Reduced / 1000);
+  doc.text(formatNumber(co2Tons), 170, 162, { align: 'right' });
+  
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.text('TON CO₂ NO EMITIDAS', 170, 172, { align: 'right' });
+  
+  // SECCIÓN DE EQUIVALENCIAS VISUALES
+  // Fondo degradado suave para la sección de equivalencias
+  doc.setFillColor(parseInt(COLORS.accent.slice(1, 3), 16), parseInt(COLORS.accent.slice(3, 5), 16), parseInt(COLORS.accent.slice(5, 7), 16), 0.7);
+  doc.roundedRect(15, 195, 180, 75, 5, 5, 'F');
+  
+  // Título más llamativo
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(39, 57, 73);
+  doc.text('EQUIVALENCIAS DE IMPACTO', 105, 207, { align: 'center' });
+  
+  // Línea decorativa bajo título
   doc.setDrawColor(parseInt(COLORS.lime.slice(1, 3), 16), parseInt(COLORS.lime.slice(3, 5), 16), parseInt(COLORS.lime.slice(5, 7), 16));
   doc.setLineWidth(1);
-  doc.line(75, 178, 135, 178);
+  doc.line(65, 210, 145, 210);
+  
+  // Iconos para cada equivalencia - Mucho más visuales
+  // Bosque - pequeño icono de árbol 
+  drawTreeIcon(doc, 30, 222, 0.4);
+  
+  // Persona - pequeño icono estilizado de persona
+  // Cabeza
+  doc.setFillColor(52, 152, 219);
+  doc.circle(30, 233, 2, 'F');
+  // Cuerpo
+  doc.setLineWidth(1.5);
+  doc.setDrawColor(52, 152, 219);
+  doc.line(30, 235, 30, 241);
+  // Brazos
+  doc.line(30, 237, 27, 240);
+  doc.line(30, 237, 33, 240);
+  // Piernas
+  doc.line(30, 241, 28, 245);
+  doc.line(30, 241, 32, 245);
+  
+  // Casa - icono de casa
+  // Base de la casa
+  doc.setFillColor(241, 196, 15);
+  doc.rect(27, 252, 6, 4, 'F');
+  // Techo
+  doc.setFillColor(241, 150, 15);
+  doc.triangle(
+    26, 252, // Esquina izquierda
+    30, 248, // Punto superior
+    34, 252, // Esquina derecha
+    'F'
+  );
+  // Puerta
+  doc.setFillColor(150, 120, 10);
+  doc.rect(29, 253, 2, 3, 'F');
+  
+  // Coche - icono de auto
+  // Cuerpo del auto
+  doc.setFillColor(46, 204, 113);
+  doc.roundedRect(120, 236, 8, 3, 1, 1, 'F');
+  // Cabina
+  doc.setFillColor(32, 184, 93);
+  doc.roundedRect(122, 234, 4, 2, 1, 1, 'F');
+  // Ruedas - cambiando de negro a gris oscuro
+  doc.setFillColor(80, 90, 100);
+  doc.circle(121.5, 239, 1, 'F');
+  doc.circle(126.5, 239, 1, 'F');
+  
+  // Texto explicativo con formato mejorado
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.setTextColor(50, 50, 50);
+  
+  // Crear recuadros para cada equivalencia
+  doc.setFillColor(240, 248, 240);
+  doc.roundedRect(38, 216, 130, 14, 1, 1, 'F');
+  
+  doc.setFillColor(235, 245, 255);
+  doc.roundedRect(38, 231, 70, 14, 1, 1, 'F');
+  
+  doc.setFillColor(255, 248, 230);
+  doc.roundedRect(38, 246, 70, 14, 1, 1, 'F');
+  
+  doc.setFillColor(230, 250, 240);
+  doc.roundedRect(115, 231, 70, 14, 1, 1, 'F');
+  
+  // Bosque
+  const hectares = (treesSaved / 400).toFixed(1);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(76, 175, 80);
+  doc.text(`BOSQUE DE ${hectares} HECTÁREAS`, 105, 223, { align: 'center' });
+  
+  // Agua
+  const people = Math.round(waterSaved / 73000);
+  doc.setTextColor(52, 152, 219);
+  doc.text(`AGUA PARA ${formatNumber(people)} PERSONAS/AÑO`, 73, 238, { align: 'center' });
+  
+  // Energía
+  const homes = Math.round(energySaved / 1200);
+  doc.setTextColor(241, 150, 15);
+  doc.text(`ENERGÍA PARA ${formatNumber(homes)} HOGARES/MES`, 73, 253, { align: 'center' });
+  
+  // CO2
+  const cars = Math.round((co2Reduced / 1000) / 4.6);
+  doc.setTextColor(46, 204, 113);
+  doc.text(`${formatNumber(cars)} AUTOS MENOS/AÑO`, 150, 238, { align: 'center' });
+  
+  // ==== DETALLE MENSUAL ====
+  doc.addPage();
+  
+  // Usar la función auxiliar para crear el encabezado
+  addMinimalistHeader(doc);
+  
+  // Título de la sección
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16);
+  doc.setTextColor(39, 57, 73);
+  doc.text('DETALLE MENSUAL', 105, 40, { align: 'center' });
+  
+  // Elemento decorativo
+  doc.setDrawColor(181, 233, 81); // Lime
+  doc.setLineWidth(2);
+  doc.line(75, 45, 135, 45);
   
   // Agrupar datos por mes y año
   const monthlyData: Record<string, { 
@@ -659,7 +801,8 @@ export async function generateClientPDF(data: ReportData): Promise<Blob> {
       const [year, month] = key.split('-');
       const monthName = monthNames[parseInt(month) - 1];
       const total = data.organicWaste + data.inorganicWaste + data.recyclableWaste;
-      const deviation = total > 0 ? (data.recyclableWaste / total) * 100 : 0;
+      const toSanitaryLandfill = data.organicWaste + data.inorganicWaste;
+      const deviation = toSanitaryLandfill > 0 ? (data.recyclableWaste / total) * 100 : 0;
       
       return [
         `${monthName} ${year}`,
@@ -667,14 +810,14 @@ export async function generateClientPDF(data: ReportData): Promise<Blob> {
         formatNumber(data.inorganicWaste / 1000),
         formatNumber(data.recyclableWaste / 1000),
         formatNumber(total / 1000),
-        `${deviation.toFixed(1)}%`
+        `${deviation.toFixed(2)}%`
       ];
     });
   
   // Añadir la tabla de detalle mensual
   autoTable(doc, {
-    startY: 185,
-    head: [['Mes/Año', 'Orgánico', 'Inorgánico', 'Reciclable', 'Total', 'Desviación']],
+    startY: 60,
+    head: [['Mes/Año', 'Orgánico (ton)', 'Inorgánico (ton)', 'Reciclable (ton)', 'Total (ton)', 'Desviación']],
     body: monthlyRows,
     headStyles: {
       fillColor: [39, 57, 73], // Navy
@@ -685,24 +828,26 @@ export async function generateClientPDF(data: ReportData): Promise<Blob> {
       fillColor: [245, 247, 250], // Light gray
     },
     styles: {
-      cellPadding: 3,
-      fontSize: 8,
+      cellPadding: 5,
+      fontSize: 9,
     },
     columnStyles: {
-      0: { fontStyle: 'bold' },
       1: { halign: 'right' },
       2: { halign: 'right' },
       3: { halign: 'right' },
       4: { halign: 'right' },
-      5: { halign: 'right', fontStyle: 'bold' },
+      5: { halign: 'right' },
     },
   });
   
   // Pie de página
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(9);
-  doc.setTextColor(100, 100, 100);
-  doc.text('Página 3 de 3', 185, 290, { align: 'right' });
+  const totalPages = doc.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text(`Reporte generado por Econova - Página ${i} de ${totalPages}`, 105, 285, { align: 'center' });
+  }
   
   // Devolver como blob
   return doc.output('blob');
@@ -733,8 +878,9 @@ export async function generateAndDownloadPDFReport(client: Client, wasteData: Wa
   const recyclableTotal = wasteData.reduce((sum, item) => sum + (item.recyclableWaste || 0), 0);
   const totalWaste = organicTotal + inorganicTotal + recyclableTotal;
   
-  // Calcular desviación (recyclableWaste / totalWaste) * 100
-  const deviation = totalWaste > 0 ? (recyclableTotal / totalWaste) * 100 : 0;
+  // Calcular desviación (recyclableWaste / (organicWaste + inorganicWaste)) * 100
+  const toSanitaryLandfill = organicTotal + inorganicTotal;
+  const deviation = toSanitaryLandfill > 0 ? (recyclableTotal / toSanitaryLandfill) * 100 : 0;
   
   // Determinar el periodo del reporte
   const formatMonth = (date: Date) => date.toLocaleDateString('es-MX', { month: 'long', year: 'numeric' });
