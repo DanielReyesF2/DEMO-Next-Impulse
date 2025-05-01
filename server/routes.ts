@@ -241,31 +241,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         (validatedData.recyclableWaste || 0) + 
         (validatedData.podaWaste || 0);
       
-      // Calculate deviation
-      const sanitaryLandfillTotal = 
-        (validatedData.organicWaste || 0) + 
-        (validatedData.inorganicWaste || 0);
-      
+      // Calculate deviation correctly using the formula: (recyclable + poda) / total * 100
       const recyclableTotal = 
         (validatedData.recyclableWaste || 0) + 
         (validatedData.podaWaste || 0);
       
-      const deviation = sanitaryLandfillTotal > 0 
-        ? (recyclableTotal / (sanitaryLandfillTotal + recyclableTotal)) * 100 
+      const deviation = totalWaste > 0 
+        ? (recyclableTotal / totalWaste) * 100 
         : 0;
       
-      // Create a document record for reference
-      const document = await storage.createDocument({
-        fileName: `Registro manual - ${new Date(validatedData.date).toLocaleDateString('es-MX')}`,
-        fileSize: 0,
-        clientId: validatedData.clientId,
-        processed: true
-      });
-      
-      // Create waste data record
+      // Create waste data record (without document association for manual entries)
       const newWasteData = await storage.createWasteData({
         ...validatedData,
-        documentId: document.id,
+        documentId: null, // No document for manual entries
         totalWaste,
         deviation: parseFloat(deviation.toFixed(2))
       });
