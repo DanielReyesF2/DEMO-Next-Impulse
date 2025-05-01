@@ -37,6 +37,117 @@ function addMinimalistHeader(doc: jsPDF, title: string = 'REPORTE DE GESTIÓN DE
   doc.text(title, 105, 13, { align: 'center' });
 }
 
+// Función para dibujar icono de árbol más detallado
+function drawTreeIcon(doc: jsPDF, x: number, y: number, size: number = 1) {
+  const trunkWidth = 3 * size;
+  const trunkHeight = 12 * size;
+  const crownRadius = 10 * size;
+  
+  // Tronco
+  doc.setFillColor(120, 80, 40); // Marrón para el tronco
+  doc.rect(x - trunkWidth/2, y - trunkHeight/2, trunkWidth, trunkHeight, 'F');
+  
+  // Copa del árbol (varias capas para darle forma)
+  doc.setFillColor(60, 160, 60); // Verde oscuro para la base
+  doc.circle(x, y - trunkHeight/2 - crownRadius*0.5, crownRadius, 'F');
+  
+  doc.setFillColor(76, 175, 80); // Verde medio para el medio
+  doc.circle(x, y - trunkHeight/2 - crownRadius*0.8, crownRadius*0.85, 'F');
+  
+  doc.setFillColor(100, 190, 90); // Verde claro para la parte superior
+  doc.circle(x, y - trunkHeight/2 - crownRadius*1.1, crownRadius*0.7, 'F');
+}
+
+// Función para dibujar icono de gota de agua más detallado
+function drawWaterDropIcon(doc: jsPDF, x: number, y: number, size: number = 1) {
+  const dropWidth = 9 * size;
+  const dropHeight = 14 * size;
+  
+  // Sombra para efecto 3D
+  doc.setFillColor(40, 140, 200, 0.5); // Azul con transparencia
+  doc.ellipse(x + 0.5, y + 0.5, dropWidth/2, dropHeight/2, 'F');
+  
+  // Forma principal de la gota
+  doc.setFillColor(52, 152, 219); // Azul principal
+  doc.ellipse(x, y, dropWidth/2, dropHeight/2, 'F');
+  
+  // Brillo para efecto 3D
+  doc.setFillColor(120, 190, 240, 0.7); // Azul claro con transparencia
+  doc.ellipse(x - dropWidth/6, y - dropHeight/6, dropWidth/6, dropHeight/6, 'F');
+}
+
+// Función para dibujar icono de rayo eléctrico más detallado
+function drawLightningIcon(doc: jsPDF, x: number, y: number, size: number = 1) {
+  const boltWidth = 10 * size;
+  const boltHeight = 16 * size;
+  
+  // Puntos para un rayo detallado - Usando triángulos en su lugar ya que jsPDF no tiene polygon nativo
+  
+  // Forma principal del rayo - dibujarlo manualmente con triángulos
+  doc.setFillColor(241, 196, 15); // Amarillo brillante
+  
+  // Parte superior del rayo (triángulo)
+  doc.triangle(
+    x, y - boltHeight/2,  // Punta superior
+    x - boltWidth*0.4, y - boltHeight*0.1,  // Esquina izquierda
+    x + boltWidth*0.4, y - boltHeight*0.2,  // Esquina derecha
+    'F'
+  );
+  
+  // Parte media del rayo (triángulo)
+  doc.triangle(
+    x - boltWidth*0.4, y - boltHeight*0.1,  // Esquina izquierda superior
+    x, y + boltHeight*0.1,  // Punto medio bajo
+    x + boltWidth*0.2, y - boltHeight*0.2,  // Punto medio derecho
+    'F'
+  );
+  
+  // Parte inferior del rayo (triángulo)
+  doc.triangle(
+    x - boltWidth*0.6, y + boltHeight*0.3,  // Punta inferior
+    x - boltWidth*0.4, y - boltHeight*0.1,  // Conexión izquierda
+    x, y + boltHeight*0.1,  // Conexión derecha
+    'F'
+  );
+  
+  // Brillo para efecto 3D
+  doc.setFillColor(255, 230, 150, 0.7); // Amarillo claro con transparencia
+  doc.circle(x - boltWidth*0.1, y - boltHeight*0.3, boltWidth*0.15, 'F');
+}
+
+// Función para dibujar icono de hoja para CO2 más detallado
+function drawLeafIcon(doc: jsPDF, x: number, y: number, size: number = 1) {
+  const leafWidth = 8 * size;
+  const leafHeight = 14 * size;
+  
+  // Sombra para efecto 3D
+  doc.setFillColor(30, 170, 90, 0.5); // Verde con transparencia
+  doc.ellipse(x + 0.5, y + 0.5, leafWidth/2, leafHeight/2, 'F');
+  
+  // Forma principal de la hoja
+  doc.setFillColor(46, 204, 113); // Verde brillante
+  doc.ellipse(x, y, leafWidth/2, leafHeight/2, 'F');
+  
+  // Nervio central
+  doc.setDrawColor(30, 150, 70);
+  doc.setLineWidth(0.8 * size);
+  doc.line(x, y - leafHeight/2, x, y + leafHeight/2);
+  
+  // Nervios laterales
+  doc.setLineWidth(0.4 * size);
+  const nerveLength = leafWidth * 0.4;
+  const nerveCount = 5;
+  const nerveSpacing = leafHeight / (nerveCount + 1);
+  
+  for (let i = 1; i <= nerveCount; i++) {
+    const yPos = y - leafHeight/2 + i * nerveSpacing;
+    // Nervio derecho
+    doc.line(x, yPos, x + nerveLength, yPos - nerveSpacing*0.3);
+    // Nervio izquierdo
+    doc.line(x, yPos, x - nerveLength, yPos - nerveSpacing*0.3);
+  }
+}
+
 interface ReportData {
   client: Client;
   wasteData: WasteData[];
@@ -404,13 +515,29 @@ export async function generateClientPDF(data: ReportData): Promise<Blob> {
   // Usar la función auxiliar para crear el encabezado
   addMinimalistHeader(doc);
   
-  // Título de la sección con fondo degradado para destacar
-  doc.setFillColor(39, 57, 73); // Navy
-  doc.roundedRect(15, 35, 180, 12, 3, 3, 'F');
+  // Banner del impacto ambiental con degradado atractivo
+  // Crear un rectángulo con degradado verde a azul marino para la sección de impacto
+  createGradientPattern(doc, 0, 30, 210, 25, COLORS.lime, COLORS.navy, 'horizontal');
+  
+  // Título con mayor impacto visual
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(16);
+  doc.setFontSize(18);
   doc.setTextColor(255, 255, 255);
-  doc.text('IMPACTO AMBIENTAL POSITIVO', 105, 44, { align: 'center' });
+  doc.text('IMPACTO AMBIENTAL POSITIVO', 105, 47, { align: 'center' });
+  
+  // Línea decorativa bajo el título
+  doc.setDrawColor(255, 255, 255);
+  doc.setLineWidth(1);
+  doc.line(65, 51, 145, 51);
+  
+  // Añadir un fondo con textura suave para toda la página
+  doc.setFillColor(250, 252, 255);
+  doc.rect(0, 55, 210, 242, 'F');
+  
+  // Marco para los indicadores visuales
+  doc.setDrawColor(181, 233, 81); // Verde lima
+  doc.setLineWidth(1.5);
+  doc.roundedRect(15, 65, 180, 120, 5, 5, 'S');
   
   // Calcular impacto ambiental
   const paperRecycled = data.recyclableTotal * 0.3; // Asumiendo que el 30% de los reciclables es papel
@@ -419,94 +546,200 @@ export async function generateClientPDF(data: ReportData): Promise<Blob> {
   const energySaved = data.recyclableTotal * 5.3; // 5.3 kWh por kg de reciclables
   const co2Reduced = data.recyclableTotal * 2.5; // 2.5 kg de CO2 por kg de residuos reciclados
   
-  // Crear visualizaciones de impacto ambiental
-  // Contenedor para los indicadores del impacto
-  doc.setFillColor(245, 250, 255);
-  doc.roundedRect(15, 55, 180, 120, 3, 3, 'F');
-  
-  // Título interior
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(12);
-  doc.setTextColor(39, 57, 73);
-  doc.text('BENEFICIOS AMBIENTALES DE LA RECUPERACIÓN DE MATERIALES', 105, 65, { align: 'center' });
-  
-  // Árboles - círculo verde
-  doc.setFillColor(108, 185, 71);
-  doc.circle(45, 85, 10, 'F');
+  // Título de impacto con degradado suave
+  doc.setFillColor(parseInt(COLORS.navy.slice(1, 3), 16), parseInt(COLORS.navy.slice(3, 5), 16), parseInt(COLORS.navy.slice(5, 7), 16), 0.1);
+  doc.roundedRect(20, 70, 170, 20, 3, 3, 'F');
   
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(16);
+  doc.setFontSize(14);
   doc.setTextColor(39, 57, 73);
-  doc.text(formatNumber(treesSaved), 105, 85, { align: 'right' });
+  doc.text('BENEFICIOS AMBIENTALES DE LA RECUPERACIÓN', 105, 82, { align: 'center' });
   
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(12);
-  doc.text('Árboles salvados', 120, 85);
+  // ÁREA DE ICONOS E INDICADORES - CUATRO PANELES VISUALES
+  // Primer panel - Árboles salvados
+  doc.setFillColor(230, 245, 230); // Fondo verde claro
+  doc.roundedRect(25, 100, 75, 35, 3, 3, 'F');
   
-  // Agua - círculo azul
-  doc.setFillColor(66, 139, 202);
-  doc.circle(45, 110, 10, 'F');
+  // Usar la función para dibujar un árbol
+  const treeX = 40;
+  const treeY = 118;
+  drawTreeIcon(doc, treeX, treeY, 0.8);
   
+  // Valor y etiqueta
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(16);
   doc.setTextColor(39, 57, 73);
-  doc.text(formatNumber(waterSaved), 105, 110, { align: 'right' });
-  
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(12);
-  doc.text('Litros de agua ahorrados', 120, 110);
-  
-  // Energía - círculo amarillo
-  doc.setFillColor(241, 196, 15);
-  doc.circle(45, 135, 10, 'F');
-  
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(16);
-  doc.setTextColor(39, 57, 73);
-  doc.text(formatNumber(energySaved), 105, 135, { align: 'right' });
-  
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(12);
-  doc.text('kWh de energía ahorrados', 120, 135);
-  
-  // CO2 - círculo azul claro
-  doc.setFillColor(52, 152, 219);
-  doc.circle(45, 160, 10, 'F');
-  
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(16);
-  doc.setTextColor(39, 57, 73);
-  doc.text(formatNumber(co2Reduced / 1000), 105, 160, { align: 'right' });
-  
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(12);
-  doc.text('Ton CO₂ no emitidas', 120, 160);
-  
-  // Equivalencias visuales
-  doc.setFillColor(245, 245, 245);
-  doc.roundedRect(15, 185, 180, 70, 3, 3, 'F');
-  
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(12);
-  doc.setTextColor(39, 57, 73);
-  doc.text('EQUIVALENCIAS', 105, 195, { align: 'center' });
+  const treesValue = Math.round(treesSaved);
+  doc.text(formatNumber(treesValue), 85, 115, { align: 'right' });
   
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(10);
+  doc.text('ÁRBOLES SALVADOS', 85, 125, { align: 'right' });
   
-  // Texto explicativo
-  const impactText = [
-    `• Los ${formatNumber(treesSaved)} árboles salvados equivalen a un bosque de aproximadamente ${formatNumber(treesSaved / 400)} hectáreas.`,
-    `• El ahorro de ${formatNumber(waterSaved)} litros de agua representa el consumo anual de ${formatNumber(waterSaved / 73000)} personas.`,
-    `• La energía ahorrada de ${formatNumber(energySaved)} kWh es suficiente para abastecer ${formatNumber(energySaved / 1200)} hogares durante un mes.`,
-    `• La reducción de ${formatNumber(co2Reduced / 1000)} toneladas de CO₂ equivale a retirar de circulación ${formatNumber((co2Reduced / 1000) / 4.6)} automóviles durante un año.`
-  ];
+  // Segundo panel - Agua ahorrada
+  doc.setFillColor(230, 240, 250); // Fondo azul claro
+  doc.roundedRect(110, 100, 75, 35, 3, 3, 'F');
   
-  let yPosImpact = 210;
-  impactText.forEach(line => {
-    doc.text(line, 20, yPosImpact);
-    yPosImpact += 10;
-  });
+  // Dibujar un icono de gota de agua
+  const dropX = 125;
+  const dropY = 118;
+  
+  // Usar la función para dibujar una gota de agua detallada
+  drawWaterDropIcon(doc, dropX, dropY, 0.8);
+  
+  // Valor y etiqueta
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16);
+  doc.setTextColor(39, 57, 73);
+  // Convertir a miles de litros para una presentación más limpia
+  const waterKL = Math.round(waterSaved / 1000);
+  doc.text(formatNumber(waterKL), 170, 115, { align: 'right' });
+  
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.text('MILES DE LITROS AHORRADOS', 170, 125, { align: 'right' });
+  
+  // Tercer panel - Energía ahorrada
+  doc.setFillColor(255, 248, 225); // Fondo amarillo claro
+  doc.roundedRect(25, 145, 75, 35, 3, 3, 'F');
+  
+  // Dibujar un icono de rayo usando nuestra función auxiliar
+  const boltX = 40;
+  const boltY = 162;
+  drawLightningIcon(doc, boltX, boltY, 0.8);
+  
+  // Valor y etiqueta
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16);
+  doc.setTextColor(39, 57, 73);
+  const energyMWh = Math.round(energySaved / 1000); // Convertir a MWh para números más limpios
+  doc.text(formatNumber(energyMWh), 85, 162, { align: 'right' });
+  
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.text('MWh DE ENERGÍA AHORRADOS', 85, 172, { align: 'right' });
+  
+  // Cuarto panel - CO2 reducido
+  doc.setFillColor(231, 245, 241); // Fondo verde-azulado claro
+  doc.roundedRect(110, 145, 75, 35, 3, 3, 'F');
+  
+  // Dibujar un icono de hoja para representar CO2 usando nuestra función auxiliar
+  const leafX = 125;
+  const leafY = 162;
+  drawLeafIcon(doc, leafX, leafY, 0.8);
+  
+  // Valor y etiqueta
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16);
+  doc.setTextColor(39, 57, 73);
+  const co2Tons = Math.round(co2Reduced / 1000);
+  doc.text(formatNumber(co2Tons), 170, 162, { align: 'right' });
+  
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.text('TON CO₂ NO EMITIDAS', 170, 172, { align: 'right' });
+  
+  // SECCIÓN DE EQUIVALENCIAS VISUALES
+  // Fondo degradado suave para la sección de equivalencias
+  doc.setFillColor(parseInt(COLORS.accent.slice(1, 3), 16), parseInt(COLORS.accent.slice(3, 5), 16), parseInt(COLORS.accent.slice(5, 7), 16), 0.7);
+  doc.roundedRect(15, 195, 180, 75, 5, 5, 'F');
+  
+  // Título más llamativo
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(39, 57, 73);
+  doc.text('EQUIVALENCIAS DE IMPACTO', 105, 207, { align: 'center' });
+  
+  // Línea decorativa bajo título
+  doc.setDrawColor(parseInt(COLORS.lime.slice(1, 3), 16), parseInt(COLORS.lime.slice(3, 5), 16), parseInt(COLORS.lime.slice(5, 7), 16));
+  doc.setLineWidth(1);
+  doc.line(65, 210, 145, 210);
+  
+  // Iconos para cada equivalencia - Mucho más visuales
+  // Bosque - pequeño icono de árbol 
+  drawTreeIcon(doc, 30, 222, 0.4);
+  
+  // Persona - pequeño icono estilizado de persona
+  // Cabeza
+  doc.setFillColor(52, 152, 219);
+  doc.circle(30, 233, 2, 'F');
+  // Cuerpo
+  doc.setLineWidth(1.5);
+  doc.setDrawColor(52, 152, 219);
+  doc.line(30, 235, 30, 241);
+  // Brazos
+  doc.line(30, 237, 27, 240);
+  doc.line(30, 237, 33, 240);
+  // Piernas
+  doc.line(30, 241, 28, 245);
+  doc.line(30, 241, 32, 245);
+  
+  // Casa - icono de casa
+  // Base de la casa
+  doc.setFillColor(241, 196, 15);
+  doc.rect(27, 252, 6, 4, 'F');
+  // Techo
+  doc.setFillColor(241, 150, 15);
+  doc.triangle(
+    26, 252, // Esquina izquierda
+    30, 248, // Punto superior
+    34, 252, // Esquina derecha
+    'F'
+  );
+  // Puerta
+  doc.setFillColor(150, 120, 10);
+  doc.rect(29, 253, 2, 3, 'F');
+  
+  // Coche - icono de auto
+  // Cuerpo del auto
+  doc.setFillColor(46, 204, 113);
+  doc.roundedRect(120, 236, 8, 3, 1, 1, 'F');
+  // Cabina
+  doc.setFillColor(32, 184, 93);
+  doc.roundedRect(122, 234, 4, 2, 1, 1, 'F');
+  // Ruedas
+  doc.setFillColor(30, 30, 30);
+  doc.circle(121.5, 239, 1, 'F');
+  doc.circle(126.5, 239, 1, 'F');
+  
+  // Texto explicativo con formato mejorado
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.setTextColor(50, 50, 50);
+  
+  // Crear recuadros para cada equivalencia
+  doc.setFillColor(240, 248, 240);
+  doc.roundedRect(38, 216, 130, 14, 1, 1, 'F');
+  
+  doc.setFillColor(235, 245, 255);
+  doc.roundedRect(38, 231, 70, 14, 1, 1, 'F');
+  
+  doc.setFillColor(255, 248, 230);
+  doc.roundedRect(38, 246, 70, 14, 1, 1, 'F');
+  
+  doc.setFillColor(230, 250, 240);
+  doc.roundedRect(115, 231, 70, 14, 1, 1, 'F');
+  
+  // Bosque
+  const hectares = (treesSaved / 400).toFixed(1);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(76, 175, 80);
+  doc.text(`BOSQUE DE ${hectares} HECTÁREAS`, 105, 223, { align: 'center' });
+  
+  // Agua
+  const people = Math.round(waterSaved / 73000);
+  doc.setTextColor(52, 152, 219);
+  doc.text(`AGUA PARA ${formatNumber(people)} PERSONAS/AÑO`, 73, 238, { align: 'center' });
+  
+  // Energía
+  const homes = Math.round(energySaved / 1200);
+  doc.setTextColor(241, 150, 15);
+  doc.text(`ENERGÍA PARA ${formatNumber(homes)} HOGARES/MES`, 73, 253, { align: 'center' });
+  
+  // CO2
+  const cars = Math.round((co2Reduced / 1000) / 4.6);
+  doc.setTextColor(46, 204, 113);
+  doc.text(`${formatNumber(cars)} AUTOS MENOS/AÑO`, 150, 238, { align: 'center' });
   
   // ==== DETALLE MENSUAL ====
   doc.addPage();
