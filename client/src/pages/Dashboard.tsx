@@ -114,7 +114,7 @@ export default function Dashboard() {
               <p className="mt-1 text-sm text-gray-500">Plataforma de gestión de residuos</p>
             </div>
             <div className="mt-4 flex flex-wrap gap-2 md:mt-0 md:ml-4">
-              <Link href="/clients/4?tab=wastedata">
+              <Link href="/data-entry">
                 <Button size="sm" className="bg-lime hover:bg-lime-dark text-black">
                   <PlusCircle className="w-4 h-4 mr-2" />
                   Registrar Residuos
@@ -185,7 +185,7 @@ export default function Dashboard() {
 
           {/* Tarjeta destacada para registro de residuos */}
           <div className="mb-6">
-            <Link href="/clients/4?tab=wastedata">
+            <Link href="/data-entry">
               <div className="rounded-lg bg-gradient-to-r from-lime-500/80 to-lime p-1 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between bg-white rounded-md p-5">
                   <div className="flex items-center mb-4 md:mb-0">
@@ -295,13 +295,87 @@ export default function Dashboard() {
           </div>
           
           {/* Charts and Alerts */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
             <div className="lg:col-span-2">
               <TrendChart data={chartData} />
             </div>
             
             <div>
               <AlertsTable alerts={alerts} />
+            </div>
+          </div>
+          
+          {/* Historial de Registros */}
+          <div>
+            <h2 className="text-lg font-anton text-gray-800 uppercase tracking-wider mb-4">Historial de Registros</h2>
+            <div className="bg-white shadow rounded-lg p-5 overflow-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead>
+                  <tr>
+                    <th className="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
+                    <th className="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Orgánico</th>
+                    <th className="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PODA</th>
+                    <th className="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Inorgánico</th>
+                    <th className="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reciclable</th>
+                    <th className="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                    <th className="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Desviación</th>
+                    <th className="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {wasteData
+                    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                    .slice(0, 10)
+                    .map((record, index) => {
+                      const date = new Date(record.date);
+                      const formattedDate = date.toLocaleDateString('es-MX', {
+                        day: 'numeric', 
+                        month: 'short', 
+                        year: 'numeric'
+                      });
+                      
+                      // Convertir kg a toneladas para mostrar
+                      const organicTons = record.organicWaste / 1000;
+                      const inorganicTons = record.inorganicWaste / 1000;
+                      const recyclableTons = (record.recyclableWaste || 0) / 1000;
+                      const podaTons = record.rawData?.poda ? record.rawData.poda / 1000 : 0;
+                      const totalTons = organicTons + inorganicTons + recyclableTons + podaTons;
+                      
+                      return (
+                        <tr key={record.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                          <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">{formattedDate}</td>
+                          <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{organicTons.toFixed(2)} ton</td>
+                          <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{podaTons.toFixed(2)} ton</td>
+                          <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{inorganicTons.toFixed(2)} ton</td>
+                          <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{recyclableTons.toFixed(2)} ton</td>
+                          <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{totalTons.toFixed(2)} ton</td>
+                          <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                            <span className="text-green-600 font-bold">{record.deviation.toFixed(2)}%</span>
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
+                            <Link href={`/clients/4/waste/${record.id}`} className="text-navy hover:text-lime">
+                              Ver
+                            </Link>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  {wasteData.length === 0 && (
+                    <tr>
+                      <td colSpan={8} className="px-4 py-8 text-center text-sm text-gray-500">
+                        No hay registros disponibles
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+              <div className="mt-4 text-right">
+                <Link href="/clients/4?tab=wastedata">
+                  <Button variant="outline" size="sm">
+                    Ver todos los registros
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
