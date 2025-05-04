@@ -281,9 +281,15 @@ export async function generateAndDownloadTrueCertificationReport(
       fillColor: [245, 245, 250]
     },
     columnStyles: {
-      0: { cellWidth: 50 },
-      1: { cellWidth: 100 },
-      2: { cellWidth: 30 }
+      0: { cellWidth: 45 },
+      1: { cellWidth: 90 },
+      2: { cellWidth: 25 }
+    },
+    tableWidth: 170, // Ancho controlado
+    styles: {
+      overflow: 'linebreak', // Evitar desbordamiento
+      fontSize: 8, // Tamaño menor
+      cellPadding: 2 // Padding reducido
     }
   });
   
@@ -308,37 +314,52 @@ export async function generateAndDownloadTrueCertificationReport(
     doc.setTextColor(0, 0, 0);
     
     // Recomendaciones basadas en el nivel actual de desviación y las necesidades específicas del Club
-    let recommendations = [];
+    // Se crean dos columnas para optimizar espacio y evitar desbordamientos
+    doc.setFontSize(8); // Texto más pequeño para las recomendaciones
     
     if (currentDeviation < 50) {
-      recommendations = [
-        '1. URGENTE: Conseguir respaldo de la alta dirección para priorizar el programa de residuos.',
-        '2. Implementar compostero en sitio para el 100% de los residuos de poda y comedor.',
-        '3. Contratar un proveedor privado para asegurar trazabilidad y destino final adecuado.',
-        '4. Formar una brigada de mínimo 3 personas para la gestión interna de residuos.'
-      ];
+      // Columna izquierda
+      doc.text('1. URGENTE: Conseguir respaldo de', 20, finalY+10);
+      doc.text('   la alta dirección', 20, finalY+15);
+      
+      doc.text('2. Implementar compostero en sitio', 20, finalY+25);
+      doc.text('   para residuos de poda y comedor', 20, finalY+30);
+      
+      // Columna derecha
+      doc.text('3. Contratar proveedor privado para', 110, finalY+10);
+      doc.text('   asegurar trazabilidad adecuada', 110, finalY+15);
+      
+      doc.text('4. Formar brigada de 3 personas', 110, finalY+25);
+      doc.text('   para gestión interna de residuos', 110, finalY+30);
     } else if (currentDeviation < 75) {
-      recommendations = [
-        '1. Involucrar activamente a la alta dirección en el programa de gestión de residuos.',
-        '2. Ampliar capacidad de compostaje in situ para todos los residuos orgánicos.',
-        '3. Negociar con proveedor privado para mejorar la trazabilidad y reportes.',
-        '4. Aumentar personal dedicado a la gestión de residuos y su capacitación.'
-      ];
+      // Columna izquierda
+      doc.text('1. Involucrar activamente a la alta', 20, finalY+10);
+      doc.text('   dirección en el programa', 20, finalY+15);
+      
+      doc.text('2. Ampliar capacidad de compostaje', 20, finalY+25);
+      doc.text('   in situ para residuos orgánicos', 20, finalY+30);
+      
+      // Columna derecha
+      doc.text('3. Mejorar trazabilidad y reportes', 110, finalY+10);
+      doc.text('   con proveedor privado', 110, finalY+15);
+      
+      doc.text('4. Aumentar personal dedicado a', 110, finalY+25);
+      doc.text('   la gestión de residuos', 110, finalY+30);
     } else {
-      recommendations = [
-        '1. Realizar presentación formal a la alta dirección sobre avances y beneficios.',
-        '2. Optimizar sistema de compostaje y aumentar su capacidad de procesamiento.',
-        '3. Revisar mensualmente indicadores con proveedor privado para asegurar desviación.',
-        '4. Capacitar continuamente a la brigada de gestión de residuos en nuevas técnicas.'
-      ];
+      // Columna izquierda
+      doc.text('1. Presentar avances y beneficios', 20, finalY+10);
+      doc.text('   a la alta dirección', 20, finalY+15);
+      
+      doc.text('2. Optimizar sistema de compostaje', 20, finalY+25);
+      doc.text('   y aumentar su capacidad', 20, finalY+30);
+      
+      // Columna derecha
+      doc.text('3. Revisar indicadores mensuales', 110, finalY+10);
+      doc.text('   con proveedor privado', 110, finalY+15);
+      
+      doc.text('4. Capacitar a la brigada en', 110, finalY+25);
+      doc.text('   nuevas técnicas de separación', 110, finalY+30);
     }
-    
-    // Escribir recomendaciones
-    let yPosition = finalY + 10;
-    recommendations.forEach(recommendation => {
-      doc.text(recommendation, 20, yPosition);
-      yPosition += 7;
-    });
   }
   
   // Pie de página

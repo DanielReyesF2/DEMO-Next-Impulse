@@ -1095,7 +1095,7 @@ export async function generateClientPDF(data: ReportData): Promise<Blob> {
   // Añadir la tabla de detalle mensual - más compacta para ahorrar espacio
   autoTable(doc, {
     startY: 160,
-    head: [['Mes/Año', 'Orgánico', 'Inorgánico', 'Reciclable', 'Total', 'Desviación']],
+    head: [['Mes/Año', 'Orgánico', 'Inorgánico', 'Reciclable', 'Total', 'Desv.']],
     body: monthlyRows,
     headStyles: {
       fillColor: [39, 57, 73], // Navy
@@ -1106,19 +1106,21 @@ export async function generateClientPDF(data: ReportData): Promise<Blob> {
       fillColor: [245, 247, 250], // Light gray
     },
     styles: {
-      cellPadding: 2, // Reducido para mayor compacidad
-      fontSize: 7, // Tamaño más pequeño pero legible
+      cellPadding: 1.5, // Más compacto
+      fontSize: 6.5, // Más pequeño pero legible
       lineWidth: 0.1,
+      overflow: 'linebreak', // Evitar desbordamiento
     },
     columnStyles: {
-      0: { fontStyle: 'bold' },
-      1: { halign: 'right' },
-      2: { halign: 'right' },
-      3: { halign: 'right' },
-      4: { halign: 'right' },
-      5: { halign: 'right', fontStyle: 'bold' },
+      0: { fontStyle: 'bold', cellWidth: 30 },
+      1: { halign: 'right', cellWidth: 20 },
+      2: { halign: 'right', cellWidth: 20 },
+      3: { halign: 'right', cellWidth: 20 },
+      4: { halign: 'right', cellWidth: 20 },
+      5: { halign: 'right', fontStyle: 'bold', cellWidth: 18 },
     },
-    margin: { left: 15, right: 15 }, // Márgenes más estrechos
+    margin: { left: 20, right: 20 }, // Márgenes más amplios para evitar desbordamiento
+    tableWidth: 180, // Ancho fijo para evitar desbordamiento
   });
   
   // ==== GRÁFICO DE GENERACIÓN MENSUAL ====
@@ -1210,50 +1212,57 @@ export async function generateClientPDF(data: ReportData): Promise<Blob> {
   doc.setLineWidth(0.7);
   doc.line(65, 213, 145, 213);
   
-  // Progreso actual y meta
+  // Progreso actual y meta - más compacto
   doc.setFillColor(245, 247, 250);
-  doc.roundedRect(15, 220, 180, 40, 3, 3, 'F');
+  doc.roundedRect(15, 220, 180, 30, 3, 3, 'F');
   
   // Indicador desviación actual - simplificado
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(12);
+  doc.setFontSize(10);
   doc.setTextColor(parseInt(COLORS.navy.slice(1, 3), 16), parseInt(COLORS.navy.slice(3, 5), 16), parseInt(COLORS.navy.slice(5, 7), 16));
   doc.text('Desviación actual:', 25, 233);
   
-  doc.setFontSize(16);
-  doc.text(`${data.deviation.toFixed(1)}%`, 95, 233);
+  doc.setFontSize(14);
+  doc.text(`${data.deviation.toFixed(1)}%`, 85, 233);
   
   // Desviación meta
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(12);
-  doc.text('Meta para certificación:', 115, 233);
-  doc.text('90%', 175, 233);
+  doc.setFontSize(10);
+  doc.text('Meta certificación:', 105, 233);
+  doc.text('90%', 165, 233);
   
-  // Acciones clave recomendadas
-  doc.setFont('helvetica', 'normal');
+  // Acciones clave recomendadas - título
+  doc.setFont('helvetica', 'bold');
   doc.setFontSize(9);
-  doc.text('Acciones prioritarias recomendadas:', 25, 245);
+  doc.text('Acciones prioritarias para alcanzar certificación:', 25, 255);
   
-  // Lista de acciones
+  // Lista de acciones - más compacta
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(8);
   
   // Recomendaciones específicas basadas en la desviación actual
+  // Diseño de dos columnas para ahorrar espacio
   if (data.deviation < 50) {
-    doc.text('1. Lograr respaldo de la alta dirección para priorizar programa de residuos', 30, 252);
-    doc.text('2. Implementar compostero en sitio para residuos de poda y comedor', 30, 258);
-    doc.text('3. Contratar proveedor privado que asegure trazabilidad', 30, 264);
-    doc.text('4. Formar brigada de mínimo 3 personas para gestión interna', 30, 270);
+    // Columna izquierda
+    doc.text('1. Priorizar programa de residuos en la alta dirección', 20, 262);
+    doc.text('2. Implementar compostero en sitio (poda/comedor)', 20, 268);
+    // Columna derecha
+    doc.text('3. Contratar proveedor privado para trazabilidad', 115, 262);
+    doc.text('4. Formar brigada de mínimo 3 personas', 115, 268);
   } else if (data.deviation < 75) {
-    doc.text('1. Aumentar participación de la alta dirección en el programa', 30, 252);
-    doc.text('2. Ampliar capacidad de compostaje in situ', 30, 258);
-    doc.text('3. Mejorar seguimiento y reportes con proveedor privado', 30, 264);
-    doc.text('4. Capacitar continuamente al personal de gestión de residuos', 30, 270);
+    // Columna izquierda
+    doc.text('1. Involucrar más a la alta dirección', 20, 262);
+    doc.text('2. Ampliar capacidad de compostaje in situ', 20, 268);
+    // Columna derecha
+    doc.text('3. Mejorar reportes con proveedor privado', 115, 262);
+    doc.text('4. Aumentar capacitación de personal', 115, 268);
   } else {
-    doc.text('1. Presentar avances y beneficios a la dirección', 30, 252);
-    doc.text('2. Optimizar sistema de compostaje actual', 30, 258);
-    doc.text('3. Revisar mensualmente indicadores con proveedores', 30, 264);
-    doc.text('4. Implementar técnicas avanzadas de separación', 30, 270);
+    // Columna izquierda
+    doc.text('1. Presentar avances a la dirección', 20, 262);
+    doc.text('2. Optimizar sistema de compostaje', 20, 268);
+    // Columna derecha
+    doc.text('3. Revisar indicadores con proveedores', 115, 262);
+    doc.text('4. Implementar técnicas avanzadas', 115, 268);
   }
   
   // Pie de página corporativo
