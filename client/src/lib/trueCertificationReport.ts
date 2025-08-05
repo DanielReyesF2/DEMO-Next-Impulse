@@ -1,6 +1,7 @@
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import logoPath from '@assets/Logo-ECONOVA-OF_Blanco.png';
+import cccmLogo from '@assets/CCCM_1754423231662.png';
 
 // Colores corporativos
 const COLORS = {
@@ -88,11 +89,18 @@ function addHeader(doc: jsPDF, title: string = 'CERTIFICACIÓN TRUE ZERO WASTE')
   doc.setFillColor(parseInt(COLORS.lime.slice(1, 3), 16), parseInt(COLORS.lime.slice(3, 5), 16), parseInt(COLORS.lime.slice(5, 7), 16));
   doc.rect(0, 20, 210, 2, 'F');
   
-  // Logo en el encabezado
+  // Logo de Econova en el lado izquierdo
   try {
     doc.addImage(logoPath, 'PNG', 10, 2, 30, 15, undefined, 'FAST');
   } catch (error) {
-    console.error('Error al añadir el logo en el encabezado:', error);
+    console.error('Error al añadir el logo de Econova:', error);
+  }
+  
+  // Logo del Club Campestre en el lado derecho
+  try {
+    doc.addImage(cccmLogo, 'PNG', 170, 2, 15, 15, undefined, 'FAST');
+  } catch (error) {
+    console.error('Error al añadir el logo del Club Campestre:', error);
   }
   
   // Título

@@ -1,5 +1,6 @@
 import { Leaf, Calendar, Building, Trees, Wind } from 'lucide-react';
 import { Link } from 'wouter';
+import cccmLogo from '@assets/CCCM_1754423231662.png';
 
 export const ClubHeader = () => {
   return (
@@ -18,7 +19,14 @@ export const ClubHeader = () => {
           
           {/* Logo y nombre del club */}
           <div className="relative z-10 text-center">
-            <h1 className="font-anton text-3xl md:text-4xl uppercase tracking-widest mb-2 text-white">
+            <div className="mb-4">
+              <img 
+                src={cccmLogo} 
+                alt="Club Campestre Ciudad de México" 
+                className="h-16 w-16 md:h-20 md:w-20 mx-auto mb-3 bg-white rounded-lg p-2"
+              />
+            </div>
+            <h1 className="font-anton text-2xl md:text-3xl uppercase tracking-widest mb-2 text-white">
               Club Campestre
             </h1>
             <p className="text-white/80 text-sm md:text-base italic">
