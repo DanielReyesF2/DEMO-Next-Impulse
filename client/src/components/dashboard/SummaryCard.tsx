@@ -34,78 +34,68 @@ export default function SummaryCard({
   progressLabel,
   type
 }: SummaryCardProps) {
-  // Determine icon based on card type
-  const renderIcon = () => {
+  // Determine icon and colors based on card type
+  const getConfig = () => {
     switch (type) {
       case "organic":
-        return (
-          <div className="bg-lime bg-opacity-20 p-2 rounded-md">
-            <Scale className="w-6 h-6 text-lime" />
-          </div>
-        );
+        return { 
+          icon: Scale, 
+          iconColor: "text-lime", 
+          bgColor: "bg-lime/10",
+          progressColor: "bg-lime"
+        };
       case "inorganic":
-        return (
-          <div className="bg-navy bg-opacity-20 p-2 rounded-md">
-            <Trash2 className="w-6 h-6 text-navy" />
-          </div>
-        );
+        return { 
+          icon: Trash2, 
+          iconColor: "text-navy", 
+          bgColor: "bg-navy/10",
+          progressColor: "bg-navy"
+        };
       case "total":
-        return (
-          <div className="bg-gray-700 bg-opacity-20 p-2 rounded-md">
-            <BarChart className="w-6 h-6 text-gray-700" />
-          </div>
-        );
+        return { 
+          icon: BarChart, 
+          iconColor: "text-gray-600", 
+          bgColor: "bg-gray-100",
+          progressColor: "bg-gray-600"
+        };
       case "deviation":
-        return (
-          <div className="bg-orange-500 bg-opacity-20 p-2 rounded-md">
-            <AlertTriangle className="w-6 h-6 text-orange-500" />
-          </div>
-        );
+        return { 
+          icon: AlertTriangle, 
+          iconColor: "text-orange-500", 
+          bgColor: "bg-orange-50",
+          progressColor: "bg-orange-500"
+        };
     }
   };
 
-  // Determine progress bar color based on card type
-  const getProgressBarColor = () => {
-    switch (type) {
-      case "organic":
-        return "bg-lime";
-      case "inorganic":
-        return "bg-navy";
-      case "total":
-        return "bg-gray-700";
-      case "deviation":
-        return "bg-orange-500";
-    }
-  };
+  const config = getConfig();
+  const Icon = config.icon;
 
   return (
-    <div className={cardVariants({ type })}>
-      <div className="flex justify-between items-start">
-        <div>
-          <div className="text-xs font-medium text-gray-500 uppercase tracking-wider">{title}</div>
-          <div className="mt-1 flex items-baseline">
-            <span className="text-2xl font-semibold text-gray-800">{value}</span>
-            <span className={`ml-2 text-sm font-medium ${change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-              {change >= 0 ? (
-                <TrendingUp className="inline-block w-3 h-3 mr-1" />
-              ) : (
-                <TrendingDown className="inline-block w-3 h-3 mr-1" />
-              )}
-              {Math.abs(change)}%
+    <div className="bg-white border border-gray-100 rounded-xl p-6 hover:shadow-sm transition-shadow">
+      <div className="flex items-start justify-between">
+        <div className="flex-1">
+          <p className="text-sm text-gray-600 mb-1">{title}</p>
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-semibold text-gray-900">{value}</span>
+            <span className={`text-sm font-medium ${change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              {change >= 0 ? '+' : ''}{change}%
             </span>
           </div>
-          <div className="text-xs text-gray-500 mt-1">Comparado con el período anterior</div>
         </div>
-        {renderIcon()}
+        <div className={`p-2 rounded-lg ${config.bgColor}`}>
+          <Icon className={`w-5 h-5 ${config.iconColor}`} />
+        </div>
       </div>
-      <div className="mt-3">
-        <div className="w-full bg-gray-200 rounded-full h-1.5">
+      
+      <div className="mt-4">
+        <div className="w-full bg-gray-100 rounded-full h-1">
           <div 
-            className={`${getProgressBarColor()} h-1.5 rounded-full`} 
-            style={{ width: `${progress}%` }}
-          ></div>
+            className={`${config.progressColor} h-1 rounded-full transition-all`} 
+            style={{ width: `${Math.min(progress, 100)}%` }}
+          />
         </div>
-        <div className="text-xs text-gray-500 mt-1">{progressLabel}</div>
+        <p className="text-xs text-gray-500 mt-2">{progressLabel}</p>
       </div>
     </div>
   );

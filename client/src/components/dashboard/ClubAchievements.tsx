@@ -34,45 +34,35 @@ const achievements = [
 
 export const ClubAchievements = () => {
   return (
-    <div className="bg-white rounded-lg shadow-sm overflow-hidden mb-8">
-      <div className="p-6 pb-4">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-anton text-gray-800 uppercase tracking-wider">Logros de Sostenibilidad</h2>
-          <Award className="h-5 w-5 text-lime" />
-        </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <div className="bg-white border border-gray-100 rounded-xl overflow-hidden mb-6">
+      <div className="px-6 py-4 border-b border-gray-100">
+        <h2 className="font-semibold text-gray-900">Logros de Sostenibilidad</h2>
+      </div>
+      
+      <div className="p-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {achievements.map((achievement, index) => (
-            <div 
-              key={index} 
-              className="flex p-4 bg-gray-50 rounded-lg hover:shadow-md transition-shadow"
-            >
-              <div className={`flex-shrink-0 rounded-full p-2.5 ${achievement.color} text-white mr-4`}>
+            <div key={index} className="text-center">
+              <div className={`w-12 h-12 ${achievement.color} rounded-xl flex items-center justify-center text-white mx-auto mb-3`}>
                 {achievement.icon}
               </div>
-              <div className="flex-1">
-                <h3 className="font-medium text-gray-900">{achievement.name}</h3>
-                <p className="text-sm text-gray-500 mt-1">{achievement.description}</p>
-                <div className="w-full h-1.5 bg-gray-200 rounded-full mt-3">
-                  <div 
-                    className={`h-1.5 rounded-full ${achievement.color}`}
-                    style={{ width: `${achievement.progress}%` }}
-                  ></div>
-                </div>
-                <div className="flex justify-between mt-1">
-                  <span className="text-xs text-gray-500">Progreso</span>
-                  <span className="text-xs font-medium">{achievement.progress}%</span>
-                </div>
+              <h3 className="font-medium text-gray-900 text-sm mb-1">{achievement.name}</h3>
+              <div className="w-full h-1 bg-gray-100 rounded-full mb-1">
+                <div 
+                  className={`h-1 rounded-full ${achievement.color}`}
+                  style={{ width: `${achievement.progress}%` }}
+                />
               </div>
+              <span className="text-xs text-gray-500">{achievement.progress}%</span>
             </div>
           ))}
         </div>
-      </div>
-      
-      <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-3 text-center">
-        <span className="text-sm text-gray-600">
-          Certificación ISO 14001 en proceso - Estimado: Diciembre 2025
-        </span>
+        
+        <div className="mt-6 pt-4 border-t border-gray-100 text-center">
+          <span className="text-sm text-gray-600">
+            ISO 14001 en proceso · Estimado Dic 2025
+          </span>
+        </div>
       </div>
     </div>
   );
