@@ -37,7 +37,7 @@ interface MonthlyData {
 
 export default function Analysis() {
   const { toast } = useToast();
-  const [selectedYear, setSelectedYear] = useState('2024');
+  const [selectedYear, setSelectedYear] = useState('2025');
   const [data, setData] = useState<MonthlyData[]>([]);
 
   const months = [
@@ -161,15 +161,9 @@ export default function Analysis() {
               <p className="mt-1 text-sm text-gray-500">Tabla de 12 meses como requiere la certificadora</p>
             </div>
             <div className="mt-4 flex md:mt-0 md:ml-4 space-x-2">
-              <Select value={selectedYear} onValueChange={setSelectedYear}>
-                <SelectTrigger className="w-32">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="2024">2024</SelectItem>
-                  <SelectItem value="2025">2025</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="text-lg font-anton text-gray-800">
+                Año: 2025
+              </div>
               <Button 
                 onClick={() => initializeYear(parseInt(selectedYear))}
                 className="bg-lime hover:bg-lime-dark text-black"
@@ -512,8 +506,8 @@ export default function Analysis() {
             <Card>
               <CardContent className="p-8 text-center">
                 <Calculator className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No hay datos para {selectedYear}</h3>
-                <p className="text-gray-500 mb-4">Haz clic en "Inicializar Año" para comenzar con la tabla de 12 meses</p>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No hay datos para 2025</h3>
+                <p className="text-gray-500 mb-4">Haz clic en "Inicializar Año" para ver los datos reales de enero-junio</p>
               </CardContent>
             </Card>
           )}
