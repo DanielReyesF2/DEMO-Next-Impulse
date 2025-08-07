@@ -453,27 +453,7 @@ export function WasteFlowVisualization({ totalWasteDiverted }: WasteFlowVisualiz
           ))}
         </div>
       </div>
-      {/* Summary Stats */}
-      <div className="bg-gradient-to-r from-green-50 via-blue-50 to-purple-50 rounded-2xl p-6 border border-gray-200 mb-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
-          <div>
-            <div className="text-2xl font-anton text-green-600">{organicFlows.reduce((sum, flow) => sum + flow.volume, 0).toFixed(1)}</div>
-            <div className="text-sm text-gray-600">Ton Orgánicos</div>
-          </div>
-          <div>
-            <div className="text-2xl font-anton text-blue-600">{recyclableFlows.reduce((sum, flow) => sum + flow.volume, 0).toFixed(1)}</div>
-            <div className="text-sm text-gray-600">Ton Reciclables</div>
-          </div>
-          <div>
-            <div className="text-2xl font-anton text-gray-600">{inorganicFlows.reduce((sum, flow) => sum + flow.volume, 0).toFixed(1)}</div>
-            <div className="text-sm text-gray-600">Ton Inorgánicos</div>
-          </div>
-          <div>
-            <div className="text-2xl font-anton text-emerald-600">{diversionRate.toFixed(1)}%</div>
-            <div className="text-sm text-gray-600">Tasa Desviación</div>
-          </div>
-        </div>
-      </div>
+      
       {/* Detailed Subcategory Breakdown - Professional Sales Presentation */}
       <div className="bg-white rounded-2xl p-6 border border-gray-200">
         <h3 className="text-xl font-anton text-gray-800 uppercase mb-6 text-center">Clasificación Detallada por Subcategorías</h3>
