@@ -26,6 +26,7 @@ interface MonthlyData {
   totalRecyclables: number;
   // Orgánicos
   organicsCompost: number;
+  organicsToLandfill: number;
   totalOrganics: number;
   // Inorgánicos no reciclables
   inorganicNonRecyclable: number;
@@ -49,12 +50,12 @@ export default function Analysis() {
 
   // Datos reales extraídos de los PDFs enero-junio 2025
   const realData2025 = [
-    { month: 1, organics: 5386.5, recyclables: 569.05, inorganicNonRecyclable: 2965.58 }, // Enero
-    { month: 2, organics: 4841.5, recyclables: 2368.0, inorganicNonRecyclable: 2423.3 }, // Febrero
-    { month: 3, organics: 5964.0, recyclables: 2156.8, inorganicNonRecyclable: 3140.5 }, // Marzo
-    { month: 4, organics: 4677.5, recyclables: 721.2, inorganicNonRecyclable: 2480.7 }, // Abril
-    { month: 5, organics: 4921.0, recyclables: 2980.0, inorganicNonRecyclable: 2844.0 }, // Mayo
-    { month: 6, organics: 3837.5, recyclables: 3468.0, inorganicNonRecyclable: 2147.5 }, // Junio
+    { month: 1, organicsToLandfill: 5386.5, recyclables: 569.05, inorganicNonRecyclable: 2965.58, organicsCompost: 0 }, // Enero
+    { month: 2, organicsToLandfill: 4841.5, recyclables: 2368.0, inorganicNonRecyclable: 2423.3, organicsCompost: 0 }, // Febrero
+    { month: 3, organicsToLandfill: 5964.0, recyclables: 2156.8, inorganicNonRecyclable: 3140.5, organicsCompost: 0 }, // Marzo
+    { month: 4, organicsToLandfill: 4677.5, recyclables: 721.2, inorganicNonRecyclable: 2480.7, organicsCompost: 0 }, // Abril
+    { month: 5, organicsToLandfill: 4921.0, recyclables: 2980.0, inorganicNonRecyclable: 2844.0, organicsCompost: 0 }, // Mayo
+    { month: 6, organicsToLandfill: 3837.5, recyclables: 3468.0, inorganicNonRecyclable: 2147.5, organicsCompost: 0 }, // Junio
   ];
 
   const initializeYear = (year: number) => {
@@ -66,8 +67,8 @@ export default function Analysis() {
       
       if (realDataForMonth) {
         // Usar datos reales
-        const totalGenerated = realDataForMonth.organics + realDataForMonth.recyclables + realDataForMonth.inorganicNonRecyclable;
-        const totalDiverted = realDataForMonth.organics + realDataForMonth.recyclables;
+        const totalGenerated = realDataForMonth.organicsToLandfill + realDataForMonth.recyclables + realDataForMonth.inorganicNonRecyclable + realDataForMonth.organicsCompost;
+        const totalDiverted = realDataForMonth.organicsCompost + realDataForMonth.recyclables; // Solo orgánicos de composta + reciclables
         const deviationPercentage = (totalDiverted / totalGenerated) * 100; // Porcentaje desviado del relleno
         
         yearData.push({
@@ -85,8 +86,9 @@ export default function Analysis() {
           aluminum: Math.round(realDataForMonth.recyclables * 0.005),
           glass: Math.round(realDataForMonth.recyclables * 0.01),
           totalRecyclables: realDataForMonth.recyclables,
-          organicsCompost: realDataForMonth.organics,
-          totalOrganics: realDataForMonth.organics,
+          organicsCompost: realDataForMonth.organicsCompost,
+          organicsToLandfill: realDataForMonth.organicsToLandfill,
+          totalOrganics: realDataForMonth.organicsCompost,
           inorganicNonRecyclable: realDataForMonth.inorganicNonRecyclable,
           glassDonation: 0,
           totalDiverted: totalDiverted,
@@ -111,6 +113,7 @@ export default function Analysis() {
           glass: 0,
           totalRecyclables: 0,
           organicsCompost: year === 2025 ? 0 : 18000, // Para 2025 usar datos reales, otros años valor por defecto
+          organicsToLandfill: 0,
           totalOrganics: year === 2025 ? 0 : 18000,
           inorganicNonRecyclable: 0,
           glassDonation: 0,
@@ -221,7 +224,7 @@ export default function Analysis() {
                     <TableBody>
                       {/* Datos principales simplificados */}
                       <TableRow className="hover:bg-gray-50">
-                        <TableCell className="font-medium text-green-700">🌱 Orgánicos</TableCell>
+                        <TableCell className="font-medium text-green-700">🌱 Orgánicos (composta)</TableCell>
                         {data.map((month, index) => (
                           <TableCell key={index} className="text-center font-medium">
                             {month.organicsCompost.toLocaleString()}
@@ -229,6 +232,18 @@ export default function Analysis() {
                         ))}
                         <TableCell className="text-center font-bold text-green-700">
                           {calculateTotals('organicsCompost').toLocaleString()}
+                        </TableCell>
+                      </TableRow>
+                      
+                      <TableRow className="hover:bg-gray-50">
+                        <TableCell className="font-medium text-orange-700">🗑️ Orgánicos (relleno)</TableCell>
+                        {data.map((month, index) => (
+                          <TableCell key={index} className="text-center font-medium">
+                            {month.organicsToLandfill.toLocaleString()}
+                          </TableCell>
+                        ))}
+                        <TableCell className="text-center font-bold text-orange-700">
+                          {calculateTotals('organicsToLandfill').toLocaleString()}
                         </TableCell>
                       </TableRow>
 
@@ -245,7 +260,7 @@ export default function Analysis() {
                       </TableRow>
 
                       <TableRow className="hover:bg-gray-50">
-                        <TableCell className="font-medium text-red-700">🗑️ Inorgánicos (relleno)</TableCell>
+                        <TableCell className="font-medium text-red-700">🚮 Inorgánicos (relleno)</TableCell>
                         {data.map((month, index) => (
                           <TableCell key={index} className="text-center font-medium">
                             {month.inorganicNonRecyclable.toLocaleString()}
