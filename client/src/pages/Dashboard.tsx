@@ -44,7 +44,7 @@ export default function Dashboard() {
     refetchOnWindowFocus: false,
   });
   
-  // Datos reales 2025 extraídos de los PDFs (iguales al análisis)
+  // Datos reales 2025 extraídos de los PDFs (enero-junio)
   const realData2025 = [
     { month: 'Enero', organicsToLandfill: 5386.5, recyclables: 569.05, inorganicNonRecyclable: 2965.58, organicsCompost: 12800 },
     { month: 'Febrero', organicsToLandfill: 4841.5, recyclables: 2368.0, inorganicNonRecyclable: 2423.3, organicsCompost: 0 },
