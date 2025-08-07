@@ -342,21 +342,7 @@ export default function Analysis() {
                         </TableCell>
                       </TableRow>
 
-                      <TableRow className="bg-yellow-100">
-                        <TableCell className="font-bold text-green-800">📊 % Desviado</TableCell>
-                        {data.map((month, index) => (
-                          <TableCell key={index} className="text-center font-bold">
-                            <span className={`text-lg ${month.deviationPercentage >= 90 ? 'text-green-600' : 'text-red-600'}`}>
-                              {month.deviationPercentage.toFixed(1)}%
-                            </span>
-                          </TableCell>
-                        ))}
-                        <TableCell className="text-center font-bold">
-                          <span className={`text-lg ${averageDeviation >= 90 ? 'text-green-600' : 'text-red-600'}`}>
-                            {averageDeviation.toFixed(1)}%
-                          </span>
-                        </TableCell>
-                      </TableRow>
+
 
                       
                     </TableBody>
