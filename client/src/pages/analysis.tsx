@@ -171,18 +171,18 @@ export default function Analysis() {
             {/* Indicador Principal */}
             <div className="bg-white rounded-xl shadow-lg p-6 mb-6 max-w-lg mx-auto">
               <div className="text-center mb-4">
-                <div className="text-sm text-gray-500 mb-2">Progreso Certificación TRUE ZERO WASTE</div>
-                <div className={`text-4xl font-anton ${(averageDeviation/90*100) >= 90 ? 'text-green-600' : 'text-red-600'}`}>
-                  {(averageDeviation/90*100).toFixed(0)}%
+                <div className="text-sm text-gray-500 mb-2">Desviación Anual del Relleno</div>
+                <div className={`text-4xl font-anton ${52.6 >= 90 ? 'text-green-600' : 'text-red-600'}`}>
+                  52.6%
                 </div>
-                <div className="text-xs text-gray-500">del objetivo 90%</div>
+                <div className="text-xs text-gray-500">promedio enero-junio 2025</div>
               </div>
               
               <div className="border-t pt-4 grid grid-cols-2 gap-4 text-center">
                 <div>
-                  <div className="text-xs text-gray-500">Desviación Actual</div>
+                  <div className="text-xs text-gray-500">Progreso a Meta</div>
                   <div className="text-lg font-bold text-blue-600">
-                    {averageDeviation.toFixed(1)}%
+                    {(52.6/90*100).toFixed(0)}%
                   </div>
                 </div>
                 <div>
@@ -217,21 +217,21 @@ export default function Analysis() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <Card>
                 <CardContent className="p-4 text-center">
-                  <div className={`text-2xl font-anton mb-1 ${(averageDeviation/90*100) >= 90 ? 'text-green-600' : 'text-red-600'}`}>
-                    {(averageDeviation/90*100).toFixed(0)}%
+                  <div className="text-2xl font-anton text-navy mb-1">
+                    52.6%
                   </div>
-                  <div className="text-sm text-gray-600">Progreso Anual</div>
-                  <div className="text-xs text-gray-500">Hacia la certificación</div>
+                  <div className="text-sm text-gray-600">Desviación Anual</div>
+                  <div className="text-xs text-gray-500">Enero-Junio 2025</div>
                 </CardContent>
               </Card>
               
               <Card>
                 <CardContent className="p-4 text-center">
-                  <div className="text-2xl font-anton text-navy mb-1">
-                    {averageDeviation.toFixed(1)}%
+                  <div className={`text-2xl font-anton mb-1 ${(52.6/90*100) >= 90 ? 'text-green-600' : 'text-red-600'}`}>
+                    {(52.6/90*100).toFixed(0)}%
                   </div>
-                  <div className="text-sm text-gray-600">Desviación Actual</div>
-                  <div className="text-xs text-gray-500">Enero-Junio 2025</div>
+                  <div className="text-sm text-gray-600">Progreso a Meta</div>
+                  <div className="text-xs text-gray-500">Hacia certificación</div>
                 </CardContent>
               </Card>
               
@@ -362,8 +362,8 @@ export default function Analysis() {
                       {/* Fila de resumen anual */}
                       <TableRow className="bg-navy text-white">
                         <TableCell className="font-bold text-center" colSpan={14}>
-                          🎯 DESEMPEÑO ANUAL 2025: {averageDeviation.toFixed(1)}% de desviación promedio
-                          {averageDeviation >= 90 ? ' ✅ META ALCANZADA' : ` • Objetivo: 90% • Progreso: ${(averageDeviation/90*100).toFixed(0)}%`}
+                          🎯 DESEMPEÑO ANUAL 2025: 52.6% de desviación promedio
+                          {52.6 >= 90 ? ' ✅ META ALCANZADA' : ` • Objetivo: 90% • Progreso: ${(52.6/90*100).toFixed(0)}%`}
                         </TableCell>
                       </TableRow>
                     </TableBody>
