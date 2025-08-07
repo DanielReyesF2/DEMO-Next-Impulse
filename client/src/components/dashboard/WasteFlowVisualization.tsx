@@ -37,114 +37,127 @@ interface WasteFlow {
 }
 
 const wasteFlows: WasteFlow[] = [
-  // Orgánicos
+  // ORGÁNICOS - Basado en la imagen detallada del Club
   {
-    id: 'organicos-comida',
-    name: 'Residuos de Cocina',
+    id: 'aceite-residual',
+    name: 'Aceite Residual',
+    category: 'organico',
+    icon: <Droplets className="w-5 h-5" />,
+    color: 'text-amber-600',
+    bgColor: 'bg-amber-100',
+    destination: 'Revalorización (Insumo para biodiesel)',
+    partner: 'Reoil',
+    volume: 0.8,
+    description: 'Aceite usado de cocinas convertido a biodiesel sostenible',
+    origins: ['Restaurante', 'Casa Club', 'Cocinas de eventos']
+  },
+  {
+    id: 'grasa-cascaras',
+    name: 'Grasa y Cáscaras de Fruta',
     category: 'organico',
     icon: <Utensils className="w-5 h-5" />,
     color: 'text-green-600',
     bgColor: 'bg-green-100',
-    destination: 'Biodegradación',
-    partner: 'ORKA',
-    volume: 8.5,
-    description: 'Restos de comida del restaurante y eventos',
-    origins: ['Restaurante', 'Cocina principal', 'Eventos especiales']
+    destination: 'Recolección y disposición de grasa cocinas',
+    partner: 'TEDISD Innovative Group',
+    volume: 3.2,
+    description: 'Grasas de cocina y cáscaras de frutas procesadas sustainably',
+    origins: ['Restaurante principal', 'Cocina Casa Club', 'Área de preparación']
   },
   {
-    id: 'organicos-jardineria',
-    name: 'PODA (Residuos Jardín)',
+    id: 'organicos-complejos',
+    name: 'Orgánicos Diversos',
     category: 'organico',
     icon: <TreePine className="w-5 h-5" />,
     color: 'text-green-700',
     bgColor: 'bg-green-200',
-    destination: 'Compostaje',
-    partner: 'Club interno',
-    volume: 12.3,
-    description: 'Poda de árboles y mantenimiento de áreas verdes',
-    origins: ['Áreas verdes Casa Club', 'Jardines del complejo', 'Campo de golf']
+    destination: 'Biodegradación mediante biodigestor ORKA',
+    partner: 'ORKA',
+    volume: 17.6,
+    description: 'Pan, pescados, carne, huevo, queso, pollo, pasta, arroz, frutas, azúcar, salsas, papa, caña, conchas, aceites, café',
+    origins: ['Restaurante', 'Casa Club', 'Eventos especiales', 'Cocinas auxiliares']
   },
+
+  // RECICLABLES - Clasificación profesional detallada
   {
-    id: 'organicos-aceite',
-    name: 'Aceite de Cocina',
-    category: 'organico',
-    icon: <Droplets className="w-5 h-5" />,
-    color: 'text-yellow-600',
-    bgColor: 'bg-yellow-100',
-    destination: 'Biodiesel',
-    partner: 'Reoil',
-    volume: 0.8,
-    description: 'Aceite usado de cocinas y restaurante',
-    origins: ['Cocina principal', 'Restaurante', 'Bar y cafetería']
-  },
-  
-  // Reciclables
-  {
-    id: 'reciclable-papel',
+    id: 'papel-carton-periodico',
     name: 'Papel y Cartón',
     category: 'reciclable',
     icon: <Newspaper className="w-5 h-5" />,
     color: 'text-blue-600',
     bgColor: 'bg-blue-100',
-    destination: 'Reprocesamiento',
-    partner: 'KREY',
+    destination: 'Revalorización Reciclado Refabricación',
+    partner: 'Recupera (Centros de Reciclaje)',
     volume: 2.1,
-    description: 'Documentos, cajas de cartón y material impreso',
-    origins: ['Oficinas administrativas', 'Recepción Casa Club', 'Área de eventos']
+    description: 'Papel, periódico, revistas, cartón - proceso completo de refabricación',
+    origins: ['Oficinas administrativas', 'Casa Club', 'Recepción']
   },
   {
-    id: 'reciclable-plastico',
-    name: 'Plástico PET',
+    id: 'vidrio-sat-timbrado',
+    name: 'Vidrio (Timbrado SAT)',
     category: 'reciclable',
     icon: <Wine className="w-5 h-5" />,
     color: 'text-blue-700',
     bgColor: 'bg-blue-200',
-    destination: 'Reciclaje',
-    partner: 'Recupera',
-    volume: 1.9,
-    description: 'Botellas y envases plásticos reciclables',
-    origins: ['Restaurante', 'Bar', 'Áreas comunes Casa Club']
+    destination: 'Revalorización Proceso Refabricación',
+    partner: 'Cerrando el Ciclo',
+    volume: 1.2,
+    description: 'Vidrio certificado SAT para proceso de refabricación industrial',
+    origins: ['Bar y restaurante', 'Eventos especiales', 'Áreas VIP']
   },
   {
-    id: 'reciclable-vidrio',
-    name: 'Vidrio',
+    id: 'plasticos-polipropileno',
+    name: 'Plásticos PET/HDPE',
     category: 'reciclable',
     icon: <Package className="w-5 h-5" />,
     color: 'text-emerald-600',
     bgColor: 'bg-emerald-100',
-    destination: 'Refabricación',
-    partner: 'Grupo eWaste',
-    volume: 1.2,
-    description: 'Botellas de vidrio y cristalería',
-    origins: ['Bar y restaurante', 'Eventos especiales', 'Áreas de servicio']
+    destination: 'Donación para revalorización',
+    partner: 'Verde Ciudad',
+    volume: 1.9,
+    description: 'Vidrio PET HDPE, plástico duro, aluminio, tapas de polipropileno',
+    origins: ['Casa Club', 'Restaurante', 'Áreas comunes', 'Eventos']
   },
-  
-  // Inorgánicos
+
+  // INORGÁNICOS - Sistema completo de manejo
   {
-    id: 'inorganico-electronicos',
-    name: 'Electrónicos',
+    id: 'residuos-electronicos-complejos',
+    name: 'Residuos Electrónicos',
     category: 'inorganico',
     icon: <Battery className="w-5 h-5" />,
     color: 'text-purple-600',
     bgColor: 'bg-purple-100',
-    destination: 'Recuperación de Metales',
-    partner: 'Nikken',
+    destination: 'Recuperación Revalorización Reciclaje',
+    partner: 'eWaste Group',
     volume: 0.3,
-    description: 'Equipos electrónicos y componentes',
-    origins: ['Oficinas administrativas', 'Sistemas Casa Club', 'Equipos obsoletos']
+    description: 'Blancos, losa, objetos perdidos, mobiliario, equipos electrónicos',
+    origins: ['Oficinas administrativas', 'Sistemas Casa Club', 'Mantenimiento']
   },
   {
-    id: 'inorganico-general',
+    id: 'cartuchos-nikken-especializados',
+    name: 'Cartuchos Nikken',
+    category: 'inorganico',
+    icon: <Factory className="w-5 h-5" />,
+    color: 'text-indigo-600',
+    bgColor: 'bg-indigo-100',
+    destination: 'Donación para revalorización',
+    partner: 'NIKKEN',
+    volume: 0.1,
+    description: 'Cartuchos de tinta y tóner para remanufactura especializada',
+    origins: ['Oficinas', 'Centros de impresión', 'Administración']
+  },
+  {
+    id: 'residuos-generales-controlados',
     name: 'Residuos Generales',
     category: 'inorganico',
     icon: <Trash2 className="w-5 h-5" />,
     color: 'text-gray-600',
     bgColor: 'bg-gray-100',
-    destination: 'Relleno Sanitario',
-    partner: 'SGA',
+    destination: 'Donaciones o Defensa SGA',
+    partner: 'Amistad Cristiano / KREY',
     volume: 5.8,
-    description: 'Residuos no reciclables o contaminados',
-    origins: ['Casa Club general', 'Oficinas', 'Áreas de mantenimiento']
+    description: 'Reprocesamiento y Compostaje cuando es iniciado - disposición controlada',
+    origins: ['Casa Club general', 'Mantenimiento', 'Áreas comunes']
   }
 ];
 
@@ -432,7 +445,7 @@ export function WasteFlowVisualization({ totalWasteDiverted }: WasteFlowVisualiz
       </div>
 
       {/* Summary Stats */}
-      <div className="bg-gradient-to-r from-green-50 via-blue-50 to-purple-50 rounded-2xl p-6 border border-gray-200">
+      <div className="bg-gradient-to-r from-green-50 via-blue-50 to-purple-50 rounded-2xl p-6 border border-gray-200 mb-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
           <div>
             <div className="text-2xl font-anton text-green-600">{organicFlows.reduce((sum, flow) => sum + flow.volume, 0).toFixed(1)}</div>
@@ -449,6 +462,99 @@ export function WasteFlowVisualization({ totalWasteDiverted }: WasteFlowVisualiz
           <div>
             <div className="text-2xl font-anton text-emerald-600">{diversionRate.toFixed(1)}%</div>
             <div className="text-sm text-gray-600">Tasa Desviación</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Detailed Subcategory Breakdown - Professional Sales Presentation */}
+      <div className="bg-white rounded-2xl p-6 border border-gray-200">
+        <h3 className="text-xl font-anton text-gray-800 uppercase mb-6 text-center">Clasificación Detallada por Subcategorías</h3>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Inorgánicos Detallados */}
+          <div className="space-y-4">
+            <div className="text-center">
+              <h4 className="text-lg font-bold text-gray-700 uppercase">Inorgánicos</h4>
+              <p className="text-sm text-gray-600">2DO. USO</p>
+            </div>
+            <div className="space-y-2 text-xs">
+              <div className="bg-gray-50 p-3 rounded-lg">
+                <div className="font-semibold text-gray-700">Blancos • Losa • Objetos Perdidos • Mobiliario</div>
+                <div className="text-gray-600 mt-1">→ Donaciones o Defensa SGA</div>
+              </div>
+              <div className="bg-gray-50 p-3 rounded-lg">
+                <div className="font-semibold text-gray-700">Residuos Electrónicos</div>
+                <div className="text-gray-600 mt-1">→ Recuperación Revalorización Reciclaje</div>
+              </div>
+              <div className="bg-blue-50 p-3 rounded-lg">
+                <div className="font-semibold text-blue-700">Vidrio (Timbrado SAT) • Vidrio PET HDPE • Plástico Duro</div>
+                <div className="text-blue-600 mt-1">→ Revalorización Proceso Refabricación</div>
+              </div>
+              <div className="bg-blue-50 p-3 rounded-lg">
+                <div className="font-semibold text-blue-700">Tapas de polipropileno • Aluminio • Cartón • Papel • Periódico • Revistas</div>
+                <div className="text-blue-600 mt-1">→ Cartuchos Nikken</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Orgánicos Detallados */}
+          <div className="space-y-4">
+            <div className="text-center">
+              <h4 className="text-lg font-bold text-green-700 uppercase">Orgánicos</h4>
+              <p className="text-sm text-gray-600">PROCESAMIENTO BIOLÓGICO</p>
+            </div>
+            <div className="space-y-2 text-xs">
+              <div className="bg-amber-50 p-3 rounded-lg">
+                <div className="font-semibold text-amber-700">Aceite Residual</div>
+                <div className="text-amber-600 mt-1">→ Revalorización (Insumo para biodiesel)</div>
+              </div>
+              <div className="bg-green-50 p-3 rounded-lg">
+                <div className="font-semibold text-green-700">Grasa • Fruta • Cáscaras</div>
+                <div className="text-green-600 mt-1">→ Recolección y disposición de grasa cocinas</div>
+              </div>
+              <div className="bg-green-50 p-3 rounded-lg">
+                <div className="font-semibold text-green-700">Pan • Pescados • Carne • Huevo • Queso • Pollo • Pasta • Arroz</div>
+                <div className="text-green-600 mt-1">→ Biodegradación mediante biodigestor</div>
+              </div>
+              <div className="bg-green-100 p-3 rounded-lg">
+                <div className="font-semibold text-green-800">Azúcar • Salsas • Papa • Caña • Conchas • Aceites • Café</div>
+                <div className="text-green-700 mt-1">→ Reprocesamiento y Compostaje</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Partners y Certificaciones */}
+          <div className="space-y-4">
+            <div className="text-center">
+              <h4 className="text-lg font-bold text-blue-700 uppercase">Partners Certificados</h4>
+              <p className="text-sm text-gray-600">RED DE VALORIZACIÓN</p>
+            </div>
+            <div className="space-y-3 text-xs">
+              <div className="bg-blue-50 p-3 rounded-lg text-center">
+                <div className="font-bold text-blue-800">ORKA</div>
+                <div className="text-blue-600">Biodigestores Avanzados</div>
+              </div>
+              <div className="bg-green-50 p-3 rounded-lg text-center">
+                <div className="font-bold text-green-800">Reoil</div>
+                <div className="text-green-600">Biodiesel Sustentable</div>
+              </div>
+              <div className="bg-purple-50 p-3 rounded-lg text-center">
+                <div className="font-bold text-purple-800">TEDISD</div>
+                <div className="text-purple-600">Innovative Group</div>
+              </div>
+              <div className="bg-indigo-50 p-3 rounded-lg text-center">
+                <div className="font-bold text-indigo-800">eWaste Group</div>
+                <div className="text-indigo-600">Electrónicos Especializados</div>
+              </div>
+              <div className="bg-yellow-50 p-3 rounded-lg text-center">
+                <div className="font-bold text-yellow-800">Cerrando el Ciclo</div>
+                <div className="text-yellow-600">Vidrio Certificado</div>
+              </div>
+              <div className="bg-emerald-50 p-3 rounded-lg text-center">
+                <div className="font-bold text-emerald-800">Verde Ciudad • Recupera • NIKKEN</div>
+                <div className="text-emerald-600">Red Integral de Reciclaje</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
