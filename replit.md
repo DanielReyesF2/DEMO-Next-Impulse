@@ -13,6 +13,8 @@ Preferred communication style: Simple, everyday language.
 - **Commercial Opportunity**: System now designed for potential sale to Club Campestre as integrated solution
 - **Modular Architecture**: Four environmental modules (Energy, Water, Waste, Circular Economy) with dedicated pages
 - **Circular Economy Integration**: Advanced index calculation combining all environmental factors for holistic sustainability assessment
+- **Club Infrastructure Integration**: Added PTAR wastewater treatment plant and lagoon system for water module, solar panel implementation planning for energy module
+- **Dashboard Redesign**: Eliminated rigid card layouts for more natural, interactive environmental module design
 
 # System Architecture
 
@@ -50,8 +52,8 @@ Preferred communication style: Simple, everyday language.
 
 ## Environmental Management Features
 - **Waste Management**: Organic (including PODA), inorganic, and recyclable waste tracking with TRUE Zero Waste certification progress
-- **Energy Monitoring**: Solar energy generation, consumption patterns, efficiency metrics, and renewable energy percentage tracking
-- **Water Conservation**: Consumption monitoring, recycling systems, rainwater harvesting, and quality parameters tracking
+- **Energy Monitoring**: Solar energy generation project in planning phase, consumption patterns, efficiency metrics, and renewable energy percentage tracking
+- **Water Conservation**: PTAR (Wastewater Treatment Plant) and lagoon system for golf course irrigation, consumption monitoring, recycling systems, and quality parameters tracking
 - **Circular Economy Index**: Integrated sustainability score combining all environmental factors (72% current index)
 - **Environmental Impact**: Comprehensive calculation of trees saved, water conserved, energy saved, and CO₂ reduction across all modules
 - **Sustainability Metrics**: Multi-dimensional progress tracking with targets for 2026 (85% circularity goal)

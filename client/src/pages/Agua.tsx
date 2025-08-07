@@ -34,8 +34,24 @@ export default function Agua() {
               Gestión Hídrica
             </h1>
             <p className="text-gray-600 mt-2">
-              Conservación, reciclaje y aprovechamiento sustentable del agua
+              PTAR, laguna de riego y sistema de conservación integral
             </p>
+            
+            {/* Infraestructura del club */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+              <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
+                <h3 className="font-medium text-blue-900 mb-2">🏭 Planta PTAR</h3>
+                <p className="text-sm text-blue-700">
+                  Planta de Tratamiento de Aguas Residuales en operación para el procesamiento y reutilización del agua
+                </p>
+              </div>
+              <div className="bg-green-50 rounded-lg p-4 border border-green-100">
+                <h3 className="font-medium text-green-900 mb-2">🏌️ Sistema de Riego</h3>
+                <p className="text-sm text-green-700">
+                  Laguna de almacenamiento para riego eficiente del campo de golf
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Métricas principales */}

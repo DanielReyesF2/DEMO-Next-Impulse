@@ -33,8 +33,28 @@ export default function Energia() {
               Gestión Energética
             </h1>
             <p className="text-gray-600 mt-2">
-              Eficiencia energética y transición hacia energías renovables
+              Eficiencia energética y proyecto de paneles solares
             </p>
+            
+            {/* Proyecto solar del club */}
+            <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg p-4 border border-yellow-100 mt-6">
+              <div className="flex items-center space-x-3">
+                <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                  <Sun className="w-6 h-6 text-yellow-600" />
+                </div>
+                <div>
+                  <h3 className="font-medium text-yellow-900">⚡ Proyecto de Paneles Solares</h3>
+                  <p className="text-sm text-yellow-700">
+                    En fase de planificación para implementación de sistema solar fotovoltaico
+                  </p>
+                </div>
+                <div className="ml-auto">
+                  <span className="px-3 py-1 bg-yellow-200 text-yellow-800 text-xs font-medium rounded-full">
+                    En Desarrollo
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Métricas principales */}
