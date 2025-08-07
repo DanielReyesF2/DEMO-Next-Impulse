@@ -245,32 +245,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Acciones rápidas */}
-          <div className="grid grid-cols-2 gap-4">
-            <Link href="/analysis">
-              <div className="bg-lime text-navy rounded-lg p-6 hover:bg-lime/90 transition-colors group">
-                <div className="flex items-center space-x-4">
-                  <BarChart2 className="h-8 w-8 text-navy" />
-                  <div>
-                    <h4 className="font-bold text-lg">Análisis Detallado</h4>
-                    <p className="text-sm text-navy/70">Tablas y métricas específicas</p>
-                  </div>
-                </div>
-              </div>
-            </Link>
-            
-            <Link href="/data-entry">
-              <div className="bg-white border-2 border-gray-200 rounded-lg p-6 hover:border-navy/20 transition-colors group">
-                <div className="flex items-center space-x-4">
-                  <PlusCircle className="h-8 w-8 text-gray-400 group-hover:text-navy transition-colors" />
-                  <div>
-                    <h4 className="font-bold text-lg text-gray-900">Registro Manual</h4>
-                    <p className="text-sm text-gray-500">Para casos especiales</p>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </div>
+          
         </div>
       </div>
     </AppLayout>
