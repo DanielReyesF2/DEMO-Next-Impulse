@@ -86,7 +86,7 @@ export class MemStorage implements IStorage {
       { month: 12, organic: 5.2, inorganic: 3.0, recyclable: 1.6 }, // December 2024
     ];
 
-    // Real data 2025 (from CSV file - EXACT MEASUREMENTS)
+    // Complete real data 2025 - ALL MONTHS (from CSV file - EXACT MEASUREMENTS)
     const realData2025 = [
       { month: 1, organic: 5.3865, inorganic: 2.96558, recyclable: 0.56905 }, // January 2025 - REAL
       { month: 2, organic: 4.8415, inorganic: 2.4233, recyclable: 2.368 }, // February 2025 - REAL
@@ -121,6 +121,30 @@ export class MemStorage implements IStorage {
         recyclableWaste: data.recyclable,
       });
     }
+
+    // Manually verify we have all 8 months of 2025
+    const months2025 = [5, 6, 7, 8]; // May to August - ensure these are added
+    for (const month of months2025) {
+      const existingRecord = Array.from(this.wasteData.values()).find(
+        record => record.date.getFullYear() === 2025 && record.date.getMonth() === month - 1
+      );
+      
+      if (!existingRecord) {
+        const monthData = realData2025.find(d => d.month === month);
+        if (monthData) {
+          this.createWasteData({
+            clientId: clubId,
+            documentId: null,
+            date: new Date(2025, month - 1, 15),
+            organicWaste: monthData.organic,
+            inorganicWaste: monthData.inorganic,
+            recyclableWaste: monthData.recyclable,
+          });
+        }
+      }
+    }
+    
+    console.log(`Initialized ${this.wasteData.size} waste data records from 2024-2025`);
   }
 
   // Client operations
