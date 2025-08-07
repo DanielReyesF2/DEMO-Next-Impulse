@@ -246,19 +246,7 @@ export default function Dashboard() {
           </div>
 
           {/* Acciones rápidas */}
-          <div className="grid grid-cols-3 gap-4">
-            <Link href="/documents">
-              <div className="bg-navy text-white rounded-lg p-6 hover:bg-navy/90 transition-colors group">
-                <div className="flex items-center space-x-4">
-                  <FileUp className="h-8 w-8 text-lime" />
-                  <div>
-                    <h4 className="font-bold text-lg">Subir Bitácoras</h4>
-                    <p className="text-sm text-navy-light">Procesamiento automático con IA</p>
-                  </div>
-                </div>
-              </div>
-            </Link>
-            
+          <div className="grid grid-cols-2 gap-4">
             <Link href="/analysis">
               <div className="bg-lime text-navy rounded-lg p-6 hover:bg-lime/90 transition-colors group">
                 <div className="flex items-center space-x-4">
