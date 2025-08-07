@@ -77,10 +77,10 @@ export default function Residuos() {
       return acc;
     }, {} as Record<string, any>);
 
-  // Convertir a array y tomar solo los últimos 12 meses
+  // Convertir a array con TODOS los datos históricos (enero 2024 - agosto 2025)
   const monthlyData = Object.values(cleanedData)
     .sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime())
-    .slice(-12) // Solo últimos 12 meses
+    // NO limitar - mostrar todos los datos históricos
     .map((month: any) => ({
       name: new Date(month.date).toLocaleDateString('es-MX', { month: 'short', year: '2-digit' }),
       organicos: Math.round((month.organicWaste || 0) * 1000), // kg
