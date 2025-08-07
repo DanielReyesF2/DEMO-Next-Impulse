@@ -68,8 +68,7 @@ export default function Analysis() {
         // Usar datos reales
         const totalGenerated = realDataForMonth.organics + realDataForMonth.recyclables + realDataForMonth.inorganicNonRecyclable;
         const totalDiverted = realDataForMonth.organics + realDataForMonth.recyclables;
-        const totalToLandfill = realDataForMonth.inorganicNonRecyclable; // Solo los inorgánicos no reciclables van al relleno
-        const deviationPercentage = (totalToLandfill / totalGenerated) * 100;
+        const deviationPercentage = (totalDiverted / totalGenerated) * 100; // Porcentaje desviado del relleno
         
         yearData.push({
           year,
@@ -141,8 +140,7 @@ export default function Analysis() {
     
     // Para calcular el porcentaje necesitamos el total generado
     if (monthData.totalGenerated > 0) {
-      const totalToLandfill = monthData.totalGenerated - monthData.totalDiverted;
-      monthData.deviationPercentage = (totalToLandfill / monthData.totalGenerated) * 100;
+      monthData.deviationPercentage = (monthData.totalDiverted / monthData.totalGenerated) * 100;
     }
     
     setData(newData);
@@ -169,12 +167,12 @@ export default function Analysis() {
             
             {/* Indicador Principal */}
             <div className="bg-white rounded-xl shadow-lg p-6 mb-6 max-w-md mx-auto">
-              <div className="text-sm text-gray-500 mb-2">Índice de Desviación al Relleno</div>
-              <div className={`text-4xl font-anton ${averageDeviation <= 10 ? 'text-green-600' : 'text-red-600'}`}>
+              <div className="text-sm text-gray-500 mb-2">Desviación del Relleno Sanitario</div>
+              <div className={`text-4xl font-anton ${averageDeviation >= 90 ? 'text-green-600' : 'text-red-600'}`}>
                 {averageDeviation.toFixed(1)}%
               </div>
               <div className="text-xs text-gray-500 mt-2">
-                Meta: máximo 10%
+                Meta TRUE ZERO WASTE: mínimo 90%
               </div>
             </div>
 
@@ -283,16 +281,16 @@ export default function Analysis() {
                       </TableRow>
 
                       <TableRow className="bg-yellow-100">
-                        <TableCell className="font-bold text-red-800">📊 % Al Relleno</TableCell>
+                        <TableCell className="font-bold text-green-800">📊 % Desviado</TableCell>
                         {data.map((month, index) => (
                           <TableCell key={index} className="text-center font-bold">
-                            <span className={`text-lg ${month.deviationPercentage <= 10 ? 'text-green-600' : 'text-red-600'}`}>
+                            <span className={`text-lg ${month.deviationPercentage >= 90 ? 'text-green-600' : 'text-red-600'}`}>
                               {month.deviationPercentage.toFixed(1)}%
                             </span>
                           </TableCell>
                         ))}
                         <TableCell className="text-center font-bold">
-                          <span className={`text-lg ${averageDeviation <= 10 ? 'text-green-600' : 'text-red-600'}`}>
+                          <span className={`text-lg ${averageDeviation >= 90 ? 'text-green-600' : 'text-red-600'}`}>
                             {averageDeviation.toFixed(1)}%
                           </span>
                         </TableCell>
