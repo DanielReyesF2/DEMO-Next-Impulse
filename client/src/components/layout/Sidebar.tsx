@@ -6,7 +6,11 @@ import {
   FileUp, 
   Users, 
   Settings, 
-  LogOut
+  LogOut,
+  Trash2,
+  Zap,
+  Droplets,
+  RotateCcw
 } from "lucide-react";
 import logoEconova from "../../assets/Logo-ECONOVA-OF_Blanco.png";
 
@@ -54,21 +58,46 @@ export default function Sidebar() {
       
       {/* Navigation */}
       <nav className="flex-1 pt-4 pb-4">
-        <div className="px-4 py-2 text-xs uppercase tracking-wider text-gray-400">Club Campestre CDMX</div>
+        <div className="px-4 py-2 text-xs uppercase tracking-wider text-gray-400">Sistema Ambiental</div>
         <SidebarItem 
           to="/" 
           icon={<LayoutDashboard className="w-5 h-5" />} 
           isActive={location === "/"}
         >
-          Dashboard
+          Dashboard General
+        </SidebarItem>
+        
+        <div className="px-4 py-2 mt-4 text-xs uppercase tracking-wider text-gray-400">Módulos</div>
+        <SidebarItem 
+          to="/residuos" 
+          icon={<Trash2 className="w-5 h-5" />} 
+          isActive={location === "/residuos"}
+        >
+          Residuos
         </SidebarItem>
         <SidebarItem 
-          to="/analysis" 
-          icon={<BarChart2 className="w-5 h-5" />} 
-          isActive={location === "/analysis"}
+          to="/energia" 
+          icon={<Zap className="w-5 h-5" />} 
+          isActive={location === "/energia"}
         >
-          Análisis
+          Energía
         </SidebarItem>
+        <SidebarItem 
+          to="/agua" 
+          icon={<Droplets className="w-5 h-5" />} 
+          isActive={location === "/agua"}
+        >
+          Agua
+        </SidebarItem>
+        <SidebarItem 
+          to="/economia-circular" 
+          icon={<RotateCcw className="w-5 h-5" />} 
+          isActive={location === "/economia-circular"}
+        >
+          Economía Circular
+        </SidebarItem>
+        
+        <div className="px-4 py-2 mt-4 text-xs uppercase tracking-wider text-gray-400">Administración</div>
         <SidebarItem 
           to="/documents" 
           icon={<FileUp className="w-5 h-5" />} 

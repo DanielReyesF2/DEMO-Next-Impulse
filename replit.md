@@ -1,12 +1,18 @@
 # Overview
 
-Econova is a simplified internal waste management system designed exclusively for Club Campestre Ciudad de México (CCCM). The application focuses on three core functions: dashboard visualization, document processing for automatic data extraction, and detailed analysis for TRUE Zero Waste certification tracking.
+Econova is a comprehensive environmental management system designed for Club Campestre Ciudad de México (CCCM), expanded from a waste-only application to an integrated sustainability platform. The system now encompasses four key environmental modules: Energy, Water, Waste, and Circular Economy, providing holistic environmental performance tracking and management.
 
-The system processes PDF bitácoras automatically, tracks organic/inorganic/recyclable/PODA waste, and provides internal reporting through dashboard screenshots rather than generated reports. Built for internal club use with ultra-simplified interface design.
+The system maintains its original waste management capabilities while adding energy efficiency monitoring, water conservation tracking, and an advanced circular economy index that integrates all environmental factors. Built for potential commercial sale to the client, featuring sophisticated environmental analytics and TRUE Zero Waste certification progress tracking.
 
 # User Preferences
 
 Preferred communication style: Simple, everyday language.
+
+## Recent Major Changes (Aug 2025)
+- **Scope Expansion**: Evolved from waste-only tracking to comprehensive environmental management platform
+- **Commercial Opportunity**: System now designed for potential sale to Club Campestre as integrated solution
+- **Modular Architecture**: Four environmental modules (Energy, Water, Waste, Circular Economy) with dedicated pages
+- **Circular Economy Integration**: Advanced index calculation combining all environmental factors for holistic sustainability assessment
 
 # System Architecture
 
@@ -42,11 +48,13 @@ Preferred communication style: Simple, everyday language.
 - **Data Validation**: Zod schemas for runtime type checking and validation
 - **Automated Processing**: Background processing of uploaded documents with error handling
 
-## Waste Management Features
-- **Waste Categories**: Organic (including PODA), inorganic, and recyclable waste tracking
-- **Environmental Impact**: Calculation of trees saved, water conserved, and energy saved
-- **Deviation Tracking**: Sanitary landfill deviation percentage calculation
-- **Sustainability Metrics**: Progress tracking toward TRUE Zero Waste certification
+## Environmental Management Features
+- **Waste Management**: Organic (including PODA), inorganic, and recyclable waste tracking with TRUE Zero Waste certification progress
+- **Energy Monitoring**: Solar energy generation, consumption patterns, efficiency metrics, and renewable energy percentage tracking
+- **Water Conservation**: Consumption monitoring, recycling systems, rainwater harvesting, and quality parameters tracking
+- **Circular Economy Index**: Integrated sustainability score combining all environmental factors (72% current index)
+- **Environmental Impact**: Comprehensive calculation of trees saved, water conserved, energy saved, and CO₂ reduction across all modules
+- **Sustainability Metrics**: Multi-dimensional progress tracking with targets for 2026 (85% circularity goal)
 
 ## Report Generation
 - **PDF Reports**: jsPDF-based comprehensive sustainability reports

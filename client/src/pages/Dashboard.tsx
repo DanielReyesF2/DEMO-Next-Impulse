@@ -97,13 +97,82 @@ export default function Dashboard() {
         <ClubHeader />
         
         <div className="max-w-7xl mx-auto px-4 py-6">
-          {/* Métricas principales mejoradas */}
-          <MetricsGrid 
-            deviation={summaryData.deviation}
-            organicWaste={summaryData.organicWaste}
-            inorganicWaste={summaryData.inorganicWaste}
-            totalWaste={summaryData.totalWaste}
-          />
+          {/* Header del sistema integral */}
+          <div className="mb-8 text-center">
+            <h1 className="text-4xl font-anton text-gray-800 uppercase tracking-wider mb-2">
+              Sistema Ambiental Integral
+            </h1>
+            <p className="text-lg text-gray-600">
+              Club Campestre Ciudad de México - Gestión sustentable unificada
+            </p>
+          </div>
+
+          {/* Módulos ambientales principales */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 shadow-sm border border-green-100 hover:shadow-md transition-shadow">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                  <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </div>
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-green-600">{summaryData.deviation}%</div>
+                  <div className="text-sm text-gray-600">Desviación</div>
+                </div>
+              </div>
+              <div className="text-sm font-medium text-gray-900">Residuos</div>
+              <div className="text-xs text-gray-500">TRUE Zero Waste en progreso</div>
+            </div>
+
+            <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl p-6 shadow-sm border border-yellow-100 hover:shadow-md transition-shadow">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                  <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-yellow-600">29.1%</div>
+                  <div className="text-sm text-gray-600">Renovable</div>
+                </div>
+              </div>
+              <div className="text-sm font-medium text-gray-900">Energía</div>
+              <div className="text-xs text-gray-500">Eficiencia y sustentabilidad</div>
+            </div>
+
+            <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-6 shadow-sm border border-blue-100 hover:shadow-md transition-shadow">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                  </svg>
+                </div>
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-blue-600">28.9%</div>
+                  <div className="text-sm text-gray-600">Reciclada</div>
+                </div>
+              </div>
+              <div className="text-sm font-medium text-gray-900">Agua</div>
+              <div className="text-xs text-gray-500">Conservación y reutilización</div>
+            </div>
+
+            <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-6 shadow-sm border border-purple-100 hover:shadow-md transition-shadow">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                </div>
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-purple-600">72%</div>
+                  <div className="text-sm text-gray-600">Circularidad</div>
+                </div>
+              </div>
+              <div className="text-sm font-medium text-gray-900">Economía Circular</div>
+              <div className="text-xs text-gray-500">Índice integral de sostenibilidad</div>
+            </div>
+          </div>
 
           {/* Impacto ambiental - SECCIÓN DESTACADA */}
           <EnvironmentalImpact 
