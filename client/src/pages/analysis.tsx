@@ -171,22 +171,23 @@ export default function Analysis() {
             {/* Indicador Principal */}
             <div className="bg-white rounded-xl shadow-lg p-6 mb-6 max-w-lg mx-auto">
               <div className="text-center mb-4">
-                <div className="text-sm text-gray-500 mb-2">Desviación Promedio del Relleno</div>
-                <div className={`text-4xl font-anton ${averageDeviation >= 90 ? 'text-green-600' : 'text-red-600'}`}>
-                  {averageDeviation.toFixed(1)}%
+                <div className="text-sm text-gray-500 mb-2">Progreso Certificación TRUE ZERO WASTE</div>
+                <div className={`text-4xl font-anton ${(averageDeviation/90*100) >= 90 ? 'text-green-600' : 'text-red-600'}`}>
+                  {(averageDeviation/90*100).toFixed(0)}%
                 </div>
+                <div className="text-xs text-gray-500">del objetivo 90%</div>
               </div>
               
               <div className="border-t pt-4 grid grid-cols-2 gap-4 text-center">
                 <div>
-                  <div className="text-xs text-gray-500">Mejor Mes</div>
-                  <div className="text-lg font-bold text-green-600">
-                    {data.length > 0 ? Math.max(...data.filter(d => d.deviationPercentage > 0).map(d => d.deviationPercentage)).toFixed(1) : 0}%
+                  <div className="text-xs text-gray-500">Desviación Actual</div>
+                  <div className="text-lg font-bold text-blue-600">
+                    {averageDeviation.toFixed(1)}%
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs text-gray-500">Meta 2025</div>
-                  <div className="text-lg font-bold text-blue-600">90%</div>
+                  <div className="text-xs text-gray-500">Meta Requerida</div>
+                  <div className="text-lg font-bold text-green-600">90%</div>
                 </div>
               </div>
             </div>
@@ -216,10 +217,20 @@ export default function Analysis() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <Card>
                 <CardContent className="p-4 text-center">
+                  <div className={`text-2xl font-anton mb-1 ${(averageDeviation/90*100) >= 90 ? 'text-green-600' : 'text-red-600'}`}>
+                    {(averageDeviation/90*100).toFixed(0)}%
+                  </div>
+                  <div className="text-sm text-gray-600">Progreso Anual</div>
+                  <div className="text-xs text-gray-500">Hacia la certificación</div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardContent className="p-4 text-center">
                   <div className="text-2xl font-anton text-navy mb-1">
                     {averageDeviation.toFixed(1)}%
                   </div>
-                  <div className="text-sm text-gray-600">Promedio Anual</div>
+                  <div className="text-sm text-gray-600">Desviación Actual</div>
                   <div className="text-xs text-gray-500">Enero-Junio 2025</div>
                 </CardContent>
               </Card>
@@ -227,20 +238,10 @@ export default function Analysis() {
               <Card>
                 <CardContent className="p-4 text-center">
                   <div className="text-2xl font-anton text-green-600 mb-1">
-                    {data.length > 0 ? Math.max(...data.filter(d => d.deviationPercentage > 0).map(d => d.deviationPercentage)).toFixed(1) : 0}%
+                    90%
                   </div>
-                  <div className="text-sm text-gray-600">Mejor Mes</div>
-                  <div className="text-xs text-gray-500">Máximo alcanzado</div>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardContent className="p-4 text-center">
-                  <div className={`text-2xl font-anton mb-1 ${averageDeviation >= 90 ? 'text-green-600' : 'text-red-600'}`}>
-                    {(averageDeviation/90*100).toFixed(0)}%
-                  </div>
-                  <div className="text-sm text-gray-600">Progreso a Meta</div>
-                  <div className="text-xs text-gray-500">Objetivo: 90%</div>
+                  <div className="text-sm text-gray-600">Meta Requerida</div>
+                  <div className="text-xs text-gray-500">TRUE ZERO WASTE</div>
                 </CardContent>
               </Card>
             </div>
