@@ -669,6 +669,26 @@ export default function ResiduosExcel() {
                             {kpis.totalWeight.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                           </td>
                         </tr>
+                        {/* Formula explanation */}
+                        <tr className="bg-blue-50 border-t-2 border-blue-200">
+                          <td className="border border-gray-200 p-3 font-medium text-sm text-blue-900">
+                            <div className="flex items-center gap-2">
+                              <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                              <span>Fórmula:</span>
+                            </div>
+                            <div className="mt-1 font-mono text-xs text-blue-800">
+                              % = (Total Circular ÷ Total Residuos) × 100
+                            </div>
+                          </td>
+                          <td colSpan={12} className="border border-gray-200 bg-blue-50 p-2 text-xs text-blue-700">
+                            <div className="font-mono text-center">
+                              ({kpis.totalCircular.toLocaleString('es-ES', { maximumFractionDigits: 1 })} ÷ {kpis.totalWeight.toLocaleString('es-ES', { maximumFractionDigits: 1 })}) × 100 = {kpis.deviationPercentage.toFixed(1)}%
+                            </div>
+                          </td>
+                          <td className="border border-gray-200 bg-blue-50 p-2 text-xs text-blue-700 text-center font-mono">
+                            {kpis.deviationPercentage.toFixed(1)}%
+                          </td>
+                        </tr>
                         <tr className={`${kpis.deviationPercentage >= 70 ? 'bg-green-100' : kpis.deviationPercentage >= 50 ? 'bg-amber-100' : 'bg-red-100'}`}>
                           <td className="border border-gray-200 p-3 font-bold text-lg">% de Desviación:</td>
                           <td colSpan={12} className="border border-gray-200"></td>
