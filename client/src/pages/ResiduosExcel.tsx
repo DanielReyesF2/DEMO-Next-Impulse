@@ -917,6 +917,259 @@ export default function ResiduosExcel() {
               </CardContent>
             </Card>
           </div>
+
+          {/* Charts Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            {/* Waste Distribution Chart */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-navy">Distribución de Residuos por Destino Final</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={chartData.slice(0, 8)}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="Reciclaje" fill="#16a34a" />
+                    <Bar dataKey="Composta" fill="#ca8a04" />
+                    <Bar dataKey="Reuso" fill="#2563eb" />
+                    <Bar dataKey="Relleno sanitario" fill="#dc2626" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            {/* Deviation Trend Chart */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-navy">Evolución % Desviación de Relleno Sanitario</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={chartData.slice(0, 8)}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <Tooltip />
+                    <Line type="monotone" dataKey="deviation" stroke="#b5e951" strokeWidth={3} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Excel-style Table */}
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="text-navy">Tabla Interactiva de Trazabilidad</CardTitle>
+              <p className="text-gray-600">Datos editables por categoría y mes</p>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse">
+                  {/* Table Header */}
+                  <thead>
+                    <tr className="border-b-2 border-navy">
+                      <th className="text-left p-3 font-bold text-navy min-w-[200px]">Material/Categoría</th>
+                      {MONTH_LABELS.map((month, index) => (
+                        <th key={index} className="text-center p-2 font-bold text-navy min-w-[80px]">
+                          {month}
+                        </th>
+                      ))}
+                      <th className="text-center p-3 font-bold text-navy min-w-[100px]">Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {/* RECICLAJE Section */}
+                    <tr className="bg-green-50">
+                      <td colSpan={14} className="p-3">
+                        <button
+                          onClick={() => setOpenSections(prev => ({ ...prev, recycling: !prev.recycling }))}
+                          className="flex items-center gap-2 font-bold text-green-700 text-lg w-full"
+                        >
+                          {openSections.recycling ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+                          RECICLAJE
+                        </button>
+                      </td>
+                    </tr>
+                    
+                    {openSections.recycling && wasteData?.materials.recycling.map((material) => (
+                      <tr key={material} className="border-b hover:bg-gray-50">
+                        <td className="p-3 font-medium">{material}</td>
+                        {MONTH_LABELS.map((_, monthIndex) => {
+                          const editKey = `recycling-${material}-${monthIndex}`;
+                          const value = getValue('recycling', material, monthIndex);
+                          return (
+                            <td key={monthIndex} className="p-1">
+                              <Input
+                                type="number"
+                                value={editedData[editKey] !== undefined ? editedData[editKey] : value}
+                                onChange={(e) => {
+                                  const newValue = parseFloat(e.target.value) || 0;
+                                  setEditedData(prev => ({ ...prev, [editKey]: newValue }));
+                                }}
+                                className="w-full text-center text-sm"
+                                min="0"
+                                step="0.01"
+                              />
+                            </td>
+                          );
+                        })}
+                        <td className="p-3 text-center font-bold bg-gray-100">
+                          {(getRowTotal('recycling', material) / 1000).toFixed(2)} t
+                        </td>
+                      </tr>
+                    ))}
+
+                    {/* COMPOSTA Section */}
+                    <tr className="bg-amber-50">
+                      <td colSpan={14} className="p-3">
+                        <button
+                          onClick={() => setOpenSections(prev => ({ ...prev, compost: !prev.compost }))}
+                          className="flex items-center gap-2 font-bold text-amber-700 text-lg w-full"
+                        >
+                          {openSections.compost ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+                          COMPOSTA / ORGÁNICOS
+                        </button>
+                      </td>
+                    </tr>
+                    
+                    {openSections.compost && wasteData?.materials.compost.map((category) => (
+                      <tr key={category} className="border-b hover:bg-gray-50">
+                        <td className="p-3 font-medium">{category}</td>
+                        {MONTH_LABELS.map((_, monthIndex) => {
+                          const editKey = `compost-${category}-${monthIndex}`;
+                          const value = getValue('compost', category, monthIndex);
+                          return (
+                            <td key={monthIndex} className="p-1">
+                              <Input
+                                type="number"
+                                value={editedData[editKey] !== undefined ? editedData[editKey] : value}
+                                onChange={(e) => {
+                                  const newValue = parseFloat(e.target.value) || 0;
+                                  setEditedData(prev => ({ ...prev, [editKey]: newValue }));
+                                }}
+                                className="w-full text-center text-sm"
+                                min="0"
+                                step="0.01"
+                              />
+                            </td>
+                          );
+                        })}
+                        <td className="p-3 text-center font-bold bg-gray-100">
+                          {(getRowTotal('compost', category) / 1000).toFixed(2)} t
+                        </td>
+                      </tr>
+                    ))}
+
+                    {/* REUSO Section */}
+                    <tr className="bg-blue-50">
+                      <td colSpan={14} className="p-3">
+                        <button
+                          onClick={() => setOpenSections(prev => ({ ...prev, reuse: !prev.reuse }))}
+                          className="flex items-center gap-2 font-bold text-blue-700 text-lg w-full"
+                        >
+                          {openSections.reuse ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+                          REÚSO
+                        </button>
+                      </td>
+                    </tr>
+                    
+                    {openSections.reuse && wasteData?.materials.reuse.map((category) => (
+                      <tr key={category} className="border-b hover:bg-gray-50">
+                        <td className="p-3 font-medium">{category}</td>
+                        {MONTH_LABELS.map((_, monthIndex) => {
+                          const editKey = `reuse-${category}-${monthIndex}`;
+                          const value = getValue('reuse', category, monthIndex);
+                          return (
+                            <td key={monthIndex} className="p-1">
+                              <Input
+                                type="number"
+                                value={editedData[editKey] !== undefined ? editedData[editKey] : value}
+                                onChange={(e) => {
+                                  const newValue = parseFloat(e.target.value) || 0;
+                                  setEditedData(prev => ({ ...prev, [editKey]: newValue }));
+                                }}
+                                className="w-full text-center text-sm"
+                                min="0"
+                                step="0.01"
+                              />
+                            </td>
+                          );
+                        })}
+                        <td className="p-3 text-center font-bold bg-gray-100">
+                          {(getRowTotal('reuse', category) / 1000).toFixed(2)} t
+                        </td>
+                      </tr>
+                    ))}
+
+                    {/* RELLENO SANITARIO Section */}
+                    <tr className="bg-red-50">
+                      <td colSpan={14} className="p-3">
+                        <button
+                          onClick={() => setOpenSections(prev => ({ ...prev, landfill: !prev.landfill }))}
+                          className="flex items-center gap-2 font-bold text-red-700 text-lg w-full"
+                        >
+                          {openSections.landfill ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+                          RELLENO SANITARIO
+                        </button>
+                      </td>
+                    </tr>
+                    
+                    {openSections.landfill && wasteData?.materials.landfill.map((wasteType) => (
+                      <tr key={wasteType} className="border-b hover:bg-gray-50">
+                        <td className="p-3 font-medium">{wasteType}</td>
+                        {MONTH_LABELS.map((_, monthIndex) => {
+                          const editKey = `landfill-${wasteType}-${monthIndex}`;
+                          const value = getValue('landfill', wasteType, monthIndex);
+                          return (
+                            <td key={monthIndex} className="p-1">
+                              <Input
+                                type="number"
+                                value={editedData[editKey] !== undefined ? editedData[editKey] : value}
+                                onChange={(e) => {
+                                  const newValue = parseFloat(e.target.value) || 0;
+                                  setEditedData(prev => ({ ...prev, [editKey]: newValue }));
+                                }}
+                                className="w-full text-center text-sm"
+                                min="0"
+                                step="0.01"
+                              />
+                            </td>
+                          );
+                        })}
+                        <td className="p-3 text-center font-bold bg-gray-100">
+                          {(getRowTotal('landfill', wasteType) / 1000).toFixed(2)} t
+                        </td>
+                      </tr>
+                    ))}
+
+                    {/* Totals Row */}
+                    <tr className="bg-gray-100 border-t-2 border-navy font-bold">
+                      <td className="p-3 text-navy">TOTALES POR MES</td>
+                      {MONTH_LABELS.map((_, monthIndex) => {
+                        const monthTotal = getSectionTotal('recycling', monthIndex) + 
+                                         getSectionTotal('compost', monthIndex) + 
+                                         getSectionTotal('reuse', monthIndex) + 
+                                         getSectionTotal('landfill', monthIndex);
+                        return (
+                          <td key={monthIndex} className="p-3 text-center text-navy">
+                            {(monthTotal / 1000).toFixed(1)} t
+                          </td>
+                        );
+                      })}
+                      <td className="p-3 text-center text-navy text-lg">
+                        {(kpis.totalWeight / 1000).toFixed(1)} t
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </AppLayout>
