@@ -186,6 +186,14 @@ export default function ResiduosExcel() {
     return { recyclingTotal, compostTotal, reuseTotal, landfillTotal };
   }, [wasteData, getRowTotal]);
 
+  // Helper function to get total for a section in a specific month
+  const getSectionTotal = useCallback((section: 'recycling' | 'compost' | 'reuse' | 'landfill', monthIndex: number): number => {
+    if (!wasteData || monthIndex >= wasteData.months.length) return 0;
+    
+    const materials = wasteData.materials[section] || [];
+    return materials.reduce((total, item) => total + getValue(section, item, monthIndex), 0);
+  }, [wasteData, getValue]);
+
   // Calculate KPIs exactly like Excel
   const calculateKPIs = useCallback(() => {
     const totals = getSectionTotals();
@@ -345,7 +353,152 @@ export default function ResiduosExcel() {
     pdf.setFontSize(12);
     pdf.text(`${kpis.deviationPercentage.toFixed(1)}% - ${statusText}`, margin + 10, yPos + 10);
 
-    yPos += 30;
+    yPos += 20;
+
+    // Add Charts Section - Visual Dashboard
+    const addChartsSection = () => {
+      // Charts header
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(14);
+      pdf.setTextColor(...colors.primary);
+      pdf.text('ANÁLISIS VISUAL', margin, yPos);
+      yPos += 15;
+
+      // Chart containers simulation (2 charts side by side)
+      const chartWidth = (pageWidth - 2 * margin - 10) / 2;
+      const chartHeight = 80;
+      
+      // Left Chart - Monthly Generation by Category
+      pdf.setFillColor(248, 250, 252);
+      pdf.roundedRect(margin, yPos, chartWidth, chartHeight, 3, 3, 'F');
+      
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(10);
+      pdf.setTextColor(...colors.text);
+      pdf.text('📊 Generación Mensual por Categoría', margin + 5, yPos + 10);
+      
+      // Simulate bar chart with rectangles
+      const months = ['E', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+      const barWidth = 8;
+      const chartStartY = yPos + 20;
+      const maxBarHeight = 40;
+      
+      months.forEach((month, i) => {
+        const barX = margin + 10 + (i * (barWidth + 2));
+        
+        // Get real data for this month
+        const monthData = wasteData.months[i] || { recycling: 0, compost: 0, reuse: 0, landfill: 0 };
+        const recyclingValue = getSectionTotal('recycling', i) || 0;
+        const compostValue = getSectionTotal('compost', i) || 0;
+        const reuseValue = getSectionTotal('reuse', i) || 0;
+        const landfillValue = getSectionTotal('landfill', i) || 0;
+        const maxValue = Math.max(recyclingValue + compostValue + reuseValue + landfillValue, 1);
+        
+        // Scale heights based on real data
+        const recyclingHeight = (recyclingValue / maxValue) * maxBarHeight * 0.6;
+        const compostHeight = (compostValue / maxValue) * maxBarHeight * 0.6;
+        const reuseHeight = (reuseValue / maxValue) * maxBarHeight * 0.6;
+        const landfillHeight = (landfillValue / maxValue) * maxBarHeight * 0.6;
+        
+        // Draw stacked bars with real data
+        pdf.setFillColor(...colors.success);
+        if (recyclingHeight > 0) pdf.rect(barX, chartStartY + maxBarHeight - recyclingHeight, barWidth, recyclingHeight, 'F');
+        
+        pdf.setFillColor(...colors.warning);
+        if (compostHeight > 0) pdf.rect(barX, chartStartY + maxBarHeight - recyclingHeight - compostHeight, barWidth, compostHeight, 'F');
+        
+        pdf.setFillColor(...colors.info);
+        if (reuseHeight > 0) pdf.rect(barX, chartStartY + maxBarHeight - recyclingHeight - compostHeight - reuseHeight, barWidth, reuseHeight, 'F');
+        
+        pdf.setFillColor(...colors.danger);
+        if (landfillHeight > 0) pdf.rect(barX, chartStartY + maxBarHeight - recyclingHeight - compostHeight - reuseHeight - landfillHeight, barWidth, landfillHeight, 'F');
+        
+        // Month labels
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(7);
+        pdf.setTextColor(...colors.text);
+        pdf.text(month, barX + 2, chartStartY + maxBarHeight + 8);
+      });
+      
+      // Legend for left chart
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(7);
+      const legendY = yPos + 70;
+      pdf.setFillColor(...colors.success); pdf.rect(margin + 5, legendY, 8, 4, 'F');
+      pdf.text('Reciclaje', margin + 16, legendY + 3);
+      pdf.setFillColor(...colors.warning); pdf.rect(margin + 50, legendY, 8, 4, 'F');
+      pdf.text('Composta', margin + 61, legendY + 3);
+      pdf.setFillColor(...colors.info); pdf.rect(margin + 95, legendY, 8, 4, 'F');
+      pdf.text('Reuso', margin + 106, legendY + 3);
+      pdf.setFillColor(...colors.danger); pdf.rect(margin + 130, legendY, 8, 4, 'F');
+      pdf.text('R. Sanitario', margin + 141, legendY + 3);
+
+      // Right Chart - Monthly Deviation Percentage
+      const rightChartX = margin + chartWidth + 10;
+      pdf.setFillColor(248, 250, 252);
+      pdf.roundedRect(rightChartX, yPos, chartWidth, chartHeight, 3, 3, 'F');
+      
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(10);
+      pdf.setTextColor(...colors.text);
+      pdf.text('📈 % Desviación Mensual', rightChartX + 5, yPos + 10);
+      
+      // Simulate line chart
+      const lineChartStartY = yPos + 20;
+      const linePoints: [number, number][] = [];
+      
+      months.forEach((month, i) => {
+        const pointX = rightChartX + 15 + (i * 12);
+        
+        // Calculate real deviation for this month
+        const monthRecycling = getSectionTotal('recycling', i) || 0;
+        const monthCompost = getSectionTotal('compost', i) || 0;
+        const monthReuse = getSectionTotal('reuse', i) || 0;
+        const monthLandfill = getSectionTotal('landfill', i) || 0;
+        const monthTotal = monthRecycling + monthCompost + monthReuse + monthLandfill;
+        const monthCircular = monthRecycling + monthCompost + monthReuse;
+        const deviation = monthTotal > 0 ? (monthCircular / monthTotal) * 100 : 0;
+        
+        const pointY = lineChartStartY + 45 - (deviation * 0.45);
+        linePoints.push([pointX, pointY]);
+        
+        // Draw point with color based on performance
+        const pointColor = deviation >= 70 ? colors.success : deviation >= 50 ? colors.warning : colors.danger;
+        pdf.setFillColor(...pointColor);
+        pdf.circle(pointX, pointY, 1.5, 'F');
+        
+        // Month labels
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(7);
+        pdf.setTextColor(...colors.text);
+        pdf.text(month, pointX - 2, lineChartStartY + 50);
+      });
+      
+      // Draw line connecting points
+      pdf.setDrawColor(...colors.info);
+      pdf.setLineWidth(1);
+      for (let i = 0; i < linePoints.length - 1; i++) {
+        pdf.line(linePoints[i][0], linePoints[i][1], linePoints[i + 1][0], linePoints[i + 1][1]);
+      }
+      
+      // 70% target line (dashed effect with short lines)
+      const targetY = lineChartStartY + 45 - (70 * 0.5);
+      pdf.setDrawColor(...colors.success);
+      pdf.setLineWidth(0.5);
+      for (let x = rightChartX + 15; x < rightChartX + chartWidth - 15; x += 4) {
+        pdf.line(x, targetY, x + 2, targetY);
+      }
+      
+      // Target line label
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(7);
+      pdf.setTextColor(...colors.success);
+      pdf.text('Meta 70%', rightChartX + chartWidth - 30, targetY - 2);
+      
+      yPos += chartHeight + 15;
+    };
+
+    addChartsSection();
 
     // Add footer to first page
     addFooter();
@@ -418,9 +571,9 @@ export default function ResiduosExcel() {
         halign: 'center'
       },
       columnStyles: {
-        0: { fontStyle: 'bold', cellWidth: 28, halign: 'left' },
-        ...Object.fromEntries(MONTH_LABELS.map((_, i) => [i + 1, { halign: 'right', cellWidth: 14 }])),
-        13: { halign: 'right', cellWidth: 20, fontStyle: 'bold', fillColor: [240, 253, 244] }
+        0: { fontStyle: 'bold', cellWidth: 25, halign: 'left' },
+        ...Object.fromEntries(MONTH_LABELS.map((_, i) => [i + 1, { halign: 'right', cellWidth: 12 }])),
+        13: { halign: 'right', cellWidth: 18, fontStyle: 'bold', fillColor: [240, 253, 244] }
       },
       margin: { left: margin, right: margin },
       styles: {
@@ -481,9 +634,9 @@ export default function ResiduosExcel() {
         halign: 'center'
       },
       columnStyles: {
-        0: { fontStyle: 'bold', cellWidth: 28, halign: 'left' },
-        ...Object.fromEntries(MONTH_LABELS.map((_, i) => [i + 1, { halign: 'right', cellWidth: 14 }])),
-        13: { halign: 'right', cellWidth: 20, fontStyle: 'bold', fillColor: [254, 243, 199] }
+        0: { fontStyle: 'bold', cellWidth: 25, halign: 'left' },
+        ...Object.fromEntries(MONTH_LABELS.map((_, i) => [i + 1, { halign: 'right', cellWidth: 12 }])),
+        13: { halign: 'right', cellWidth: 18, fontStyle: 'bold', fillColor: [254, 243, 199] }
       },
       margin: { left: margin, right: margin },
       styles: {
@@ -552,9 +705,9 @@ export default function ResiduosExcel() {
         halign: 'center'
       },
       columnStyles: {
-        0: { fontStyle: 'bold', cellWidth: 28, halign: 'left' },
-        ...Object.fromEntries(MONTH_LABELS.map((_, i) => [i + 1, { halign: 'right', cellWidth: 14 }])),
-        13: { halign: 'right', cellWidth: 20, fontStyle: 'bold', fillColor: [219, 234, 254] }
+        0: { fontStyle: 'bold', cellWidth: 25, halign: 'left' },
+        ...Object.fromEntries(MONTH_LABELS.map((_, i) => [i + 1, { halign: 'right', cellWidth: 12 }])),
+        13: { halign: 'right', cellWidth: 18, fontStyle: 'bold', fillColor: [219, 234, 254] }
       },
       margin: { left: margin, right: margin },
       styles: {
@@ -615,9 +768,9 @@ export default function ResiduosExcel() {
         halign: 'center'
       },
       columnStyles: {
-        0: { fontStyle: 'bold', cellWidth: 28, halign: 'left' },
-        ...Object.fromEntries(MONTH_LABELS.map((_, i) => [i + 1, { halign: 'right', cellWidth: 14 }])),
-        13: { halign: 'right', cellWidth: 20, fontStyle: 'bold', fillColor: [254, 226, 226] }
+        0: { fontStyle: 'bold', cellWidth: 25, halign: 'left' },
+        ...Object.fromEntries(MONTH_LABELS.map((_, i) => [i + 1, { halign: 'right', cellWidth: 12 }])),
+        13: { halign: 'right', cellWidth: 18, fontStyle: 'bold', fillColor: [254, 226, 226] }
       },
       margin: { left: margin, right: margin },
       styles: {
