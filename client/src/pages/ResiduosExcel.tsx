@@ -407,295 +407,298 @@ export default function ResiduosExcel() {
                 </CardHeader>
                 <CardContent>
                   <div className="overflow-x-auto">
-                    <table className="w-full border-collapse border border-gray-200 text-xs">
+                    <table className="w-full text-sm">
                       <thead>
-                        <tr className="bg-gray-50">
-                          <th className="border border-gray-200 p-2 text-left font-semibold min-w-[180px]">
+                        <tr className="border-b border-gray-200">
+                          <th className="p-3 text-left font-semibold text-gray-700 min-w-[180px]">
                             Materiales
                           </th>
                           {MONTH_LABELS.map((month) => (
-                            <th key={month} className="border border-gray-200 p-2 text-center font-semibold w-20">
+                            <th key={month} className="p-3 text-center font-semibold text-gray-700 w-20">
                               {month}
                             </th>
                           ))}
-                          <th className="border border-gray-200 p-2 text-center font-semibold bg-lime-50 w-20">
+                          <th className="p-3 text-center font-semibold text-navy bg-gray-50 w-20">
                             Total
                           </th>
                         </tr>
                       </thead>
                       <tbody>
                         {/* Recycling Section */}
-                        <tr>
-                          <td colSpan={14} className="bg-green-100 border border-gray-200 p-2 font-semibold">
+                        <tr className="border-t border-gray-100">
+                          <td colSpan={14} className="bg-emerald-50 p-3">
                             <button
                               onClick={() => setOpenSections(prev => ({ ...prev, recycling: !prev.recycling }))}
-                              className="flex items-center gap-2 hover:bg-green-200 p-1 rounded w-full text-left"
+                              className="flex items-center gap-3 hover:text-emerald-700 transition-colors w-full text-left"
                             >
-                              {openSections.recycling ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-                              <Recycle className="h-4 w-4" />
-                              Reciclaje
+                              {openSections.recycling ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+                              <Recycle className="h-5 w-5 text-emerald-600" />
+                              <span className="font-semibold text-gray-800">Reciclaje</span>
                             </button>
                           </td>
                         </tr>
                         {openSections.recycling && wasteData?.materials.recycling.map((material) => (
-                          <tr key={material}>
-                            <td className="border border-gray-200 p-2 font-medium">{material}</td>
+                          <tr key={material} className="hover:bg-gray-50 transition-colors">
+                            <td className="p-3 font-medium text-gray-700 border-b border-gray-100">{material}</td>
                             {MONTH_LABELS.map((_, monthIndex) => (
-                              <td key={monthIndex} className="border border-gray-200 p-1">
+                              <td key={monthIndex} className="p-2 border-b border-gray-100">
                                 <input
                                   type="number"
                                   step="0.1"
                                   min="0"
                                   value={getValue('recycling', material, monthIndex) || ''}
                                   onChange={(e) => handleCellChange('recycling', material, monthIndex, e.target.value)}
-                                  className="w-full h-8 text-xs text-center border-0 p-1 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                  className="w-full h-8 text-sm text-center bg-white border border-gray-200 rounded px-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                                   placeholder="0"
                                 />
                               </td>
                             ))}
-                            <td className="border border-gray-200 p-2 text-center font-semibold bg-lime-50">
+                            <td className="p-3 text-center font-semibold text-gray-800 bg-gray-50 border-b border-gray-100">
                               {getRowTotal('recycling', material).toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                             </td>
                           </tr>
                         ))}
                         {openSections.recycling && (
-                          <tr className="bg-green-50">
-                            <td className="border border-gray-200 p-2 font-bold">Total reciclaje</td>
+                          <tr className="bg-emerald-50">
+                            <td className="p-3 font-bold text-emerald-800 border-b border-emerald-200">Total reciclaje</td>
                             {MONTH_LABELS.map((_, monthIndex) => {
                               let monthTotal = 0;
                               wasteData?.materials.recycling.forEach(material => {
                                 monthTotal += getValue('recycling', material, monthIndex);
                               });
                               return (
-                                <td key={monthIndex} className="border border-gray-200 p-2 text-center font-bold">
+                                <td key={monthIndex} className="p-3 text-center font-bold text-emerald-800 border-b border-emerald-200">
                                   {monthTotal.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                                 </td>
                               );
                             })}
-                            <td className="border border-gray-200 p-2 text-center font-bold">
+                            <td className="p-3 text-center font-bold text-emerald-800 bg-emerald-100 border-b border-emerald-200">
                               {getSectionTotals().recyclingTotal.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                             </td>
                           </tr>
                         )}
 
                         {/* Compost Section */}
-                        <tr>
-                          <td colSpan={14} className="bg-amber-100 border border-gray-200 p-2 font-semibold">
+                        <tr className="border-t border-gray-100">
+                          <td colSpan={14} className="bg-amber-50 p-3">
                             <button
                               onClick={() => setOpenSections(prev => ({ ...prev, compost: !prev.compost }))}
-                              className="flex items-center gap-2 hover:bg-amber-200 p-1 rounded w-full text-left"
+                              className="flex items-center gap-3 hover:text-amber-700 transition-colors w-full text-left"
                             >
-                              {openSections.compost ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-                              <Leaf className="h-4 w-4" />
-                              Orgánicos destinados a composta
+                              {openSections.compost ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+                              <Leaf className="h-5 w-5 text-amber-600" />
+                              <span className="font-semibold text-gray-800">Orgánicos destinados a composta</span>
                             </button>
                           </td>
                         </tr>
                         {openSections.compost && wasteData?.materials.compost.map((category) => (
-                          <tr key={category}>
-                            <td className="border border-gray-200 p-2 font-medium">{category}</td>
+                          <tr key={category} className="hover:bg-gray-50 transition-colors">
+                            <td className="p-3 font-medium text-gray-700 border-b border-gray-100">{category}</td>
                             {MONTH_LABELS.map((_, monthIndex) => (
-                              <td key={monthIndex} className="border border-gray-200 p-1">
+                              <td key={monthIndex} className="p-2 border-b border-gray-100">
                                 <input
                                   type="number"
                                   step="0.1"
                                   min="0"
                                   value={getValue('compost', category, monthIndex) || ''}
                                   onChange={(e) => handleCellChange('compost', category, monthIndex, e.target.value)}
-                                  className="w-full h-8 text-xs text-center border-0 p-1 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                  className="w-full h-8 text-sm text-center bg-white border border-gray-200 rounded px-2 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                                   placeholder="0"
                                 />
                               </td>
                             ))}
-                            <td className="border border-gray-200 p-2 text-center font-semibold bg-lime-50">
+                            <td className="p-3 text-center font-semibold text-gray-800 bg-gray-50 border-b border-gray-100">
                               {getRowTotal('compost', category).toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                             </td>
                           </tr>
                         ))}
                         {openSections.compost && (
                           <tr className="bg-amber-50">
-                            <td className="border border-gray-200 p-2 font-bold">Total orgánicos</td>
+                            <td className="p-3 font-bold text-amber-800 border-b border-amber-200">Total orgánicos</td>
                             {MONTH_LABELS.map((_, monthIndex) => {
                               let monthTotal = 0;
                               wasteData?.materials.compost.forEach(category => {
                                 monthTotal += getValue('compost', category, monthIndex);
                               });
                               return (
-                                <td key={monthIndex} className="border border-gray-200 p-2 text-center font-bold">
+                                <td key={monthIndex} className="p-3 text-center font-bold text-amber-800 border-b border-amber-200">
                                   {monthTotal.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                                 </td>
                               );
                             })}
-                            <td className="border border-gray-200 p-2 text-center font-bold">
+                            <td className="p-3 text-center font-bold text-amber-800 bg-amber-100 border-b border-amber-200">
                               {getSectionTotals().compostTotal.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                             </td>
                           </tr>
                         )}
 
                         {/* Reuse Section */}
-                        <tr>
-                          <td colSpan={14} className="bg-blue-100 border border-gray-200 p-2 font-semibold">
+                        <tr className="border-t border-gray-100">
+                          <td colSpan={14} className="bg-blue-50 p-3">
                             <button
                               onClick={() => setOpenSections(prev => ({ ...prev, reuse: !prev.reuse }))}
-                              className="flex items-center gap-2 hover:bg-blue-200 p-1 rounded w-full text-left"
+                              className="flex items-center gap-3 hover:text-blue-700 transition-colors w-full text-left"
                             >
-                              {openSections.reuse ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-                              <RotateCcw className="h-4 w-4" />
-                              Reuso
+                              {openSections.reuse ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+                              <RotateCcw className="h-5 w-5 text-blue-600" />
+                              <span className="font-semibold text-gray-800">Reuso</span>
                             </button>
                           </td>
                         </tr>
                         {openSections.reuse && wasteData?.materials.reuse.map((category) => (
-                          <tr key={category}>
-                            <td className="border border-gray-200 p-2 font-medium">{category}</td>
+                          <tr key={category} className="hover:bg-gray-50 transition-colors">
+                            <td className="p-3 font-medium text-gray-700 border-b border-gray-100">{category}</td>
                             {MONTH_LABELS.map((_, monthIndex) => (
-                              <td key={monthIndex} className="border border-gray-200 p-1">
+                              <td key={monthIndex} className="p-2 border-b border-gray-100">
                                 <input
                                   type="number"
                                   step="0.1"
                                   min="0"
                                   value={getValue('reuse', category, monthIndex) || ''}
                                   onChange={(e) => handleCellChange('reuse', category, monthIndex, e.target.value)}
-                                  className="w-full h-8 text-xs text-center border-0 p-1 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                  className="w-full h-8 text-sm text-center bg-white border border-gray-200 rounded px-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                   placeholder="0"
                                 />
                               </td>
                             ))}
-                            <td className="border border-gray-200 p-2 text-center font-semibold bg-lime-50">
+                            <td className="p-3 text-center font-semibold text-gray-800 bg-gray-50 border-b border-gray-100">
                               {getRowTotal('reuse', category).toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                             </td>
                           </tr>
                         ))}
                         {openSections.reuse && (
                           <tr className="bg-blue-50">
-                            <td className="border border-gray-200 p-2 font-bold">Total reuso</td>
+                            <td className="p-3 font-bold text-blue-800 border-b border-blue-200">Total reuso</td>
                             {MONTH_LABELS.map((_, monthIndex) => {
                               let monthTotal = 0;
                               wasteData?.materials.reuse.forEach(category => {
                                 monthTotal += getValue('reuse', category, monthIndex);
                               });
                               return (
-                                <td key={monthIndex} className="border border-gray-200 p-2 text-center font-bold">
+                                <td key={monthIndex} className="p-3 text-center font-bold text-blue-800 border-b border-blue-200">
                                   {monthTotal.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                                 </td>
                               );
                             })}
-                            <td className="border border-gray-200 p-2 text-center font-bold">
+                            <td className="p-3 text-center font-bold text-blue-800 bg-blue-100 border-b border-blue-200">
                               {getSectionTotals().reuseTotal.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                             </td>
                           </tr>
                         )}
 
                         {/* Landfill Section */}
-                        <tr>
-                          <td colSpan={14} className="bg-red-100 border border-gray-200 p-2 font-semibold">
+                        <tr className="border-t border-gray-100">
+                          <td colSpan={14} className="bg-red-50 p-3">
                             <button
                               onClick={() => setOpenSections(prev => ({ ...prev, landfill: !prev.landfill }))}
-                              className="flex items-center gap-2 hover:bg-red-200 p-1 rounded w-full text-left"
+                              className="flex items-center gap-3 hover:text-red-700 transition-colors w-full text-left"
                             >
-                              {openSections.landfill ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-                              <Trash2 className="h-4 w-4" />
-                              No desvío (Relleno sanitario)
+                              {openSections.landfill ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+                              <Trash2 className="h-5 w-5 text-red-600" />
+                              <span className="font-semibold text-gray-800">No desvío (Relleno sanitario)</span>
                             </button>
                           </td>
                         </tr>
                         {openSections.landfill && wasteData?.materials.landfill.map((wasteType) => (
-                          <tr key={wasteType}>
-                            <td className="border border-gray-200 p-2 font-medium">{wasteType}</td>
+                          <tr key={wasteType} className="hover:bg-gray-50 transition-colors">
+                            <td className="p-3 font-medium text-gray-700 border-b border-gray-100">{wasteType}</td>
                             {MONTH_LABELS.map((_, monthIndex) => (
-                              <td key={monthIndex} className="border border-gray-200 p-1">
+                              <td key={monthIndex} className="p-2 border-b border-gray-100">
                                 <input
                                   type="number"
                                   step="0.1"
                                   min="0"
                                   value={getValue('landfill', wasteType, monthIndex) || ''}
                                   onChange={(e) => handleCellChange('landfill', wasteType, monthIndex, e.target.value)}
-                                  className="w-full h-8 text-xs text-center border-0 p-1 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                  className="w-full h-8 text-sm text-center bg-white border border-gray-200 rounded px-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
                                   placeholder="0"
                                 />
                               </td>
                             ))}
-                            <td className="border border-gray-200 p-2 text-center font-semibold bg-lime-50">
+                            <td className="p-3 text-center font-semibold text-gray-800 bg-gray-50 border-b border-gray-100">
                               {getRowTotal('landfill', wasteType).toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                             </td>
                           </tr>
                         ))}
                         {openSections.landfill && (
                           <tr className="bg-red-50">
-                            <td className="border border-gray-200 p-2 font-bold">Total Relleno sanitario</td>
+                            <td className="p-3 font-bold text-red-800 border-b border-red-200">Total Relleno sanitario</td>
                             {MONTH_LABELS.map((_, monthIndex) => {
                               let monthTotal = 0;
                               wasteData?.materials.landfill.forEach(wasteType => {
                                 monthTotal += getValue('landfill', wasteType, monthIndex);
                               });
                               return (
-                                <td key={monthIndex} className="border border-gray-200 p-2 text-center font-bold">
+                                <td key={monthIndex} className="p-3 text-center font-bold text-red-800 border-b border-red-200">
                                   {monthTotal.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                                 </td>
                               );
                             })}
-                            <td className="border border-gray-200 p-2 text-center font-bold">
+                            <td className="p-3 text-center font-bold text-red-800 bg-red-100 border-b border-red-200">
                               {getSectionTotals().landfillTotal.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                             </td>
                           </tr>
                         )}
 
                         {/* Grand Totals */}
-                        <tr className="bg-gray-100 border-t-4 border-gray-300">
-                          <td className="border border-gray-200 p-3 font-bold text-lg">TOTALES FINALES</td>
-                          <td colSpan={12} className="border border-gray-200"></td>
-                          <td className="border border-gray-200 p-3 text-center font-bold text-lg">
+                        <tr className="border-t-4 border-navy">
+                          <td className="p-4 font-bold text-lg text-navy bg-gray-50">TOTALES FINALES</td>
+                          <td colSpan={12} className="bg-gray-50"></td>
+                          <td className="p-4 text-center font-bold text-lg text-navy bg-gray-100">
                             {(kpis.totalCircular + kpis.totalLandfill).toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                           </td>
                         </tr>
-                        <tr className="bg-lime-100">
-                          <td className="border border-gray-200 p-2 font-bold">Total Circular:</td>
-                          <td colSpan={12} className="border border-gray-200"></td>
-                          <td className="border border-gray-200 p-2 text-center font-bold text-green-800">
+                        <tr className="bg-emerald-50">
+                          <td className="p-3 font-bold text-emerald-800">Total Circular</td>
+                          <td colSpan={12}></td>
+                          <td className="p-3 text-center font-bold text-emerald-800 bg-emerald-100">
                             {kpis.totalCircular.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                           </td>
                         </tr>
-                        <tr className="bg-red-100">
-                          <td className="border border-gray-200 p-2 font-bold">Total relleno sanitario:</td>
-                          <td colSpan={12} className="border border-gray-200"></td>
-                          <td className="border border-gray-200 p-2 text-center font-bold text-red-800">
+                        <tr className="bg-red-50">
+                          <td className="p-3 font-bold text-red-800">Total relleno sanitario</td>
+                          <td colSpan={12}></td>
+                          <td className="p-3 text-center font-bold text-red-800 bg-red-100">
                             {kpis.totalLandfill.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                           </td>
                         </tr>
-                        <tr className="bg-blue-100">
-                          <td className="border border-gray-200 p-2 font-bold">Pesos totales:</td>
-                          <td colSpan={12} className="border border-gray-200"></td>
-                          <td className="border border-gray-200 p-2 text-center font-bold text-blue-800">
+                        <tr className="bg-blue-50">
+                          <td className="p-3 font-bold text-blue-800">Pesos totales</td>
+                          <td colSpan={12}></td>
+                          <td className="p-3 text-center font-bold text-blue-800 bg-blue-100">
                             {kpis.totalWeight.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                           </td>
                         </tr>
                         {/* Formula explanation */}
-                        <tr className="bg-blue-50 border-t-2 border-blue-200">
-                          <td className="border border-gray-200 p-3 font-medium text-sm text-blue-900">
-                            <div className="flex items-center gap-2">
-                              <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                              <span>Fórmula:</span>
+                        <tr className="bg-slate-50 border-t-2 border-slate-200">
+                          <td className="p-4 font-medium text-sm text-slate-700">
+                            <div className="flex items-center gap-2 mb-2">
+                              <div className="w-2 h-2 bg-slate-600 rounded-full"></div>
+                              <span className="font-semibold">Fórmula de cálculo:</span>
                             </div>
-                            <div className="mt-1 font-mono text-xs text-blue-800">
+                            <div className="font-mono text-xs text-slate-600">
                               % = (Total Circular ÷ Total Residuos) × 100
                             </div>
                           </td>
-                          <td colSpan={12} className="border border-gray-200 bg-blue-50 p-2 text-xs text-blue-700">
+                          <td colSpan={12} className="bg-slate-50 p-3 text-sm text-slate-600">
                             <div className="font-mono text-center">
                               ({kpis.totalCircular.toLocaleString('es-ES', { maximumFractionDigits: 1 })} ÷ {kpis.totalWeight.toLocaleString('es-ES', { maximumFractionDigits: 1 })}) × 100 = {kpis.deviationPercentage.toFixed(1)}%
                             </div>
                           </td>
-                          <td className="border border-gray-200 bg-blue-50 p-2 text-xs text-blue-700 text-center font-mono">
+                          <td className="bg-slate-100 p-3 text-sm text-slate-600 text-center font-mono">
                             {kpis.deviationPercentage.toFixed(1)}%
                           </td>
                         </tr>
-                        <tr className={`${kpis.deviationPercentage >= 70 ? 'bg-green-100' : kpis.deviationPercentage >= 50 ? 'bg-amber-100' : 'bg-red-100'}`}>
-                          <td className="border border-gray-200 p-3 font-bold text-lg">% de Desviación:</td>
-                          <td colSpan={12} className="border border-gray-200"></td>
-                          <td className={`border border-gray-200 p-3 text-center font-bold text-2xl ${
-                            kpis.deviationPercentage >= 70 ? 'text-green-800' : 
-                            kpis.deviationPercentage >= 50 ? 'text-amber-800' : 'text-red-800'
-                          }`}>
+                        <tr className={`border-t-2 ${
+                          kpis.deviationPercentage >= 70 ? 'bg-emerald-100 border-emerald-300' : 
+                          kpis.deviationPercentage >= 50 ? 'bg-amber-100 border-amber-300' : 'bg-red-100 border-red-300'
+                        }`}>
+                          <td className="p-4 font-bold text-xl text-navy">% de Desviación</td>
+                          <td colSpan={12}></td>
+                          <td className={`p-4 text-center font-bold text-3xl ${
+                            kpis.deviationPercentage >= 70 ? 'text-emerald-800 bg-emerald-200' : 
+                            kpis.deviationPercentage >= 50 ? 'text-amber-800 bg-amber-200' : 'text-red-800 bg-red-200'
+                          } rounded-lg`}>
                             {kpis.deviationPercentage.toFixed(1)}%
                           </td>
                         </tr>
