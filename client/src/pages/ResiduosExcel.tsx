@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 import AppLayout from '@/components/layout/AppLayout';
@@ -110,7 +109,7 @@ export default function ResiduosExcel() {
   const getValue = useCallback((section: string, material: string, monthIndex: number): number => {
     const editKey = `${section}-${material}-${monthIndex}`;
     if (editKey in editedData) {
-      return editedData[editKey] || 0;
+      return editedData[editKey];
     }
     
     if (!wasteData?.months[monthIndex]) return 0;
@@ -428,213 +427,199 @@ export default function ResiduosExcel() {
                         {/* Recycling Section */}
                         <tr>
                           <td colSpan={14} className="bg-green-100 border border-gray-200 p-2 font-semibold">
-                            <Collapsible
-                              open={openSections.recycling}
-                              onOpenChange={(open) => setOpenSections(prev => ({ ...prev, recycling: open }))}
+                            <button
+                              onClick={() => setOpenSections(prev => ({ ...prev, recycling: !prev.recycling }))}
+                              className="flex items-center gap-2 hover:bg-green-200 p-1 rounded w-full text-left"
                             >
-                              <CollapsibleTrigger className="flex items-center gap-2 hover:bg-green-200 p-1 rounded">
-                                {openSections.recycling ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-                                <Recycle className="h-4 w-4" />
-                                Reciclaje
-                              </CollapsibleTrigger>
-                            </Collapsible>
+                              {openSections.recycling ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                              <Recycle className="h-4 w-4" />
+                              Reciclaje
+                            </button>
                           </td>
                         </tr>
-                        <Collapsible open={openSections.recycling}>
-                          <CollapsibleContent>
-                            {wasteData?.materials.recycling.map((material) => (
-                              <tr key={material}>
-                                <td className="border border-gray-200 p-2 font-medium">{material}</td>
-                                {MONTH_LABELS.map((_, monthIndex) => (
-                                  <td key={monthIndex} className="border border-gray-200 p-1">
-                                    <Input
-                                      type="number"
-                                      step="0.1"
-                                      min="0"
-                                      value={getValue('recycling', material, monthIndex)}
-                                      onChange={(e) => handleCellChange('recycling', material, monthIndex, e.target.value)}
-                                      className="h-8 text-xs text-center border-0 p-1"
-                                    />
-                                  </td>
-                                ))}
-                                <td className="border border-gray-200 p-2 text-center font-semibold bg-lime-50">
-                                  {getRowTotal('recycling', material).toLocaleString('es-ES', { maximumFractionDigits: 1 })}
-                                </td>
-                              </tr>
+                        {openSections.recycling && wasteData?.materials.recycling.map((material) => (
+                          <tr key={material}>
+                            <td className="border border-gray-200 p-2 font-medium">{material}</td>
+                            {MONTH_LABELS.map((_, monthIndex) => (
+                              <td key={monthIndex} className="border border-gray-200 p-1">
+                                <input
+                                  type="number"
+                                  step="0.1"
+                                  min="0"
+                                  value={getValue('recycling', material, monthIndex) || ''}
+                                  onChange={(e) => handleCellChange('recycling', material, monthIndex, e.target.value)}
+                                  className="w-full h-8 text-xs text-center border-0 p-1 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                  placeholder="0"
+                                />
+                              </td>
                             ))}
-                          </CollapsibleContent>
-                        </Collapsible>
+                            <td className="border border-gray-200 p-2 text-center font-semibold bg-lime-50">
+                              {getRowTotal('recycling', material).toLocaleString('es-ES', { maximumFractionDigits: 1 })}
+                            </td>
+                          </tr>
+                        ))}
 
                         {/* Compost Section */}
                         <tr>
                           <td colSpan={14} className="bg-amber-100 border border-gray-200 p-2 font-semibold">
-                            <Collapsible
-                              open={openSections.compost}
-                              onOpenChange={(open) => setOpenSections(prev => ({ ...prev, compost: open }))}
+                            <button
+                              onClick={() => setOpenSections(prev => ({ ...prev, compost: !prev.compost }))}
+                              className="flex items-center gap-2 hover:bg-amber-200 p-1 rounded w-full text-left"
                             >
-                              <CollapsibleTrigger className="flex items-center gap-2 hover:bg-amber-200 p-1 rounded">
-                                {openSections.compost ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-                                <Leaf className="h-4 w-4" />
-                                Orgánicos destinados a composta
-                              </CollapsibleTrigger>
-                            </Collapsible>
+                              {openSections.compost ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                              <Leaf className="h-4 w-4" />
+                              Orgánicos destinados a composta
+                            </button>
                           </td>
                         </tr>
-                        <Collapsible open={openSections.compost}>
-                          <CollapsibleContent>
-                            {wasteData?.materials.compost.map((category) => (
-                              <tr key={category}>
-                                <td className="border border-gray-200 p-2 font-medium">{category}</td>
-                                {MONTH_LABELS.map((_, monthIndex) => (
-                                  <td key={monthIndex} className="border border-gray-200 p-1">
-                                    <Input
-                                      type="number"
-                                      step="0.1"
-                                      min="0"
-                                      value={getValue('compost', category, monthIndex)}
-                                      onChange={(e) => handleCellChange('compost', category, monthIndex, e.target.value)}
-                                      className="h-8 text-xs text-center border-0 p-1"
-                                    />
-                                  </td>
-                                ))}
-                                <td className="border border-gray-200 p-2 text-center font-semibold bg-lime-50">
-                                  {getRowTotal('compost', category).toLocaleString('es-ES', { maximumFractionDigits: 1 })}
-                                </td>
-                              </tr>
-                            ))}
-                            <tr className="bg-amber-50">
-                              <td className="border border-gray-200 p-2 font-bold">Total orgánicos</td>
-                              {MONTH_LABELS.map((_, monthIndex) => {
-                                let monthTotal = 0;
-                                wasteData?.materials.compost.forEach(category => {
-                                  monthTotal += getValue('compost', category, monthIndex);
-                                });
-                                return (
-                                  <td key={monthIndex} className="border border-gray-200 p-2 text-center font-bold">
-                                    {monthTotal.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
-                                  </td>
-                                );
-                              })}
-                              <td className="border border-gray-200 p-2 text-center font-bold">
-                                {getSectionTotals().compostTotal.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
+                        {openSections.compost && wasteData?.materials.compost.map((category) => (
+                          <tr key={category}>
+                            <td className="border border-gray-200 p-2 font-medium">{category}</td>
+                            {MONTH_LABELS.map((_, monthIndex) => (
+                              <td key={monthIndex} className="border border-gray-200 p-1">
+                                <input
+                                  type="number"
+                                  step="0.1"
+                                  min="0"
+                                  value={getValue('compost', category, monthIndex) || ''}
+                                  onChange={(e) => handleCellChange('compost', category, monthIndex, e.target.value)}
+                                  className="w-full h-8 text-xs text-center border-0 p-1 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                  placeholder="0"
+                                />
                               </td>
-                            </tr>
-                          </CollapsibleContent>
-                        </Collapsible>
+                            ))}
+                            <td className="border border-gray-200 p-2 text-center font-semibold bg-lime-50">
+                              {getRowTotal('compost', category).toLocaleString('es-ES', { maximumFractionDigits: 1 })}
+                            </td>
+                          </tr>
+                        ))}
+                        {openSections.compost && (
+                          <tr className="bg-amber-50">
+                            <td className="border border-gray-200 p-2 font-bold">Total orgánicos</td>
+                            {MONTH_LABELS.map((_, monthIndex) => {
+                              let monthTotal = 0;
+                              wasteData?.materials.compost.forEach(category => {
+                                monthTotal += getValue('compost', category, monthIndex);
+                              });
+                              return (
+                                <td key={monthIndex} className="border border-gray-200 p-2 text-center font-bold">
+                                  {monthTotal.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
+                                </td>
+                              );
+                            })}
+                            <td className="border border-gray-200 p-2 text-center font-bold">
+                              {getSectionTotals().compostTotal.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
+                            </td>
+                          </tr>
+                        )}
 
                         {/* Reuse Section */}
                         <tr>
                           <td colSpan={14} className="bg-blue-100 border border-gray-200 p-2 font-semibold">
-                            <Collapsible
-                              open={openSections.reuse}
-                              onOpenChange={(open) => setOpenSections(prev => ({ ...prev, reuse: open }))}
+                            <button
+                              onClick={() => setOpenSections(prev => ({ ...prev, reuse: !prev.reuse }))}
+                              className="flex items-center gap-2 hover:bg-blue-200 p-1 rounded w-full text-left"
                             >
-                              <CollapsibleTrigger className="flex items-center gap-2 hover:bg-blue-200 p-1 rounded">
-                                {openSections.reuse ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-                                <RotateCcw className="h-4 w-4" />
-                                Reuso
-                              </CollapsibleTrigger>
-                            </Collapsible>
+                              {openSections.reuse ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                              <RotateCcw className="h-4 w-4" />
+                              Reuso
+                            </button>
                           </td>
                         </tr>
-                        <Collapsible open={openSections.reuse}>
-                          <CollapsibleContent>
-                            {wasteData?.materials.reuse.map((category) => (
-                              <tr key={category}>
-                                <td className="border border-gray-200 p-2 font-medium">{category}</td>
-                                {MONTH_LABELS.map((_, monthIndex) => (
-                                  <td key={monthIndex} className="border border-gray-200 p-1">
-                                    <Input
-                                      type="number"
-                                      step="0.1"
-                                      min="0"
-                                      value={getValue('reuse', category, monthIndex)}
-                                      onChange={(e) => handleCellChange('reuse', category, monthIndex, e.target.value)}
-                                      className="h-8 text-xs text-center border-0 p-1"
-                                    />
-                                  </td>
-                                ))}
-                                <td className="border border-gray-200 p-2 text-center font-semibold bg-lime-50">
-                                  {getRowTotal('reuse', category).toLocaleString('es-ES', { maximumFractionDigits: 1 })}
-                                </td>
-                              </tr>
-                            ))}
-                            <tr className="bg-blue-50">
-                              <td className="border border-gray-200 p-2 font-bold">Total reuso</td>
-                              {MONTH_LABELS.map((_, monthIndex) => {
-                                let monthTotal = 0;
-                                wasteData?.materials.reuse.forEach(category => {
-                                  monthTotal += getValue('reuse', category, monthIndex);
-                                });
-                                return (
-                                  <td key={monthIndex} className="border border-gray-200 p-2 text-center font-bold">
-                                    {monthTotal.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
-                                  </td>
-                                );
-                              })}
-                              <td className="border border-gray-200 p-2 text-center font-bold">
-                                {getSectionTotals().reuseTotal.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
+                        {openSections.reuse && wasteData?.materials.reuse.map((category) => (
+                          <tr key={category}>
+                            <td className="border border-gray-200 p-2 font-medium">{category}</td>
+                            {MONTH_LABELS.map((_, monthIndex) => (
+                              <td key={monthIndex} className="border border-gray-200 p-1">
+                                <input
+                                  type="number"
+                                  step="0.1"
+                                  min="0"
+                                  value={getValue('reuse', category, monthIndex) || ''}
+                                  onChange={(e) => handleCellChange('reuse', category, monthIndex, e.target.value)}
+                                  className="w-full h-8 text-xs text-center border-0 p-1 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                  placeholder="0"
+                                />
                               </td>
-                            </tr>
-                          </CollapsibleContent>
-                        </Collapsible>
+                            ))}
+                            <td className="border border-gray-200 p-2 text-center font-semibold bg-lime-50">
+                              {getRowTotal('reuse', category).toLocaleString('es-ES', { maximumFractionDigits: 1 })}
+                            </td>
+                          </tr>
+                        ))}
+                        {openSections.reuse && (
+                          <tr className="bg-blue-50">
+                            <td className="border border-gray-200 p-2 font-bold">Total reuso</td>
+                            {MONTH_LABELS.map((_, monthIndex) => {
+                              let monthTotal = 0;
+                              wasteData?.materials.reuse.forEach(category => {
+                                monthTotal += getValue('reuse', category, monthIndex);
+                              });
+                              return (
+                                <td key={monthIndex} className="border border-gray-200 p-2 text-center font-bold">
+                                  {monthTotal.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
+                                </td>
+                              );
+                            })}
+                            <td className="border border-gray-200 p-2 text-center font-bold">
+                              {getSectionTotals().reuseTotal.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
+                            </td>
+                          </tr>
+                        )}
 
                         {/* Landfill Section */}
                         <tr>
                           <td colSpan={14} className="bg-red-100 border border-gray-200 p-2 font-semibold">
-                            <Collapsible
-                              open={openSections.landfill}
-                              onOpenChange={(open) => setOpenSections(prev => ({ ...prev, landfill: open }))}
+                            <button
+                              onClick={() => setOpenSections(prev => ({ ...prev, landfill: !prev.landfill }))}
+                              className="flex items-center gap-2 hover:bg-red-200 p-1 rounded w-full text-left"
                             >
-                              <CollapsibleTrigger className="flex items-center gap-2 hover:bg-red-200 p-1 rounded">
-                                {openSections.landfill ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-                                <Trash2 className="h-4 w-4" />
-                                No desvío (Relleno sanitario)
-                              </CollapsibleTrigger>
-                            </Collapsible>
+                              {openSections.landfill ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                              <Trash2 className="h-4 w-4" />
+                              No desvío (Relleno sanitario)
+                            </button>
                           </td>
                         </tr>
-                        <Collapsible open={openSections.landfill}>
-                          <CollapsibleContent>
-                            {wasteData?.materials.landfill.map((wasteType) => (
-                              <tr key={wasteType}>
-                                <td className="border border-gray-200 p-2 font-medium">{wasteType}</td>
-                                {MONTH_LABELS.map((_, monthIndex) => (
-                                  <td key={monthIndex} className="border border-gray-200 p-1">
-                                    <Input
-                                      type="number"
-                                      step="0.1"
-                                      min="0"
-                                      value={getValue('landfill', wasteType, monthIndex)}
-                                      onChange={(e) => handleCellChange('landfill', wasteType, monthIndex, e.target.value)}
-                                      className="h-8 text-xs text-center border-0 p-1"
-                                    />
-                                  </td>
-                                ))}
-                                <td className="border border-gray-200 p-2 text-center font-semibold bg-lime-50">
-                                  {getRowTotal('landfill', wasteType).toLocaleString('es-ES', { maximumFractionDigits: 1 })}
-                                </td>
-                              </tr>
-                            ))}
-                            <tr className="bg-red-50">
-                              <td className="border border-gray-200 p-2 font-bold">Total Relleno sanitario</td>
-                              {MONTH_LABELS.map((_, monthIndex) => {
-                                let monthTotal = 0;
-                                wasteData?.materials.landfill.forEach(wasteType => {
-                                  monthTotal += getValue('landfill', wasteType, monthIndex);
-                                });
-                                return (
-                                  <td key={monthIndex} className="border border-gray-200 p-2 text-center font-bold">
-                                    {monthTotal.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
-                                  </td>
-                                );
-                              })}
-                              <td className="border border-gray-200 p-2 text-center font-bold">
-                                {getSectionTotals().landfillTotal.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
+                        {openSections.landfill && wasteData?.materials.landfill.map((wasteType) => (
+                          <tr key={wasteType}>
+                            <td className="border border-gray-200 p-2 font-medium">{wasteType}</td>
+                            {MONTH_LABELS.map((_, monthIndex) => (
+                              <td key={monthIndex} className="border border-gray-200 p-1">
+                                <input
+                                  type="number"
+                                  step="0.1"
+                                  min="0"
+                                  value={getValue('landfill', wasteType, monthIndex) || ''}
+                                  onChange={(e) => handleCellChange('landfill', wasteType, monthIndex, e.target.value)}
+                                  className="w-full h-8 text-xs text-center border-0 p-1 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                  placeholder="0"
+                                />
                               </td>
-                            </tr>
-                          </CollapsibleContent>
-                        </Collapsible>
+                            ))}
+                            <td className="border border-gray-200 p-2 text-center font-semibold bg-lime-50">
+                              {getRowTotal('landfill', wasteType).toLocaleString('es-ES', { maximumFractionDigits: 1 })}
+                            </td>
+                          </tr>
+                        ))}
+                        {openSections.landfill && (
+                          <tr className="bg-red-50">
+                            <td className="border border-gray-200 p-2 font-bold">Total Relleno sanitario</td>
+                            {MONTH_LABELS.map((_, monthIndex) => {
+                              let monthTotal = 0;
+                              wasteData?.materials.landfill.forEach(wasteType => {
+                                monthTotal += getValue('landfill', wasteType, monthIndex);
+                              });
+                              return (
+                                <td key={monthIndex} className="border border-gray-200 p-2 text-center font-bold">
+                                  {monthTotal.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
+                                </td>
+                              );
+                            })}
+                            <td className="border border-gray-200 p-2 text-center font-bold">
+                              {getSectionTotals().landfillTotal.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
+                            </td>
+                          </tr>
+                        )}
 
                         {/* Grand Totals */}
                         <tr className="bg-gray-100 border-t-4 border-gray-300">
