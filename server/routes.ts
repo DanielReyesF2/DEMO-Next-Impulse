@@ -4,7 +4,11 @@ import { storage } from "./storage";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
-import { insertDocumentSchema, insertWasteDataSchema, insertAlertSchema } from "@shared/schema";
+import { 
+  insertDocumentSchema, insertWasteDataSchema, insertAlertSchema,
+  insertRecyclingEntrySchema, insertCompostEntrySchema, insertReuseEntrySchema, insertLandfillEntrySchema,
+  RECYCLING_MATERIALS, COMPOST_CATEGORIES, REUSE_CATEGORIES, LANDFILL_WASTE_TYPES
+} from "@shared/schema";
 import { z } from "zod";
 import { processPDFDocument } from './pdf-processor';
 import { processCSVDocument, isValidCSV, cleanupFile } from './csv-processor';
@@ -287,6 +291,164 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       res.status(500).json({ message: "Failed to create waste data" });
+    }
+  });
+
+  // Detailed waste tracking routes (Excel replication)
+  
+  // Get waste data for a specific year (structured like Excel)
+  app.get("/api/waste-excel/:year", async (req: Request, res: Response) => {
+    try {
+      const year = parseInt(req.params.year);
+      
+      // Get or create months for the year
+      const months = await storage.getMonths(year);
+      const monthsData = [];
+      
+      for (let month = 1; month <= 12; month++) {
+        let monthRecord = months.find(m => m.month === month);
+        
+        if (!monthRecord) {
+          const monthNames = [
+            'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+            'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
+          ];
+          
+          monthRecord = await storage.createMonth({
+            year,
+            month,
+            label: `${monthNames[month - 1]} ${year}`
+          });
+        }
+        
+        // Get entries for this month
+        const recycling = await storage.getRecyclingEntries(monthRecord.id);
+        const compost = await storage.getCompostEntries(monthRecord.id);
+        const reuse = await storage.getReuseEntries(monthRecord.id);
+        const landfill = await storage.getLandfillEntries(monthRecord.id);
+        
+        monthsData.push({
+          month: monthRecord,
+          recycling,
+          compost,
+          reuse,
+          landfill
+        });
+      }
+      
+      res.json({
+        year,
+        months: monthsData,
+        materials: {
+          recycling: RECYCLING_MATERIALS,
+          compost: COMPOST_CATEGORIES,
+          reuse: REUSE_CATEGORIES,
+          landfill: LANDFILL_WASTE_TYPES
+        }
+      });
+    } catch (error) {
+      console.error("Error fetching waste excel data:", error);
+      res.status(500).json({ message: "Failed to fetch waste excel data" });
+    }
+  });
+  
+  // Update waste entry
+  app.post("/api/waste-excel/update", async (req: Request, res: Response) => {
+    try {
+      const { monthId, category, material, kg, type } = req.body;
+      
+      let result;
+      
+      switch (type) {
+        case 'recycling':
+          result = await storage.upsertRecyclingEntry({
+            monthId,
+            material,
+            kg: parseFloat(kg) || 0
+          });
+          break;
+        case 'compost':
+          result = await storage.upsertCompostEntry({
+            monthId,
+            category: material, // material serves as category for compost
+            kg: parseFloat(kg) || 0
+          });
+          break;
+        case 'reuse':
+          result = await storage.upsertReuseEntry({
+            monthId,
+            category: material,
+            kg: parseFloat(kg) || 0
+          });
+          break;
+        case 'landfill':
+          result = await storage.upsertLandfillEntry({
+            monthId,
+            wasteType: material,
+            kg: parseFloat(kg) || 0
+          });
+          break;
+        default:
+          return res.status(400).json({ message: "Invalid entry type" });
+      }
+      
+      res.json({ success: true, data: result });
+    } catch (error) {
+      console.error("Error updating waste entry:", error);
+      res.status(500).json({ message: "Failed to update waste entry" });
+    }
+  });
+  
+  // Batch update all data for a year
+  app.post("/api/waste-excel/batch-update", async (req: Request, res: Response) => {
+    try {
+      const { year, data } = req.body;
+      
+      // Process batch updates
+      for (const monthData of data) {
+        const { monthId, entries } = monthData;
+        
+        // Update recycling entries
+        for (const entry of entries.recycling || []) {
+          await storage.upsertRecyclingEntry({
+            monthId,
+            material: entry.material,
+            kg: parseFloat(entry.kg) || 0
+          });
+        }
+        
+        // Update compost entries
+        for (const entry of entries.compost || []) {
+          await storage.upsertCompostEntry({
+            monthId,
+            category: entry.category,
+            kg: parseFloat(entry.kg) || 0
+          });
+        }
+        
+        // Update reuse entries
+        for (const entry of entries.reuse || []) {
+          await storage.upsertReuseEntry({
+            monthId,
+            category: entry.category,
+            kg: parseFloat(entry.kg) || 0
+          });
+        }
+        
+        // Update landfill entries
+        for (const entry of entries.landfill || []) {
+          await storage.upsertLandfillEntry({
+            monthId,
+            wasteType: entry.wasteType,
+            kg: parseFloat(entry.kg) || 0
+          });
+        }
+      }
+      
+      res.json({ success: true, message: "Batch update completed" });
+    } catch (error) {
+      console.error("Error in batch update:", error);
+      res.status(500).json({ message: "Failed to perform batch update" });
     }
   });
 

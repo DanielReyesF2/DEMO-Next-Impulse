@@ -1,0 +1,110 @@
+Quiero extender el módulo(Next.js/React + Supabase/SQLite, Tailwind, Recharts) para replicar la tabla de Excel que uso y que los totales y el % de Desviación se calcula exactamente igual que en Excel.
+
+1) Objetivo
+Construir una tabla editablecon las mismas secciones/filas que mi Excel:
+
+Reciclaje (filas): Papel Mixto, Papel de oficina, Revistas, Periódico, Cartón, PET, Plástico Duro, HDPE, Tin Can, Aluminio, Vidrio, Fierro, Residuo electrónico.
+
+Orgánicos destinados a composta (filas): Poda (tiro San Sebastián), Jardinería.
+
+Reuso (filas): Vidrio donación.
+
+No desvío (Relleno sanitario) (filas): Orgánico, Inorgánico.
+
+Columnas por mes de Ene–Dic más una columna Total al final.
+
+Botón “Actualizar” : guarda cambios y recalcula todos los subtotales/total
+
+Persistencia : en DB (puede ser SQLite vía Prisma o Supabase — usa lo que sea más rápido). Soporta multiaño.
+
+2) Esquema de datos
+Crea tablas (o colecciones) así:
+
+months:{ id, year, month (1–12), label }
+
+recycling_entries:
+
+{ id, month_id, material, kg }
+
+material∈ [ "Papel Mixto","Papel de oficina","Revistas","Periódico","Cartón","PET","Plástico Duro","HDPE","Tin Can","Aluminio","Vidrio","Fierro","Residuo electrónico" ]
+
+compost_entries: `{ id, mes_i{ id, month_id, category, kg }
+
+category∈ ["Poda San Sebastián","Jardinería"]
+
+reuse_entries:{ id, month_id, category, kg }
+
+category∈ ["Vidrio donación"]
+
+landfill_entries:{ id, month_id, waste_type, kg }
+
+waste_type∈ ["Orgánico","Inorgánico"]
+
+Reglas:
+
+Si un campo está vacío, trátalo como 0.0 .
+
+Guarda números como flotador (kg).
+
+Soporta Múltiples años; la vista muestra un año seleccionado.
+
+3)
+Página /residuos con selector de Año (predeterminado: año actual).
+
+Tabla con secciones plegables ( Reciclaje , Orgánicos a composta , Reuso , No desvío ) y meses Ene–Dic + Total .
+
+Celdas editables por mes/material. Edición en línea (número de tipo de entrada con paso=0.1).
+
+Fila “A: suma por fila ≡ suma de los 12 meses.
+
+Botón “Actualizar” :
+
+Persiste todo lo editado
+
+Recálculo:
+
+Circular total (kg) =Total Reciclaje + Total Orgánicos a composta + Total Reuso
+
+Total relleno sanitario (kg) = `Total NoTotal No desvío (orgánico + inorgánico)
+
+Pesos totales (kg) = `Total Circular + Total relleno sanTotal Circular + Total relleno sanitario
+
+% de Desviación =Total Circular / (Total Circular + Total relleno sanitario) * 100
+
+Esta es la fórmula MISMA que el Excel (tasa de desvío de relleno = desviado / generado).
+
+Redondear y mostrar con 1 decimal en porcentaje (ej. 77,4%).
+
+Validaciones :
+
+No permitir negativos.
+
+Si el usuario borra un valor = trátalo como 0.
+
+Rendimiento : usar cálculo en memoria tras guardar y solo una escritura por bloque (UI optimista).
+
+4) Gráficas (Rechart
+Apilar barras mensuales por categoría de circular (Reciclaje, Compost, Reuso) y una barra aparte para Relleno sanitario .
+
+Gráfico de línea : % de Desviación mensual =
+Desvío mensual = (Reciclaje_mes + Compost_mes + Reuso_mes) / (Reciclaje_mes + Compost_mes + Reuso_mes + Relleno_mes) * 100.
+
+Tarjetas KPI a la derecha (como en mi Excel):
+
+Circular total (kg)
+
+Total relleno sanitario (kg)
+
+Pesos totales (kg)
+
+% de Desviación (grande, con color verde/ámbar/rojo según umbrales: ≥70% verde; 50–69% ámbar; <50% rojo).
+
+5) Exactitud de cálculo
+Los totales y el % de Desviación deben coincidir con mi Excel al dígito (tolerancia ±0.1 kg y ±0.1 pp).
+
+Suma de la columna Total = suma de los 12 meses.
+
+Suma de Total Circular + Total Relleno = Pesos totales .
+
+Si un material/mes no existe en DB, inicializarlo en 0 para que la tabla sea completa (sin huecos).
+

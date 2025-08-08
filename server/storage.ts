@@ -3,7 +3,14 @@ import {
   Document, InsertDocument, 
   WasteData, InsertWasteData, 
   Alert, InsertAlert,
-  clients, documents, wasteData, alerts
+  Month, InsertMonth,
+  RecyclingEntry, InsertRecyclingEntry,
+  CompostEntry, InsertCompostEntry,
+  ReuseEntry, InsertReuseEntry,
+  LandfillEntry, InsertLandfillEntry,
+  clients, documents, wasteData, alerts,
+  months, recyclingEntries, compostEntries, reuseEntries, landfillEntries,
+  RECYCLING_MATERIALS, COMPOST_CATEGORIES, REUSE_CATEGORIES, LANDFILL_WASTE_TYPES
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, gte, lte } from "drizzle-orm";
@@ -31,6 +38,31 @@ export interface IStorage {
   getAlert(id: number): Promise<Alert | undefined>;
   createAlert(alert: InsertAlert): Promise<Alert>;
   updateAlert(id: number, updates: Partial<Alert>): Promise<Alert | undefined>;
+  
+  // Detailed waste tracking operations (Excel replication)
+  // Month operations
+  getMonths(year: number): Promise<Month[]>;
+  getMonth(year: number, month: number): Promise<Month | undefined>;
+  createMonth(month: InsertMonth): Promise<Month>;
+  
+  // Recycling operations
+  getRecyclingEntries(monthId: number): Promise<RecyclingEntry[]>;
+  upsertRecyclingEntry(entry: InsertRecyclingEntry): Promise<RecyclingEntry>;
+  
+  // Compost operations
+  getCompostEntries(monthId: number): Promise<CompostEntry[]>;
+  upsertCompostEntry(entry: InsertCompostEntry): Promise<CompostEntry>;
+  
+  // Reuse operations
+  getReuseEntries(monthId: number): Promise<ReuseEntry[]>;
+  upsertReuseEntry(entry: InsertReuseEntry): Promise<ReuseEntry>;
+  
+  // Landfill operations
+  getLandfillEntries(monthId: number): Promise<LandfillEntry[]>;
+  upsertLandfillEntry(entry: InsertLandfillEntry): Promise<LandfillEntry>;
+  
+  // Batch update operations
+  updateWasteDataForYear(year: number, data: any): Promise<void>;
 }
 
 export class MemStorage implements IStorage {
@@ -236,6 +268,55 @@ export class MemStorage implements IStorage {
     this.alerts.set(id, updatedAlert);
     return updatedAlert;
   }
+  
+  // Detailed waste tracking operations - stub implementations
+  async getMonths(year: number): Promise<Month[]> {
+    throw new Error("Detailed waste tracking not implemented in MemStorage");
+  }
+  
+  async getMonth(year: number, month: number): Promise<Month | undefined> {
+    throw new Error("Detailed waste tracking not implemented in MemStorage");
+  }
+  
+  async createMonth(month: InsertMonth): Promise<Month> {
+    throw new Error("Detailed waste tracking not implemented in MemStorage");
+  }
+  
+  async getRecyclingEntries(monthId: number): Promise<RecyclingEntry[]> {
+    throw new Error("Detailed waste tracking not implemented in MemStorage");
+  }
+  
+  async upsertRecyclingEntry(entry: InsertRecyclingEntry): Promise<RecyclingEntry> {
+    throw new Error("Detailed waste tracking not implemented in MemStorage");
+  }
+  
+  async getCompostEntries(monthId: number): Promise<CompostEntry[]> {
+    throw new Error("Detailed waste tracking not implemented in MemStorage");
+  }
+  
+  async upsertCompostEntry(entry: InsertCompostEntry): Promise<CompostEntry> {
+    throw new Error("Detailed waste tracking not implemented in MemStorage");
+  }
+  
+  async getReuseEntries(monthId: number): Promise<ReuseEntry[]> {
+    throw new Error("Detailed waste tracking not implemented in MemStorage");
+  }
+  
+  async upsertReuseEntry(entry: InsertReuseEntry): Promise<ReuseEntry> {
+    throw new Error("Detailed waste tracking not implemented in MemStorage");
+  }
+  
+  async getLandfillEntries(monthId: number): Promise<LandfillEntry[]> {
+    throw new Error("Detailed waste tracking not implemented in MemStorage");
+  }
+  
+  async upsertLandfillEntry(entry: InsertLandfillEntry): Promise<LandfillEntry> {
+    throw new Error("Detailed waste tracking not implemented in MemStorage");
+  }
+  
+  async updateWasteDataForYear(year: number, data: any): Promise<void> {
+    throw new Error("Detailed waste tracking not implemented in MemStorage");
+  }
 }
 
 export class DatabaseStorage implements IStorage {
@@ -395,6 +476,154 @@ export class DatabaseStorage implements IStorage {
       .returning();
     
     return results.length > 0 ? results[0] : undefined;
+  }
+  
+  // Detailed waste tracking operations (Excel replication)
+  // Month operations
+  async getMonths(year: number): Promise<Month[]> {
+    return await db.select().from(months).where(eq(months.year, year));
+  }
+  
+  async getMonth(year: number, month: number): Promise<Month | undefined> {
+    const results = await db
+      .select()
+      .from(months)
+      .where(and(eq(months.year, year), eq(months.month, month)));
+    return results.length > 0 ? results[0] : undefined;
+  }
+  
+  async createMonth(month: InsertMonth): Promise<Month> {
+    const [newMonth] = await db
+      .insert(months)
+      .values(month)
+      .returning();
+    return newMonth;
+  }
+  
+  // Recycling operations
+  async getRecyclingEntries(monthId: number): Promise<RecyclingEntry[]> {
+    return await db.select().from(recyclingEntries).where(eq(recyclingEntries.monthId, monthId));
+  }
+  
+  async upsertRecyclingEntry(entry: InsertRecyclingEntry): Promise<RecyclingEntry> {
+    const existing = await db
+      .select()
+      .from(recyclingEntries)
+      .where(and(
+        eq(recyclingEntries.monthId, entry.monthId),
+        eq(recyclingEntries.material, entry.material)
+      ));
+    
+    if (existing.length > 0) {
+      const [updated] = await db
+        .update(recyclingEntries)
+        .set({ kg: entry.kg })
+        .where(eq(recyclingEntries.id, existing[0].id))
+        .returning();
+      return updated;
+    } else {
+      const [created] = await db
+        .insert(recyclingEntries)
+        .values(entry)
+        .returning();
+      return created;
+    }
+  }
+  
+  // Compost operations
+  async getCompostEntries(monthId: number): Promise<CompostEntry[]> {
+    return await db.select().from(compostEntries).where(eq(compostEntries.monthId, monthId));
+  }
+  
+  async upsertCompostEntry(entry: InsertCompostEntry): Promise<CompostEntry> {
+    const existing = await db
+      .select()
+      .from(compostEntries)
+      .where(and(
+        eq(compostEntries.monthId, entry.monthId),
+        eq(compostEntries.category, entry.category)
+      ));
+    
+    if (existing.length > 0) {
+      const [updated] = await db
+        .update(compostEntries)
+        .set({ kg: entry.kg })
+        .where(eq(compostEntries.id, existing[0].id))
+        .returning();
+      return updated;
+    } else {
+      const [created] = await db
+        .insert(compostEntries)
+        .values(entry)
+        .returning();
+      return created;
+    }
+  }
+  
+  // Reuse operations
+  async getReuseEntries(monthId: number): Promise<ReuseEntry[]> {
+    return await db.select().from(reuseEntries).where(eq(reuseEntries.monthId, monthId));
+  }
+  
+  async upsertReuseEntry(entry: InsertReuseEntry): Promise<ReuseEntry> {
+    const existing = await db
+      .select()
+      .from(reuseEntries)
+      .where(and(
+        eq(reuseEntries.monthId, entry.monthId),
+        eq(reuseEntries.category, entry.category)
+      ));
+    
+    if (existing.length > 0) {
+      const [updated] = await db
+        .update(reuseEntries)
+        .set({ kg: entry.kg })
+        .where(eq(reuseEntries.id, existing[0].id))
+        .returning();
+      return updated;
+    } else {
+      const [created] = await db
+        .insert(reuseEntries)
+        .values(entry)
+        .returning();
+      return created;
+    }
+  }
+  
+  // Landfill operations
+  async getLandfillEntries(monthId: number): Promise<LandfillEntry[]> {
+    return await db.select().from(landfillEntries).where(eq(landfillEntries.monthId, monthId));
+  }
+  
+  async upsertLandfillEntry(entry: InsertLandfillEntry): Promise<LandfillEntry> {
+    const existing = await db
+      .select()
+      .from(landfillEntries)
+      .where(and(
+        eq(landfillEntries.monthId, entry.monthId),
+        eq(landfillEntries.wasteType, entry.wasteType)
+      ));
+    
+    if (existing.length > 0) {
+      const [updated] = await db
+        .update(landfillEntries)
+        .set({ kg: entry.kg })
+        .where(eq(landfillEntries.id, existing[0].id))
+        .returning();
+      return updated;
+    } else {
+      const [created] = await db
+        .insert(landfillEntries)
+        .values(entry)
+        .returning();
+      return created;
+    }
+  }
+  
+  // Batch update operations
+  async updateWasteDataForYear(year: number, data: any): Promise<void> {
+    // This will be implemented when we create the API routes
+    console.log(`Updating waste data for year ${year}`, data);
   }
 }
 

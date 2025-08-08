@@ -10,7 +10,8 @@ import {
   Trash2,
   Zap,
   Droplets,
-  RotateCcw
+  RotateCcw,
+  Table
 } from "lucide-react";
 import logoEconova from "../../assets/Logo-ECONOVA-OF_Blanco.png";
 
@@ -74,6 +75,13 @@ export default function Sidebar() {
           isActive={location === "/residuos"}
         >
           Residuos
+        </SidebarItem>
+        <SidebarItem 
+          to="/residuos-excel" 
+          icon={<Table className="w-5 h-5" />} 
+          isActive={location === "/residuos-excel"}
+        >
+          Tabla Excel Residuos
         </SidebarItem>
         <SidebarItem 
           to="/energia" 

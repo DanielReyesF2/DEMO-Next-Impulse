@@ -9,6 +9,7 @@ import Documents from "@/pages/documents";
 import Analysis from "@/pages/analysis";
 import DataEntry from "@/pages/DataEntry";
 import Residuos from "@/pages/Residuos";
+import ResiduosExcel from "@/pages/ResiduosExcel";
 import Energia from "@/pages/Energia";
 import Agua from "@/pages/Agua";
 import EconomiaCircular from "@/pages/EconomiaCircular";
@@ -18,6 +19,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Dashboard} />
       <Route path="/residuos" component={Residuos} />
+      <Route path="/residuos-excel" component={ResiduosExcel} />
       <Route path="/energia" component={Energia} />
       <Route path="/agua" component={Agua} />
       <Route path="/economia-circular" component={EconomiaCircular} />

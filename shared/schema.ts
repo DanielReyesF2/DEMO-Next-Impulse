@@ -137,3 +137,104 @@ export type InsertMonthlyDeviationData = z.infer<typeof insertMonthlyDeviationDa
 
 export type Alert = typeof alerts.$inferSelect;
 export type InsertAlert = z.infer<typeof insertAlertSchema>;
+
+// New detailed waste tracking schema for Excel replication
+
+// Months table for organizing data by year/month
+export const months = pgTable("months", {
+  id: serial("id").primaryKey(),
+  year: integer("year").notNull(),
+  month: integer("month").notNull(), // 1-12
+  label: text("label").notNull(), // e.g., "Ene 2025"
+});
+
+// Recycling entries with specific materials
+export const recyclingEntries = pgTable("recycling_entries", {
+  id: serial("id").primaryKey(),
+  monthId: integer("month_id").references(() => months.id).notNull(),
+  material: text("material").notNull(), // Papel Mixto, Papel de oficina, etc.
+  kg: real("kg").default(0).notNull(),
+});
+
+// Compost entries (organics)
+export const compostEntries = pgTable("compost_entries", {
+  id: serial("id").primaryKey(),
+  monthId: integer("month_id").references(() => months.id).notNull(),
+  category: text("category").notNull(), // Poda San Sebastián, Jardinería
+  kg: real("kg").default(0).notNull(),
+});
+
+// Reuse entries
+export const reuseEntries = pgTable("reuse_entries", {
+  id: serial("id").primaryKey(),
+  monthId: integer("month_id").references(() => months.id).notNull(),
+  category: text("category").notNull(), // Vidrio donación
+  kg: real("kg").default(0).notNull(),
+});
+
+// Landfill entries (no desvío)
+export const landfillEntries = pgTable("landfill_entries", {
+  id: serial("id").primaryKey(),
+  monthId: integer("month_id").references(() => months.id).notNull(),
+  wasteType: text("waste_type").notNull(), // Orgánico, Inorgánico
+  kg: real("kg").default(0).notNull(),
+});
+
+// Insert schemas
+export const insertMonthSchema = createInsertSchema(months).omit({ id: true });
+export const insertRecyclingEntrySchema = createInsertSchema(recyclingEntries).omit({ id: true });
+export const insertCompostEntrySchema = createInsertSchema(compostEntries).omit({ id: true });
+export const insertReuseEntrySchema = createInsertSchema(reuseEntries).omit({ id: true });
+export const insertLandfillEntrySchema = createInsertSchema(landfillEntries).omit({ id: true });
+
+// Types
+export type Month = typeof months.$inferSelect;
+export type InsertMonth = z.infer<typeof insertMonthSchema>;
+
+export type RecyclingEntry = typeof recyclingEntries.$inferSelect;
+export type InsertRecyclingEntry = z.infer<typeof insertRecyclingEntrySchema>;
+
+export type CompostEntry = typeof compostEntries.$inferSelect;
+export type InsertCompostEntry = z.infer<typeof insertCompostEntrySchema>;
+
+export type ReuseEntry = typeof reuseEntries.$inferSelect;
+export type InsertReuseEntry = z.infer<typeof insertReuseEntrySchema>;
+
+export type LandfillEntry = typeof landfillEntries.$inferSelect;
+export type InsertLandfillEntry = z.infer<typeof insertLandfillEntrySchema>;
+
+// Constants for materials and categories
+export const RECYCLING_MATERIALS = [
+  "Papel Mixto",
+  "Papel de oficina", 
+  "Revistas",
+  "Periódico",
+  "Cartón",
+  "PET",
+  "Plástico Duro",
+  "HDPE",
+  "Tin Can",
+  "Aluminio",
+  "Vidrio",
+  "Fierro",
+  "Residuo electrónico"
+] as const;
+
+export const COMPOST_CATEGORIES = [
+  "Poda San Sebastián",
+  "Jardinería"
+] as const;
+
+export const REUSE_CATEGORIES = [
+  "Vidrio donación"
+] as const;
+
+export const LANDFILL_WASTE_TYPES = [
+  "Orgánico",
+  "Inorgánico"
+] as const;
+
+export type RecyclingMaterial = typeof RECYCLING_MATERIALS[number];
+export type CompostCategory = typeof COMPOST_CATEGORIES[number];
+export type ReuseCategory = typeof REUSE_CATEGORIES[number];
+export type LandfillWasteType = typeof LANDFILL_WASTE_TYPES[number];
