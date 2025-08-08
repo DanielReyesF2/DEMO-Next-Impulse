@@ -70,18 +70,11 @@ export default function Sidebar() {
         
         <div className="px-4 py-2 mt-4 text-xs uppercase tracking-wider text-gray-400">Módulos</div>
         <SidebarItem 
-          to="/residuos" 
-          icon={<Trash2 className="w-5 h-5" />} 
-          isActive={location === "/residuos"}
-        >
-          Residuos
-        </SidebarItem>
-        <SidebarItem 
-          to="/residuos-excel" 
+          to="/trazabilidad-residuos" 
           icon={<Table className="w-5 h-5" />} 
-          isActive={location === "/residuos-excel"}
+          isActive={location === "/trazabilidad-residuos"}
         >
-          Tabla Excel Residuos
+          Trazabilidad Residuos
         </SidebarItem>
         <SidebarItem 
           to="/energia" 

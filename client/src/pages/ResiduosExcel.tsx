@@ -347,10 +347,10 @@ export default function ResiduosExcel() {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
                 <h1 className="text-2xl font-anton uppercase tracking-wide text-navy">
-                  Gestión Detallada de Residuos
+                  Trazabilidad Residuos
                 </h1>
                 <p className="text-gray-600 mt-1">
-                  Réplica exacta de la tabla Excel con cálculos precisos
+                  Sistema integral de seguimiento y trazabilidad de residuos
                 </p>
               </div>
               
