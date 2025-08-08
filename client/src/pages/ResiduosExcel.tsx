@@ -797,55 +797,6 @@ export default function ResiduosExcel() {
             </div>
 
 
-            {/* KPIs Row */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Card className="bg-gradient-to-r from-lime-500 to-lime-600 text-white">
-                <CardContent className="p-4">
-                  <div className="text-center">
-                    <div className="text-xl font-bold">
-                      {(kpis.totalCircular / 1000).toFixed(1)}
-                    </div>
-                    <div className="text-sm text-lime-100">Circular (ton)</div>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card className="bg-gradient-to-r from-red-500 to-red-600 text-white">
-                <CardContent className="p-4">
-                  <div className="text-center">
-                    <div className="text-xl font-bold">
-                      {(kpis.totalLandfill / 1000).toFixed(1)}
-                    </div>
-                    <div className="text-sm text-red-100">Relleno (ton)</div>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card className="bg-gradient-to-r from-navy to-navy/80 text-white">
-                <CardContent className="p-4">
-                  <div className="text-center">
-                    <div className="text-xl font-bold">
-                      {(kpis.totalWeight / 1000).toFixed(1)}
-                    </div>
-                    <div className="text-sm text-white/80">Total (ton)</div>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card className={`bg-gradient-to-r ${
-                kpis.deviationPercentage >= 70 ? 'from-green-500 to-green-600' : 
-                kpis.deviationPercentage >= 50 ? 'from-amber-500 to-amber-600' : 'from-red-500 to-red-600'
-              } text-white`}>
-                <CardContent className="p-4">
-                  <div className="text-center">
-                    <div className="text-xl font-bold">
-                      {kpis.deviationPercentage.toFixed(1)}%
-                    </div>
-                    <div className="text-sm opacity-80">Desviación</div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
             {/* Charts Section */}
             <div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
