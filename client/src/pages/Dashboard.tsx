@@ -78,7 +78,7 @@ export default function Dashboard() {
           {/* Módulos ambientales principales */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
             {/* Residuos */}
-            <Link href="/residuos">
+            <Link href="/trazabilidad-residuos">
               <div className="group cursor-pointer bg-white rounded-3xl p-8 shadow-lg border border-gray-100 hover:shadow-2xl hover:border-green-300 transition-all duration-500 hover:-translate-y-2 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-bl-full opacity-50"></div>
                 <div className="flex items-center justify-between mb-6">
