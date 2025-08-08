@@ -788,7 +788,7 @@ export default function ResiduosExcel() {
                             }`}>
                               <CheckCircle className="h-4 w-4" />
                               {kpis.deviationPercentage >= 70 ? 'Certificación TRUE Zero Waste Alcanzada' : 
-                               kpis.deviationPercentage >= 50 ? 'En Progreso hacia Certificación' : 'Requiere Mejoras para Certificación'}
+                               kpis.deviationPercentage >= 50 ? 'En Progreso hacia Certificación' : 'Situación Crítica - Acción Inmediata Requerida'}
                             </div>
                           </td>
                           <td className={`p-4 text-center font-bold text-3xl ${
@@ -804,6 +804,145 @@ export default function ResiduosExcel() {
                 </CardContent>
               </Card>
             </div>
+
+            {/* Recomendaciones Econova Section */}
+            {kpis.deviationPercentage < 70 && (
+              <div className="lg:col-span-4 mt-6">
+                <Card className="border-2 border-lime-200 bg-gradient-to-r from-lime-50 via-white to-navy/5">
+                  <CardHeader className="bg-gradient-to-r from-lime-500 to-navy text-white">
+                    <CardTitle className="flex items-center gap-3">
+                      <div className="p-2 bg-white/20 rounded-full">
+                        <Target className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <div className="text-lg font-bold">Plan de Acción Econova</div>
+                        <div className="text-sm text-white/80">Recomendaciones para alcanzar la meta del 90%</div>
+                      </div>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      {/* Current Status Alert */}
+                      <div className="lg:col-span-2">
+                        <div className={`p-4 rounded-xl border-l-4 ${
+                          kpis.deviationPercentage < 50 ? 
+                            'bg-red-50 border-red-500 text-red-800' :
+                            'bg-amber-50 border-amber-500 text-amber-800'
+                        }`}>
+                          <div className="flex items-center gap-3">
+                            <AlertCircle className="h-6 w-6 flex-shrink-0" />
+                            <div>
+                              <div className="font-bold text-lg">
+                                {kpis.deviationPercentage < 50 ? 
+                                  'ALERTA CRÍTICA: ' :
+                                  'ATENCIÓN: '
+                                }
+                                Nivel actual {kpis.deviationPercentage.toFixed(1)}% - Meta 90%
+                              </div>
+                              <div className="text-sm mt-1">
+                                {kpis.deviationPercentage < 50 ? 
+                                  'Se requiere incrementar la desviación en ' + (90 - kpis.deviationPercentage).toFixed(1) + ' puntos porcentuales mediante acciones inmediatas.' :
+                                  'Estás en el camino correcto. Faltan ' + (90 - kpis.deviationPercentage).toFixed(1) + ' puntos para alcanzar la meta.'
+                                }
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Priority Actions */}
+                      <div>
+                        <h3 className="text-lg font-bold text-navy mb-4 flex items-center gap-2">
+                          <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                          Acciones Prioritarias
+                        </h3>
+                        <div className="space-y-3">
+                          <div className="bg-white rounded-lg p-4 border border-red-100">
+                            <div className="font-semibold text-red-700 mb-2">1. Reducir Relleno Sanitario</div>
+                            <div className="text-sm text-gray-600 mb-2">
+                              Actualmente: {(kpis.totalLandfill / 1000).toFixed(1)} toneladas van a relleno sanitario
+                            </div>
+                            <ul className="text-sm text-gray-700 space-y-1">
+                              <li>• Implementar separación en origen más estricta</li>
+                              <li>• Capacitar personal de limpieza y usuarios</li>
+                              <li>• Instalar señalización clara en contenedores</li>
+                            </ul>
+                          </div>
+                          
+                          <div className="bg-white rounded-lg p-4 border border-lime-100">
+                            <div className="font-semibold text-lime-700 mb-2">2. Incrementar Compostaje</div>
+                            <div className="text-sm text-gray-600 mb-2">
+                              Oportunidad: Residuos orgánicos de restaurantes y jardinería
+                            </div>
+                            <ul className="text-sm text-gray-700 space-y-1">
+                              <li>• Expandir programa de compostaje institucional</li>
+                              <li>• Incluir residuos de poda (PODA) sistemáticamente</li>
+                              <li>• Crear centro de compostaje en sitio</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Econova Solutions */}
+                      <div>
+                        <h3 className="text-lg font-bold text-navy mb-4 flex items-center gap-2">
+                          <div className="w-2 h-2 bg-lime-500 rounded-full"></div>
+                          Soluciones Econova
+                        </h3>
+                        <div className="space-y-3">
+                          <div className="bg-lime-50 rounded-lg p-4 border border-lime-200">
+                            <div className="font-semibold text-lime-800 mb-2">Programa Integral Zero Waste</div>
+                            <ul className="text-sm text-lime-700 space-y-1">
+                              <li>• Auditoría completa de residuos en 48 horas</li>
+                              <li>• Plan personalizado para alcanzar 90% en 6 meses</li>
+                              <li>• Capacitación certificada del personal</li>
+                              <li>• Monitoreo mensual con dashboard en tiempo real</li>
+                            </ul>
+                          </div>
+                          
+                          <div className="bg-navy/5 rounded-lg p-4 border border-navy/20">
+                            <div className="font-semibold text-navy mb-2">Tecnología Econova</div>
+                            <ul className="text-sm text-navy/80 space-y-1">
+                              <li>• Sistema de pesaje automático IoT</li>
+                              <li>• App móvil para reportes instantáneos</li>
+                              <li>• Contenedores inteligentes con sensores</li>
+                              <li>• Certificación digital TRUE Zero Waste</li>
+                            </ul>
+                          </div>
+                          
+                          <div className="bg-white rounded-lg p-4 border border-gray-200">
+                            <div className="font-semibold text-gray-800 mb-2">Impacto Esperado</div>
+                            <div className="grid grid-cols-2 gap-4 text-sm">
+                              <div className="text-center p-2 bg-lime-100 rounded">
+                                <div className="font-bold text-lime-800">90%+</div>
+                                <div className="text-lime-600">Desviación</div>
+                              </div>
+                              <div className="text-center p-2 bg-green-100 rounded">
+                                <div className="font-bold text-green-800">Certificación</div>
+                                <div className="text-green-600">TRUE Zero Waste</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Call to Action */}
+                    <div className="mt-6 text-center">
+                      <div className="bg-gradient-to-r from-lime-500 to-navy p-6 rounded-xl text-white">
+                        <div className="text-xl font-bold mb-2">¿Listo para transformar tu gestión de residuos?</div>
+                        <div className="text-sm text-white/80 mb-4">
+                          Contacta a Econova para implementar un plan personalizado y alcanzar la certificación TRUE Zero Waste
+                        </div>
+                        <Button className="bg-white text-navy hover:bg-gray-100 font-semibold">
+                          Solicitar Consultoría Gratuita
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
 
             {/* KPIs Sidebar */}
             <div className="space-y-6">
