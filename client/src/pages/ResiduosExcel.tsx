@@ -924,26 +924,7 @@ export default function ResiduosExcel() {
                       </div>
                     </div>
                     
-                    {/* Call to Action */}
-                    <div className="mt-6 text-center">
-                      <div className="bg-gradient-to-r from-lime-500 to-navy p-6 rounded-xl text-white">
-                        <div className="text-xl font-bold mb-2">Implementación Inmediata</div>
-                        <div className="text-sm text-white/80 mb-4">
-                          Activa estos servicios Econova para alcanzar 90% de desviación y certificación TRUE Zero Waste
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                          <Button className="bg-white text-navy hover:bg-gray-100 font-semibold text-sm">
-                            Activar App Trazabilidad
-                          </Button>
-                          <Button className="bg-white text-navy hover:bg-gray-100 font-semibold text-sm">
-                            Contratar Synergy
-                          </Button>
-                          <Button className="bg-white text-navy hover:bg-gray-100 font-semibold text-sm">
-                            Implementar Composta
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
+                    
                   </CardContent>
                 </Card>
               </div>
