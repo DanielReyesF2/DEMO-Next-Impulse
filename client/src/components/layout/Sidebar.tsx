@@ -11,7 +11,8 @@ import {
   Zap,
   Droplets,
   RotateCcw,
-  Table
+  Table,
+  Download
 } from "lucide-react";
 import logoEconova from "../../assets/Logo-ECONOVA-OF_Blanco.png";
 

@@ -452,6 +452,101 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Data Export API endpoints
+  
+  // Export waste data in CSV format
+  app.get("/api/export/waste-data", async (req: Request, res: Response) => {
+    try {
+      const filters: { clientId?: number, fromDate?: Date, toDate?: Date } = {};
+      const format = req.query.format as string || 'json';
+      const wasteTypes = {
+        organic: req.query.organic === 'true',
+        inorganic: req.query.inorganic === 'true',
+        recyclable: req.query.recyclable === 'true'
+      };
+      
+      if (req.query.clientId && req.query.clientId !== 'all') {
+        filters.clientId = parseInt(req.query.clientId as string);
+      }
+      
+      if (req.query.fromDate) {
+        filters.fromDate = new Date(req.query.fromDate as string);
+      }
+      
+      if (req.query.toDate) {
+        filters.toDate = new Date(req.query.toDate as string);
+      }
+      
+      // Get waste data with filters
+      const wasteData = await storage.getWasteData(filters);
+      
+      // Get all clients for reference
+      const clients = await storage.getClients();
+      
+      if (format === 'csv') {
+        // Generate CSV
+        const csvData = wasteData.map(record => {
+          const client = clients.find(c => c.id === record.clientId);
+          const csvRecord: any = {
+            'Fecha': new Date(record.date).toLocaleDateString('es-ES'),
+            'Cliente': client?.name || 'N/A',
+          };
+          
+          if (wasteTypes.organic) csvRecord['Residuos Orgánicos (kg)'] = record.organicWaste || 0;
+          if (wasteTypes.inorganic) csvRecord['Residuos Inorgánicos (kg)'] = record.inorganicWaste || 0;
+          if (wasteTypes.recyclable) csvRecord['Residuos Reciclables (kg)'] = record.recyclableWaste || 0;
+          
+          csvRecord['Total Residuos (kg)'] = record.totalWaste || 0;
+          csvRecord['Desviación de Relleno Sanitario (%)'] = record.deviation || 0;
+          csvRecord['Ubicación'] = record.location || 'N/A';
+          csvRecord['Observaciones'] = record.observations || '';
+          
+          return csvRecord;
+        });
+        
+        // Convert to CSV string
+        if (csvData.length === 0) {
+          return res.status(200).send('No hay datos para exportar');
+        }
+        
+        const headers = Object.keys(csvData[0]);
+        const csvContent = [
+          headers.join(','),
+          ...csvData.map(row => 
+            headers.map(header => {
+              const value = row[header];
+              if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
+                return `"${value.replace(/"/g, '""')}"`;
+              }
+              return value || '';
+            }).join(',')
+          )
+        ].join('\n');
+        
+        // Set headers for file download
+        const filename = `datos_residuos_${new Date().toISOString().split('T')[0]}.csv`;
+        res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        res.setHeader('Cache-Control', 'no-cache');
+        
+        // Send CSV with BOM for proper UTF-8 encoding
+        res.send('\uFEFF' + csvContent);
+        
+      } else {
+        // Return JSON for client-side processing
+        res.json({
+          data: wasteData,
+          clients: clients,
+          count: wasteData.length
+        });
+      }
+      
+    } catch (error) {
+      console.error("Error exporting waste data:", error);
+      res.status(500).json({ message: "Failed to export waste data" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
