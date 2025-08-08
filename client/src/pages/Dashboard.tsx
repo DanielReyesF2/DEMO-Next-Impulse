@@ -20,8 +20,30 @@ import {
   ArrowRight
 } from 'lucide-react';
 
+// Types for the Excel data (imported from ResiduosExcel)
+interface MonthData {
+  month: { id: number; year: number; month: number; label: string };
+  recycling: Array<{ material: string; kg: number }>;
+  compost: Array<{ category: string; kg: number }>;
+  reuse: Array<{ category: string; kg: number }>;
+  landfill: Array<{ wasteType: string; kg: number }>;
+}
+
+interface WasteExcelData {
+  year: number;
+  months: MonthData[];
+  materials: {
+    recycling: readonly string[];
+    compost: readonly string[];
+    reuse: readonly string[];
+    landfill: readonly string[];
+  };
+}
+
 export default function Dashboard() {
-  // Obtener datos de residuos
+  const currentYear = 2025;
+  
+  // Obtener datos de residuos (legacy)
   const { data: wasteData = [] } = useQuery<WasteData[]>({
     queryKey: ['/api/waste-data'],
     refetchOnWindowFocus: false,
@@ -33,23 +55,79 @@ export default function Dashboard() {
     refetchOnWindowFocus: false,
   });
 
-  // Datos reales calculados del sistema
-  const processedData = wasteData.length > 0 ? {
-    wasteDeviation: 52.6, // Calculado de datos reales
+  // Obtener datos de la tabla de trazabilidad (FUENTE DE VERDAD)
+  const { data: wasteExcelData } = useQuery<WasteExcelData>({
+    queryKey: ['/api/waste-excel', currentYear],
+    queryFn: async ({ queryKey }) => {
+      const response = await fetch(`/api/waste-excel/${currentYear}`);
+      if (!response.ok) throw new Error('Failed to fetch data');
+      return response.json();
+    },
+    refetchOnWindowFocus: false,
+  });
+
+  // Calcular totales de cada sección (misma lógica que ResiduosExcel)
+  const calculateSectionTotals = () => {
+    if (!wasteExcelData) return { recyclingTotal: 0, compostTotal: 0, reuseTotal: 0, landfillTotal: 0 };
+    
+    let recyclingTotal = 0;
+    let compostTotal = 0;
+    let reuseTotal = 0;
+    let landfillTotal = 0;
+
+    wasteExcelData.months.forEach(monthData => {
+      // Recycling
+      monthData.recycling.forEach(entry => {
+        recyclingTotal += entry.kg;
+      });
+      
+      // Compost
+      monthData.compost.forEach(entry => {
+        compostTotal += entry.kg;
+      });
+      
+      // Reuse
+      monthData.reuse.forEach(entry => {
+        reuseTotal += entry.kg;
+      });
+      
+      // Landfill
+      monthData.landfill.forEach(entry => {
+        landfillTotal += entry.kg;
+      });
+    });
+
+    return { recyclingTotal, compostTotal, reuseTotal, landfillTotal };
+  };
+
+  // Calcular KPIs (misma lógica que ResiduosExcel)
+  const calculateRealTimeKPIs = () => {
+    const totals = calculateSectionTotals();
+    const totalCircular = totals.recyclingTotal + totals.compostTotal + totals.reuseTotal;
+    const totalLandfill = totals.landfillTotal;
+    const totalWeight = totalCircular + totalLandfill;
+    const deviationPercentage = totalWeight > 0 ? (totalCircular / totalWeight) * 100 : 0;
+    
+    return {
+      totalCircular,
+      totalLandfill,
+      totalWeight,
+      deviationPercentage
+    };
+  };
+
+  const realTimeKPIs = calculateRealTimeKPIs();
+
+  // Datos calculados en tiempo real desde la trazabilidad
+  const processedData = {
+    wasteDeviation: realTimeKPIs.deviationPercentage, // AHORA SE CALCULA EN TIEMPO REAL
     energyRenewable: 29.1,
-    waterRecycled: 28.9,
-    circularityIndex: 72
-  } : {
-    wasteDeviation: 52.6,
-    energyRenewable: 29.1, 
     waterRecycled: 28.9,
     circularityIndex: 72
   };
 
-  // Calcular impacto ambiental
-  const totalWasteDiverted = wasteData.reduce((sum, month) => 
-    sum + (month.organicWaste || 0) + (month.recyclableWaste || 0), 0
-  );
+  // Calcular impacto ambiental usando datos reales de trazabilidad
+  const totalWasteDiverted = realTimeKPIs.totalCircular / 1000; // Convertir de kg a toneladas
   
   const environmentalImpact = {
     trees: Math.round(totalWasteDiverted * 1.2), // 61 árboles salvados
