@@ -21,7 +21,8 @@ import {
   Calculator,
   ArrowRight,
   Target,
-  CheckCircle
+  CheckCircle,
+  AlertCircle
 } from 'lucide-react';
 
 // Types for the Excel replication
