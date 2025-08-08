@@ -676,32 +676,32 @@ export default function ResiduosExcel() {
                         {/* Formula explanation - Enhanced Visual Design */}
                         <tr>
                           <td colSpan={14} className="p-0">
-                            <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 p-6 border-t-2 border-indigo-200">
+                            <div className="bg-gradient-to-r from-gray-50 via-lime-50 to-navy/5 p-6 border-t-2 border-lime-200">
                               <div className="max-w-5xl mx-auto">
                                 {/* Header */}
                                 <div className="text-center mb-6">
                                   <div className="flex items-center justify-center gap-3 mb-2">
-                                    <div className="p-2 bg-indigo-600 rounded-full">
+                                    <div className="p-2 bg-navy rounded-full">
                                       <Calculator className="h-5 w-5 text-white" />
                                     </div>
-                                    <h3 className="text-xl font-bold text-indigo-900">Metodología de Cálculo Certificada</h3>
-                                    <div className="p-2 bg-green-600 rounded-full">
-                                      <CheckCircle className="h-5 w-5 text-white" />
+                                    <h3 className="text-xl font-bold text-navy">Metodología de Cálculo Certificada</h3>
+                                    <div className="p-2 bg-lime-500 rounded-full">
+                                      <CheckCircle className="h-5 w-5 text-navy" />
                                     </div>
                                   </div>
-                                  <p className="text-sm text-indigo-700">Certificación TRUE Zero Waste - Estándar Internacional</p>
+                                  <p className="text-sm text-navy/70">Certificación TRUE Zero Waste - Estándar Internacional</p>
                                 </div>
 
                                 {/* Visual Formula Flow */}
                                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-center mb-6">
                                   {/* Step 1: Total Circular */}
-                                  <div className="bg-white rounded-xl p-4 shadow-sm border border-green-200 transform hover:scale-105 transition-transform">
+                                  <div className="bg-white rounded-xl p-4 shadow-sm border border-lime-200 transform hover:scale-105 transition-transform">
                                     <div className="text-center">
-                                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                                        <Recycle className="h-6 w-6 text-green-600" />
+                                      <div className="w-12 h-12 bg-lime-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                                        <Recycle className="h-6 w-6 text-lime-600" />
                                       </div>
                                       <div className="text-xs text-gray-600 mb-1">Total Circular</div>
-                                      <div className="text-lg font-bold text-green-700">
+                                      <div className="text-lg font-bold text-lime-700">
                                         {kpis.totalCircular.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                                       </div>
                                       <div className="text-xs text-gray-500">kg</div>
@@ -710,17 +710,17 @@ export default function ResiduosExcel() {
 
                                   {/* Arrow 1 */}
                                   <div className="flex justify-center">
-                                    <div className="text-indigo-600">
+                                    <div className="text-navy">
                                       <ArrowRight className="h-6 w-6" />
                                     </div>
                                   </div>
 
                                   {/* Step 2: Division Symbol & Total Residuos */}
-                                  <div className="bg-white rounded-xl p-4 shadow-sm border border-blue-200 transform hover:scale-105 transition-transform">
+                                  <div className="bg-white rounded-xl p-4 shadow-sm border border-navy/20 transform hover:scale-105 transition-transform">
                                     <div className="text-center">
-                                      <div className="text-2xl font-bold text-blue-600 mb-1">÷</div>
+                                      <div className="text-2xl font-bold text-navy mb-1">÷</div>
                                       <div className="text-xs text-gray-600 mb-1">Total Residuos</div>
-                                      <div className="text-lg font-bold text-blue-700">
+                                      <div className="text-lg font-bold text-navy">
                                         {kpis.totalWeight.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                                       </div>
                                       <div className="text-xs text-gray-500">kg</div>
@@ -729,36 +729,36 @@ export default function ResiduosExcel() {
 
                                   {/* Arrow 2 */}
                                   <div className="flex justify-center">
-                                    <div className="text-indigo-600">
+                                    <div className="text-navy">
                                       <ArrowRight className="h-6 w-6" />
                                     </div>
                                   </div>
 
                                   {/* Step 3: Result */}
                                   <div className={`bg-white rounded-xl p-4 shadow-lg border-2 transform hover:scale-105 transition-transform ${
-                                    kpis.deviationPercentage >= 70 ? 'border-green-300 bg-gradient-to-br from-green-50 to-emerald-50' : 
+                                    kpis.deviationPercentage >= 70 ? 'border-lime-300 bg-gradient-to-br from-lime-50 to-lime-100' : 
                                     kpis.deviationPercentage >= 50 ? 'border-amber-300 bg-gradient-to-br from-amber-50 to-yellow-50' : 
                                     'border-red-300 bg-gradient-to-br from-red-50 to-pink-50'
                                   }`}>
                                     <div className="text-center">
                                       <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 ${
-                                        kpis.deviationPercentage >= 70 ? 'bg-green-100' : 
+                                        kpis.deviationPercentage >= 70 ? 'bg-lime-100' : 
                                         kpis.deviationPercentage >= 50 ? 'bg-amber-100' : 'bg-red-100'
                                       }`}>
                                         <Target className={`h-6 w-6 ${
-                                          kpis.deviationPercentage >= 70 ? 'text-green-600' : 
+                                          kpis.deviationPercentage >= 70 ? 'text-lime-600' : 
                                           kpis.deviationPercentage >= 50 ? 'text-amber-600' : 'text-red-600'
                                         }`} />
                                       </div>
                                       <div className="text-xs text-gray-600 mb-1">% Desviación</div>
                                       <div className={`text-2xl font-bold ${
-                                        kpis.deviationPercentage >= 70 ? 'text-green-700' : 
+                                        kpis.deviationPercentage >= 70 ? 'text-lime-700' : 
                                         kpis.deviationPercentage >= 50 ? 'text-amber-700' : 'text-red-700'
                                       }`}>
                                         {kpis.deviationPercentage.toFixed(1)}%
                                       </div>
                                       <div className={`text-xs font-medium ${
-                                        kpis.deviationPercentage >= 70 ? 'text-green-600' : 
+                                        kpis.deviationPercentage >= 70 ? 'text-lime-600' : 
                                         kpis.deviationPercentage >= 50 ? 'text-amber-600' : 'text-red-600'
                                       }`}>
                                         {kpis.deviationPercentage >= 70 ? 'Excelente' : 
@@ -772,21 +772,21 @@ export default function ResiduosExcel() {
                                 <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-200">
                                   <div className="text-center">
                                     <div className="text-sm text-gray-600 mb-2">Fórmula matemática:</div>
-                                    <div className="font-mono text-lg text-indigo-800 bg-indigo-50 rounded-lg p-3 inline-block">
+                                    <div className="font-mono text-lg text-navy bg-navy/5 rounded-lg p-3 inline-block">
                                       % = (Total Circular ÷ Total Residuos) × 100
                                     </div>
                                   </div>
                                   <div className="mt-3 text-center">
                                     <div className="text-sm text-gray-600">Aplicando los valores actuales:</div>
                                     <div className="font-mono text-sm text-gray-700 bg-gray-50 rounded-lg p-3 mt-2">
-                                      ({kpis.totalCircular.toLocaleString('es-ES', { maximumFractionDigits: 1 })} ÷ {kpis.totalWeight.toLocaleString('es-ES', { maximumFractionDigits: 1 })}) × 100 = <span className="font-bold text-indigo-700">{kpis.deviationPercentage.toFixed(1)}%</span>
+                                      ({kpis.totalCircular.toLocaleString('es-ES', { maximumFractionDigits: 1 })} ÷ {kpis.totalWeight.toLocaleString('es-ES', { maximumFractionDigits: 1 })}) × 100 = <span className="font-bold text-navy">{kpis.deviationPercentage.toFixed(1)}%</span>
                                     </div>
                                   </div>
                                 </div>
 
                                 {/* Certification Badge */}
                                 <div className="text-center mt-4">
-                                  <div className="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-full text-sm font-medium">
+                                  <div className="inline-flex items-center gap-2 bg-lime-500 text-navy px-4 py-2 rounded-full text-sm font-medium">
                                     <CheckCircle className="h-4 w-4" />
                                     Metodología Certificada TRUE Zero Waste
                                   </div>
@@ -796,13 +796,13 @@ export default function ResiduosExcel() {
                           </td>
                         </tr>
                         <tr className={`${
-                          kpis.deviationPercentage >= 70 ? 'bg-emerald-50' : 
+                          kpis.deviationPercentage >= 70 ? 'bg-lime-50' : 
                           kpis.deviationPercentage >= 50 ? 'bg-amber-50' : 'bg-red-50'
                         }`}>
                           <td className="p-4 font-bold text-xl text-navy">Resultado Final</td>
                           <td colSpan={12} className="text-center">
                             <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${
-                              kpis.deviationPercentage >= 70 ? 'bg-emerald-100 text-emerald-800' : 
+                              kpis.deviationPercentage >= 70 ? 'bg-lime-100 text-lime-800' : 
                               kpis.deviationPercentage >= 50 ? 'bg-amber-100 text-amber-800' : 'bg-red-100 text-red-800'
                             }`}>
                               <CheckCircle className="h-4 w-4" />
@@ -811,7 +811,7 @@ export default function ResiduosExcel() {
                             </div>
                           </td>
                           <td className={`p-4 text-center font-bold text-3xl ${
-                            kpis.deviationPercentage >= 70 ? 'text-emerald-800 bg-emerald-200' : 
+                            kpis.deviationPercentage >= 70 ? 'text-lime-800 bg-lime-200' : 
                             kpis.deviationPercentage >= 50 ? 'text-amber-800 bg-amber-200' : 'text-red-800 bg-red-200'
                           } rounded-lg`}>
                             {kpis.deviationPercentage.toFixed(1)}%
