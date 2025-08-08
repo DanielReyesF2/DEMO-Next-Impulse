@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { Button } from '@/components/ui/button';
@@ -736,7 +736,29 @@ export default function ResiduosExcel() {
     generatePremiumPDF();
   };
 
-  // Helper functions for calculations (already defined above)
+  // Generate chart data for visualizations
+  const generateChartData = useMemo(() => {
+    if (!wasteData) return [];
+    
+    return MONTH_LABELS.map((monthName, index) => {
+      const recyclingTotal = getValue(`reciclaje_${index + 1}`) || 0;
+      const compostTotal = getValue(`compostaje_${index + 1}`) || 0;
+      const reuseTotal = getValue(`reuso_${index + 1}`) || 0;
+      const landfillTotal = getValue(`relleno_sanitario_${index + 1}`) || 0;
+      
+      const total = recyclingTotal + compostTotal + reuseTotal + landfillTotal;
+      const monthlyDeviation = total > 0 ? ((recyclingTotal + compostTotal + reuseTotal) / total) * 100 : 0;
+      
+      return {
+        month: monthName,
+        Reciclaje: recyclingTotal / 1000,
+        Composta: compostTotal / 1000,
+        Reuso: reuseTotal / 1000,
+        'Relleno sanitario': landfillTotal / 1000,
+        deviation: monthlyDeviation
+      };
+    });
+  }, [wasteData, getValue]);
   
   // Loading state
   if (isLoading) {
