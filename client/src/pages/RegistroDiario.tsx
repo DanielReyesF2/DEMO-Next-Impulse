@@ -77,6 +77,7 @@ export default function RegistroDiario() {
   const locationOptions = [
     'Comedor Principal',
     'Casa Club',
+    'Casas',
     'Área de Piscinas',
     'Canchas de Tenis',
     'Campo de Golf',
