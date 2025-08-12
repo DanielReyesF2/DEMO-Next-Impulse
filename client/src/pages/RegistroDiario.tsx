@@ -665,39 +665,7 @@ export default function RegistroDiario() {
                 </CardContent>
               </Card>
 
-              {/* Ventajas vs proceso actual */}
-              <Card className="mt-6">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-lime-700">
-                    <CheckCircle className="h-5 w-5" />
-                    Ventajas vs Proceso Actual
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3 text-sm">
-                    <div className="flex items-center gap-3 text-green-700">
-                      <CheckCircle className="h-4 w-4" />
-                      <span>Datos en tiempo real</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-green-700">
-                      <CheckCircle className="h-4 w-4" />
-                      <span>Sin papeles ni escaneos</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-green-700">
-                      <CheckCircle className="h-4 w-4" />
-                      <span>Reportes automáticos</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-green-700">
-                      <CheckCircle className="h-4 w-4" />
-                      <span>Trazabilidad completa</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-green-700">
-                      <CheckCircle className="h-4 w-4" />
-                      <span>Alertas automáticas</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              
             </div>
           </div>
         </div>
