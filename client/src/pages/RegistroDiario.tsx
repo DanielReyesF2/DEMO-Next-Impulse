@@ -240,6 +240,24 @@ export default function RegistroDiario() {
                 </div>
               </div>
             </div>
+            
+            {/* Ventajas minimalistas */}
+            <div className="flex justify-center mt-6 pt-4 border-t border-gray-100">
+              <div className="flex items-center space-x-8 text-xs text-gray-500">
+                <div className="flex items-center gap-1">
+                  <CheckCircle className="h-3 w-3 text-green-500" />
+                  <span>Sin papeles</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <CheckCircle className="h-3 w-3 text-green-500" />
+                  <span>Reportes automáticos</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <CheckCircle className="h-3 w-3 text-green-500" />
+                  <span>Trazabilidad completa</span>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
