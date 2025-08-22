@@ -257,7 +257,7 @@ export function WasteFlowVisualization({ totalWasteDiverted }: WasteFlowVisualiz
       </div>
 
       {/* Diagrama Sankey */}
-      <div ref={sankeyRef} className="h-96 bg-white rounded-xl shadow-sm border border-gray-100">
+      <div ref={sankeyRef} className="h-[500px] bg-white rounded-xl shadow-sm border border-gray-100">
         <ResponsiveSankey
           data={filteredData}
           margin={{ top: 20, right: 160, bottom: 20, left: 160 }}
