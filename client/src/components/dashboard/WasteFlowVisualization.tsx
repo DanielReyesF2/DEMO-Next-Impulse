@@ -185,174 +185,151 @@ export function WasteFlowVisualization({ totalWasteDiverted }: WasteFlowVisualiz
   const diversionRate = ((totalVolume - inorganicFlows.reduce((sum, flow) => sum + flow.volume, 0)) / totalVolume * 100);
 
   return (
-    <div className="bg-gradient-to-br from-white to-gray-50 rounded-3xl p-8 shadow-xl border border-gray-200">
-      {/* Header */}
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-anton uppercase tracking-wide mb-3 text-[#b5e951]">Flujos de  Materiales</h2>
-        <p className="text-lg text-gray-600 mb-6">
+    <div className="bg-gradient-to-br from-white to-gray-50 rounded-3xl p-10 shadow-xl border border-gray-200">
+      {/* Header Simplificado */}
+      <div className="text-center mb-12">
+        <h2 className="text-3xl font-anton uppercase tracking-wide mb-3 text-[#b5e951]">Flujos de Materiales</h2>
+        <p className="text-lg text-gray-600">
           Visualización interactiva del sistema integral de gestión de residuos
         </p>
       </div>
-      {/* Flow Visualization */}
-      <div className="relative">
-        {/* Points of Origin */}
-        <div className="flex items-center justify-center mb-4">
-          <MapPin className="w-4 h-4 text-gray-600 mr-2" />
-          <span className="text-sm font-medium text-gray-700 uppercase tracking-wide">Puntos de Origen</span>
+
+      {/* Flujo Visual Simplificado */}
+      <div className="relative max-w-4xl mx-auto">
+        
+        {/* Puntos de Origen - Diseño más limpio */}
+        <div className="flex items-center justify-center mb-6">
+          <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">Puntos de Origen</span>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-8 max-w-6xl mx-auto">
-          <div className="text-center">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg mb-2 mx-auto">
-              <Building2 className="w-6 h-6 text-white" />
+        <div className="flex justify-center items-center space-x-4 mb-10">
+          <div className="group text-center">
+            <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-xl mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
+              <Building2 className="w-7 h-7 text-white" />
             </div>
-            <div className="text-sm font-medium text-gray-800">Casa Club</div>
-            <div className="text-xs text-gray-500">Oficinas & Servicios</div>
+            <div className="text-xs font-semibold text-gray-700">Casa Club</div>
           </div>
 
-          <div className="text-center">
-            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center shadow-lg mb-2 mx-auto">
-              <ChefHat className="w-6 h-6 text-white" />
+          <div className="group text-center">
+            <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-xl mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
+              <ChefHat className="w-7 h-7 text-white" />
             </div>
-            <div className="text-sm font-medium text-gray-800">Acuarima</div>
+            <div className="text-xs font-semibold text-gray-700">Acuarima</div>
             <div className="text-xs text-gray-500">Restaurante Jose</div>
           </div>
 
-          <div className="text-center">
-            <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center shadow-lg mb-2 mx-auto">
-              <Users className="w-6 h-6 text-white" />
+          <div className="group text-center">
+            <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center shadow-xl mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
+              <Users className="w-7 h-7 text-white" />
             </div>
-            <div className="text-sm font-medium text-gray-800">Eventos</div>
-            <div className="text-xs text-gray-500">Áreas Comunes</div>
+            <div className="text-xs font-semibold text-gray-700">Eventos</div>
           </div>
 
-          <div className="text-center">
-            <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center shadow-lg mb-2 mx-auto">
-              <TreePine className="w-6 h-6 text-white" />
+          <div className="group text-center">
+            <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-xl mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
+              <TreePine className="w-7 h-7 text-white" />
             </div>
-            <div className="text-sm font-medium text-gray-800">Campo</div>
-            <div className="text-xs text-gray-500">Golf & Jardines</div>
+            <div className="text-xs font-semibold text-gray-700">Campo</div>
           </div>
 
-          <div className="text-center">
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg mb-2 mx-auto">
-              <Zap className="w-6 h-6 text-white" />
+          <div className="group text-center">
+            <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
+              <Zap className="w-7 h-7 text-white" />
             </div>
-            <div className="text-sm font-medium text-gray-800">Canchas Tennis</div>
-            <div className="text-xs text-gray-500">Deportivo</div>
+            <div className="text-xs font-semibold text-gray-700">Canchas Tennis</div>
           </div>
 
-          <div className="text-center">
-            <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center shadow-lg mb-2 mx-auto">
-              <Package className="w-6 h-6 text-white" />
+          <div className="group text-center">
+            <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-xl mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
+              <Package className="w-7 h-7 text-white" />
             </div>
-            <div className="text-sm font-medium text-gray-800">Canchas Padel</div>
-            <div className="text-xs text-gray-500">Deportivo</div>
+            <div className="text-xs font-semibold text-gray-700">Canchas Padel</div>
           </div>
         </div>
 
-        {/* Flow Connections */}
-        <div className="relative z-0 mb-4">
-          <div className="flex justify-center items-center h-24">
-            <div className="flex items-center space-x-4">
-              {/* Visual flow indicators */}
-              <div className={`flex items-center space-x-2 transition-all duration-1000 ${
-                animatingParticles ? 'opacity-100' : 'opacity-60'
-              }`}>
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <div className="w-1 h-1 bg-green-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                <div className="w-1 h-1 bg-blue-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" style={{ animationDelay: '0.6s' }}></div>
-                <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0.8s' }}></div>
-                <div className="w-2 h-2 bg-gray-500 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
-              </div>
-            </div>
-          </div>
-
-          {/* Simple animated arrows */}
-          <div className="flex justify-center mb-6">
-            <div className={`flex items-center space-x-8 transition-all duration-1000 ${
-              animatingParticles ? 'opacity-100 translate-y-0' : 'opacity-60 translate-y-1'
+        {/* Líneas de Flujo Animadas */}
+        <div className="relative flex justify-center mb-8">
+          <div className="flex flex-col items-center space-y-2">
+            {/* Partículas animadas */}
+            <div className={`flex items-center space-x-3 transition-all duration-1000 ${
+              animatingParticles ? 'opacity-100' : 'opacity-60'
             }`}>
-              <ArrowDown className="w-6 h-6 text-green-500 animate-bounce" style={{ animationDelay: '0s' }} />
-              <ArrowDown className="w-6 h-6 text-blue-500 animate-bounce" style={{ animationDelay: '0.5s' }} />
-              <ArrowDown className="w-6 h-6 text-gray-500 animate-bounce" style={{ animationDelay: '1s' }} />
+              <div className="w-3 h-3 bg-gradient-to-r from-green-400 to-green-500 rounded-full animate-pulse" style={{ animationDelay: '0s' }}></div>
+              <div className="w-2 h-2 bg-gradient-to-r from-blue-400 to-blue-500 rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
+              <div className="w-2 h-2 bg-gradient-to-r from-gray-400 to-gray-500 rounded-full animate-pulse" style={{ animationDelay: '0.6s' }}></div>
+            </div>
+            
+            {/* Flecha central elegante */}
+            <div className={`transition-all duration-700 ${
+              animatingParticles ? 'translate-y-0 opacity-100' : 'translate-y-1 opacity-70'
+            }`}>
+              <ArrowDown className="w-8 h-8 text-[#b5e951] animate-bounce" />
             </div>
           </div>
         </div>
 
-        {/* Category Containers */}
-        <div className="flex justify-center space-x-16 relative z-10 mb-8">
-          <div className="text-center bg-white rounded-2xl p-6 shadow-lg border-2 border-green-200">
-            <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg mb-4 mx-auto">
-              <Leaf className="w-8 h-8 text-white" />
+        {/* Categorías de Destino - Diseño más impactante */}
+        <div className="grid grid-cols-3 gap-8 mb-12">
+          <div className="group text-center bg-white rounded-3xl p-8 shadow-xl border-2 border-green-200 hover:border-green-300 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
+            <div className="w-20 h-20 bg-gradient-to-br from-green-500 via-green-600 to-emerald-700 rounded-3xl flex items-center justify-center shadow-xl mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
+              <Leaf className="w-10 h-10 text-white" />
             </div>
-            <div className="text-xl font-anton text-green-700 uppercase tracking-wide mb-1">Orgánicos</div>
-            <div className="text-sm text-gray-600">{organicFlows.reduce((sum, flow) => sum + flow.volume, 0).toFixed(1)} ton/mes</div>
+            <div className="text-2xl font-black text-green-700 mb-2">{organicFlows.reduce((sum, flow) => sum + flow.volume, 0).toFixed(1)}%</div>
+            <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">ORGÁNICOS</div>
+            <div className="text-sm text-gray-600">TRUE Zero Waste</div>
           </div>
 
-          <div className="text-center bg-white rounded-2xl p-6 shadow-lg border-2 border-blue-200">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg mb-4 mx-auto">
-              <Recycle className="w-8 h-8 text-white" />
+          <div className="group text-center bg-white rounded-3xl p-8 shadow-xl border-2 border-blue-200 hover:border-blue-300 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
+            <div className="w-20 h-20 bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-700 rounded-3xl flex items-center justify-center shadow-xl mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
+              <Recycle className="w-10 h-10 text-white" />
             </div>
-            <div className="text-xl font-anton text-blue-700 uppercase tracking-wide mb-1">Reciclables</div>
-            <div className="text-sm text-gray-600">{recyclableFlows.reduce((sum, flow) => sum + flow.volume, 0).toFixed(1)} ton/mes</div>
+            <div className="text-2xl font-black text-blue-700 mb-2">{recyclableFlows.reduce((sum, flow) => sum + flow.volume, 0).toFixed(1)}%</div>
+            <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">RECICLABLES</div>
+            <div className="text-sm text-gray-600">Economía Circular</div>
           </div>
 
-          <div className="text-center bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-200">
-            <div className="w-16 h-16 bg-gradient-to-br from-gray-500 to-gray-600 rounded-2xl flex items-center justify-center shadow-lg mb-4 mx-auto">
-              <Trash2 className="w-8 h-8 text-white" />
+          <div className="group text-center bg-white rounded-3xl p-8 shadow-xl border-2 border-gray-200 hover:border-gray-300 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
+            <div className="w-20 h-20 bg-gradient-to-br from-gray-500 via-gray-600 to-slate-700 rounded-3xl flex items-center justify-center shadow-xl mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
+              <Trash2 className="w-10 h-10 text-white" />
             </div>
-            <div className="text-xl font-anton text-gray-700 uppercase tracking-wide mb-1">Inorgánicos</div>
-            <div className="text-sm text-gray-600">{inorganicFlows.reduce((sum, flow) => sum + flow.volume, 0).toFixed(1)} ton/mes</div>
+            <div className="text-2xl font-black text-gray-700 mb-2">{inorganicFlows.reduce((sum, flow) => sum + flow.volume, 0).toFixed(1)}%</div>
+            <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">INORGÁNICOS</div>
+            <div className="text-sm text-gray-600">Disposición Controlada</div>
           </div>
         </div>
-
         
       </div>
-      {/* Detailed Flow Items */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      {/* Detalles de Flujos - Minimalista */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Orgánicos */}
-        <div className="space-y-3">
-          {organicFlows.map((flow, index) => (
+        <div className="space-y-4">
+          <div className="flex items-center space-x-2 mb-4">
+            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+            <span className="text-sm font-bold text-green-700 uppercase tracking-wide">Orgánicos</span>
+          </div>
+          {organicFlows.slice(0, 3).map((flow, index) => (
             <div
               key={flow.id}
-              className={`group cursor-pointer p-4 rounded-xl bg-white border border-gray-200 hover:border-green-300 hover:shadow-md transition-all duration-300 ${
-                selectedFlow === flow.id ? 'border-green-400 shadow-lg bg-green-50' : ''
-              }`}
+              className="group cursor-pointer bg-white rounded-2xl p-4 shadow-md hover:shadow-xl border border-green-100 hover:border-green-200 transition-all duration-300"
               onClick={() => setSelectedFlow(selectedFlow === flow.id ? null : flow.id)}
             >
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-3">
-                  <div className={`w-8 h-8 ${flow.bgColor} rounded-lg flex items-center justify-center`}>
+                  <div className={`w-10 h-10 ${flow.bgColor} rounded-xl flex items-center justify-center`}>
                     <span className={flow.color}>{flow.icon}</span>
                   </div>
                   <div>
-                    <div className="font-medium text-gray-800 text-sm">{flow.name}</div>
-                    <div className="text-xs text-gray-500">{flow.volume} ton/mes</div>
+                    <div className="font-semibold text-gray-800 text-sm">{flow.name}</div>
+                    <div className="text-xs text-green-600 font-medium">{flow.volume} ton/mes</div>
                   </div>
                 </div>
-                
-                <div className="flex items-center space-x-1">
-                  <div className={`w-1 h-1 bg-green-400 rounded-full transition-all duration-500 ${
-                    animatingParticles ? 'opacity-100' : 'opacity-50'
-                  }`}></div>
-                  <div className={`w-1 h-1 bg-green-500 rounded-full transition-all duration-500 delay-200 ${
-                    animatingParticles ? 'opacity-100' : 'opacity-50'
-                  }`}></div>
-                  <ArrowRight className={`w-3 h-3 text-green-500 transition-all duration-300 ${
-                    animatingParticles ? 'translate-x-0.5 opacity-100' : 'translate-x-0 opacity-70'
-                  }`} />
-                </div>
+                <ArrowRight className="w-4 h-4 text-green-500 group-hover:translate-x-1 transition-transform duration-300" />
               </div>
-
+              
               {selectedFlow === flow.id && (
-                <div className="mt-3 pt-3 border-t border-green-200">
+                <div className="pt-3 border-t border-green-100">
                   <div className="text-xs text-gray-600 mb-2">{flow.description}</div>
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-green-600 font-medium">{flow.destination}</span>
-                    <span className="text-gray-500">{flow.partner}</span>
-                  </div>
+                  <div className="text-xs text-green-600 font-medium">{flow.partner}</div>
                 </div>
               )}
             </div>
@@ -360,46 +337,34 @@ export function WasteFlowVisualization({ totalWasteDiverted }: WasteFlowVisualiz
         </div>
 
         {/* Reciclables */}
-        <div className="space-y-3">
-          {recyclableFlows.map((flow, index) => (
+        <div className="space-y-4">
+          <div className="flex items-center space-x-2 mb-4">
+            <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+            <span className="text-sm font-bold text-blue-700 uppercase tracking-wide">Reciclables</span>
+          </div>
+          {recyclableFlows.slice(0, 3).map((flow, index) => (
             <div
               key={flow.id}
-              className={`group cursor-pointer p-4 rounded-xl bg-white border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-300 ${
-                selectedFlow === flow.id ? 'border-blue-400 shadow-lg bg-blue-50' : ''
-              }`}
+              className="group cursor-pointer bg-white rounded-2xl p-4 shadow-md hover:shadow-xl border border-blue-100 hover:border-blue-200 transition-all duration-300"
               onClick={() => setSelectedFlow(selectedFlow === flow.id ? null : flow.id)}
             >
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-3">
-                  <div className={`w-8 h-8 ${flow.bgColor} rounded-lg flex items-center justify-center`}>
+                  <div className={`w-10 h-10 ${flow.bgColor} rounded-xl flex items-center justify-center`}>
                     <span className={flow.color}>{flow.icon}</span>
                   </div>
                   <div>
-                    <div className="font-medium text-gray-800 text-sm">{flow.name}</div>
-                    <div className="text-xs text-gray-500">{flow.volume} ton/mes</div>
+                    <div className="font-semibold text-gray-800 text-sm">{flow.name}</div>
+                    <div className="text-xs text-blue-600 font-medium">{flow.volume} ton/mes</div>
                   </div>
                 </div>
-                
-                <div className="flex items-center space-x-1">
-                  <div className={`w-1 h-1 bg-blue-400 rounded-full transition-all duration-500 ${
-                    animatingParticles ? 'opacity-100' : 'opacity-50'
-                  }`}></div>
-                  <div className={`w-1 h-1 bg-blue-500 rounded-full transition-all duration-500 delay-200 ${
-                    animatingParticles ? 'opacity-100' : 'opacity-50'
-                  }`}></div>
-                  <ArrowRight className={`w-3 h-3 text-blue-500 transition-all duration-300 ${
-                    animatingParticles ? 'translate-x-0.5 opacity-100' : 'translate-x-0 opacity-70'
-                  }`} />
-                </div>
+                <ArrowRight className="w-4 h-4 text-blue-500 group-hover:translate-x-1 transition-transform duration-300" />
               </div>
-
+              
               {selectedFlow === flow.id && (
-                <div className="mt-3 pt-3 border-t border-blue-200">
+                <div className="pt-3 border-t border-blue-100">
                   <div className="text-xs text-gray-600 mb-2">{flow.description}</div>
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-blue-600 font-medium">{flow.destination}</span>
-                    <span className="text-gray-500">{flow.partner}</span>
-                  </div>
+                  <div className="text-xs text-blue-600 font-medium">{flow.partner}</div>
                 </div>
               )}
             </div>
@@ -407,46 +372,34 @@ export function WasteFlowVisualization({ totalWasteDiverted }: WasteFlowVisualiz
         </div>
 
         {/* Inorgánicos */}
-        <div className="space-y-3">
-          {inorganicFlows.map((flow, index) => (
+        <div className="space-y-4">
+          <div className="flex items-center space-x-2 mb-4">
+            <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+            <span className="text-sm font-bold text-gray-700 uppercase tracking-wide">Inorgánicos</span>
+          </div>
+          {inorganicFlows.slice(0, 3).map((flow, index) => (
             <div
               key={flow.id}
-              className={`group cursor-pointer p-4 rounded-xl bg-white border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300 ${
-                selectedFlow === flow.id ? 'border-gray-400 shadow-lg bg-gray-50' : ''
-              }`}
+              className="group cursor-pointer bg-white rounded-2xl p-4 shadow-md hover:shadow-xl border border-gray-100 hover:border-gray-200 transition-all duration-300"
               onClick={() => setSelectedFlow(selectedFlow === flow.id ? null : flow.id)}
             >
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-3">
-                  <div className={`w-8 h-8 ${flow.bgColor} rounded-lg flex items-center justify-center`}>
+                  <div className={`w-10 h-10 ${flow.bgColor} rounded-xl flex items-center justify-center`}>
                     <span className={flow.color}>{flow.icon}</span>
                   </div>
                   <div>
-                    <div className="font-medium text-gray-800 text-sm">{flow.name}</div>
-                    <div className="text-xs text-gray-500">{flow.volume} ton/mes</div>
+                    <div className="font-semibold text-gray-800 text-sm">{flow.name}</div>
+                    <div className="text-xs text-gray-600 font-medium">{flow.volume} ton/mes</div>
                   </div>
                 </div>
-                
-                <div className="flex items-center space-x-1">
-                  <div className={`w-1 h-1 bg-gray-400 rounded-full transition-all duration-500 ${
-                    animatingParticles ? 'opacity-100' : 'opacity-50'
-                  }`}></div>
-                  <div className={`w-1 h-1 bg-gray-500 rounded-full transition-all duration-500 delay-200 ${
-                    animatingParticles ? 'opacity-100' : 'opacity-50'
-                  }`}></div>
-                  <ArrowRight className={`w-3 h-3 text-gray-500 transition-all duration-300 ${
-                    animatingParticles ? 'translate-x-0.5 opacity-100' : 'translate-x-0 opacity-70'
-                  }`} />
-                </div>
+                <ArrowRight className="w-4 h-4 text-gray-500 group-hover:translate-x-1 transition-transform duration-300" />
               </div>
-
+              
               {selectedFlow === flow.id && (
-                <div className="mt-3 pt-3 border-t border-gray-200">
+                <div className="pt-3 border-t border-gray-100">
                   <div className="text-xs text-gray-600 mb-2">{flow.description}</div>
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-gray-600 font-medium">{flow.destination}</span>
-                    <span className="text-gray-500">{flow.partner}</span>
-                  </div>
+                  <div className="text-xs text-gray-600 font-medium">{flow.partner}</div>
                 </div>
               )}
             </div>
