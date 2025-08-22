@@ -117,7 +117,7 @@ export default function TenantSidebar({ clientSlug }: TenantSidebarProps) {
   };
 
   return (
-    <div className="w-64 bg-white shadow-lg border-r border-gray-200 h-screen flex flex-col">
+    <div className="w-64 bg-[#273949] shadow-lg h-screen flex flex-col">
       {/* Header */}
       <div 
         className="p-6 text-white"
@@ -149,9 +149,9 @@ export default function TenantSidebar({ clientSlug }: TenantSidebarProps) {
       </div>
 
       {/* Back to client selector */}
-      <div className="p-4 border-b border-gray-100">
+      <div className="p-4 border-b border-[#1e2a35]">
         <Link href="/">
-          <Button variant="ghost" size="sm" className="w-full justify-start text-gray-600 hover:text-gray-900">
+          <Button variant="ghost" size="sm" className="w-full justify-start text-gray-300 hover:text-white hover:bg-[#1e2a35]">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Cambiar Cliente
           </Button>
@@ -171,11 +171,11 @@ export default function TenantSidebar({ clientSlug }: TenantSidebarProps) {
                     variant={parentActive ? "default" : "ghost"}
                     className={`w-full justify-start ${
                       parentActive 
-                        ? 'text-white shadow-sm' 
-                        : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
+                        ? 'text-black shadow-sm' 
+                        : 'text-gray-300 hover:text-white hover:bg-[#1e2a35]'
                     }`}
                     style={parentActive ? { 
-                      backgroundColor: clientConfig.primaryColor 
+                      backgroundColor: clientConfig.secondaryColor 
                     } : {}}
                   >
                     <item.icon className="w-4 h-4 mr-3" />
@@ -190,7 +190,7 @@ export default function TenantSidebar({ clientSlug }: TenantSidebarProps) {
                 
                 {/* Submenu */}
                 {item.children && parentActive && (
-                  <div className="ml-4 mt-1 space-y-1 border-l-2 border-gray-200 pl-4">
+                  <div className="ml-4 mt-1 space-y-1 border-l-2 border-[#1e2a35] pl-4">
                     {item.children.map((child: any) => (
                       <Link key={child.name} href={child.path}>
                         <Button
@@ -198,9 +198,12 @@ export default function TenantSidebar({ clientSlug }: TenantSidebarProps) {
                           size="sm"
                           className={`w-full justify-start text-xs ${
                             isActive(child.path)
-                              ? 'bg-gray-100 text-gray-900'
-                              : 'text-gray-600 hover:text-gray-800'
+                              ? 'text-black'
+                              : 'text-gray-400 hover:text-white hover:bg-[#1e2a35]'
                           }`}
+                          style={isActive(child.path) ? {
+                            backgroundColor: `${clientConfig.secondaryColor}80`
+                          } : {}}
                         >
                           <child.icon className="w-3 h-3 mr-2" />
                           {child.name}
@@ -214,11 +217,11 @@ export default function TenantSidebar({ clientSlug }: TenantSidebarProps) {
           })}
         </div>
 
-        <Separator className="my-6" />
+        <Separator className="my-6 bg-[#1e2a35]" />
 
         {/* Utility Items */}
         <div className="space-y-1">
-          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
+          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3 py-2">
             Herramientas
           </h3>
           {utilityItems.map((item) => (
@@ -227,9 +230,12 @@ export default function TenantSidebar({ clientSlug }: TenantSidebarProps) {
                 variant={isActive(item.path) ? "secondary" : "ghost"}
                 className={`w-full justify-start ${
                   isActive(item.path)
-                    ? 'bg-gray-100 text-gray-900'
-                    : 'text-gray-600 hover:text-gray-800'
+                    ? 'text-black'
+                    : 'text-gray-300 hover:text-white hover:bg-[#1e2a35]'
                 }`}
+                style={isActive(item.path) ? {
+                  backgroundColor: `${clientConfig.secondaryColor}60`
+                } : {}}
               >
                 <item.icon className="w-4 h-4 mr-3" />
                 <div className="flex-1 text-left">
@@ -243,9 +249,9 @@ export default function TenantSidebar({ clientSlug }: TenantSidebarProps) {
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-gray-200">
-        <div className="text-xs text-gray-500 text-center">
-          <div className="font-semibold">{clientConfig.fullName}</div>
+      <div className="p-4 border-t border-[#1e2a35]">
+        <div className="text-xs text-gray-400 text-center">
+          <div className="font-semibold text-gray-300">{clientConfig.fullName}</div>
           <div className="mt-1">Sistema Ambiental Multi-Tenant</div>
         </div>
       </div>
