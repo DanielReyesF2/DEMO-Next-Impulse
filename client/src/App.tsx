@@ -15,6 +15,9 @@ import Energia from "@/pages/Energia";
 import Agua from "@/pages/Agua";
 import EconomiaCircular from "@/pages/EconomiaCircular";
 import DataExport from "@/pages/DataExport";
+import MultiTenantDashboard from "@/components/MultiTenantDashboard";
+import TenantNavigation from "@/components/TenantNavigation";
+
 // Temporary simple components until we fix the imports
 const AdminDashboard = () => <div className="p-8">Admin Dashboard - Coming Soon</div>;
 const ClientSelector = () => (
@@ -54,16 +57,14 @@ const ClientSelector = () => (
   </div>
 );
 
-// Simple tenant wrapper
+// Tenant wrapper with navigation
 interface TenantWrapperProps {
   clientSlug: string;
   children: React.ReactNode;
 }
 const TenantWrapper = ({ clientSlug, children }: TenantWrapperProps) => (
   <div data-tenant={clientSlug}>
-    <div className="bg-blue-100 p-2 text-sm text-center">
-      Cliente activo: <strong>{clientSlug}</strong>
-    </div>
+    <TenantNavigation clientSlug={clientSlug} />
     {children}
   </div>
 );
@@ -80,7 +81,7 @@ function Router() {
       {/* Tenant Routes - Direct route matching */}
       <Route path="/cccm/dashboard">
         <TenantWrapper clientSlug="cccm">
-          <Dashboard />
+          <MultiTenantDashboard clientSlug="cccm" />
         </TenantWrapper>
       </Route>
       <Route path="/cccm/registro-diario">
@@ -117,14 +118,44 @@ function Router() {
       {/* Club Avándaro Routes */}
       <Route path="/club-de-golf-avandaro/dashboard">
         <TenantWrapper clientSlug="club-de-golf-avandaro">
-          <Dashboard />
+          <MultiTenantDashboard clientSlug="club-de-golf-avandaro" />
+        </TenantWrapper>
+      </Route>
+      <Route path="/club-de-golf-avandaro/registro-diario">
+        <TenantWrapper clientSlug="club-de-golf-avandaro">
+          <RegistroDiario />
+        </TenantWrapper>
+      </Route>
+      <Route path="/club-de-golf-avandaro/energia">
+        <TenantWrapper clientSlug="club-de-golf-avandaro">
+          <Energia />
+        </TenantWrapper>
+      </Route>
+      <Route path="/club-de-golf-avandaro/agua">
+        <TenantWrapper clientSlug="club-de-golf-avandaro">
+          <Agua />
         </TenantWrapper>
       </Route>
       
       {/* Rancho Avándaro Routes */}
       <Route path="/rancho-avandaro/dashboard">
         <TenantWrapper clientSlug="rancho-avandaro">
-          <Dashboard />
+          <MultiTenantDashboard clientSlug="rancho-avandaro" />
+        </TenantWrapper>
+      </Route>
+      <Route path="/rancho-avandaro/registro-diario">
+        <TenantWrapper clientSlug="rancho-avandaro">
+          <RegistroDiario />
+        </TenantWrapper>
+      </Route>
+      <Route path="/rancho-avandaro/energia">
+        <TenantWrapper clientSlug="rancho-avandaro">
+          <Energia />
+        </TenantWrapper>
+      </Route>
+      <Route path="/rancho-avandaro/agua">
+        <TenantWrapper clientSlug="rancho-avandaro">
+          <Agua />
         </TenantWrapper>
       </Route>
       

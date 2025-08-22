@@ -897,6 +897,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Tenant info endpoint for multi-tenant dashboard
+  app.get('/api/tenant/info/:clientSlug', async (req, res) => {
+    try {
+      const { clientSlug } = req.params;
+      const client = await storage.getClientBySlug(clientSlug);
+      
+      if (!client) {
+        return res.status(404).json({ message: 'Client not found' });
+      }
+
+      const settings = await storage.getClientSettings(client.id);
+      const features = await storage.getClientFeatures(client.id);
+      
+      res.json({
+        client,
+        settings: settings.reduce((acc: any, setting) => {
+          acc[setting.key] = setting.value;
+          return acc;
+        }, {}),
+        features: features.reduce((acc: any, feature) => {
+          acc[feature.feature] = feature.enabled;
+          return acc;
+        }, {})
+      });
+    } catch (error) {
+      console.error("Error fetching tenant info:", error);
+      res.status(500).json({ message: "Failed to fetch tenant info" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
