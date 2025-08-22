@@ -64,9 +64,20 @@ interface TenantRequest extends Request {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Apply hardened multi-tenant middleware
-  app.use(resolveTenant);
-  app.use(logTenantContext);
+  // Apply hardened multi-tenant middleware to specific routes only
+  // This prevents interference with static assets and initial HTML loading
+  app.use('/api', resolveTenant);
+  app.use('/api', logTenantContext);
+  
+  // Apply tenant resolution to client dashboard routes
+  app.use('/:clientSlug(cccm|club-avandaro|rancho-avandaro)/*', (req, res, next) => {
+    // Only apply to non-asset requests
+    if (!req.path.includes('.') && !req.path.includes('@vite') && !req.path.includes('src')) {
+      resolveTenant(req, res, next);
+    } else {
+      next();
+    }
+  });
 
   // Admin Routes (global access) - Protected with admin scope
   app.get("/api/admin/clients", requireAdminScopes, async (req: Request, res: Response) => {
