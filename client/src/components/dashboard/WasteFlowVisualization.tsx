@@ -186,225 +186,190 @@ export function WasteFlowVisualization({ totalWasteDiverted }: WasteFlowVisualiz
 
   return (
     <div className="bg-gradient-to-br from-white to-gray-50 rounded-3xl p-10 shadow-xl border border-gray-200">
-      {/* Header Simplificado */}
+      {/* Header */}
       <div className="text-center mb-12">
         <h2 className="text-3xl font-anton uppercase tracking-wide mb-3 text-[#b5e951]">Flujos de Materiales</h2>
         <p className="text-lg text-gray-600">
-          Visualización interactiva del sistema integral de gestión de residuos
+          Diagrama de flujo integral de gestión de residuos
         </p>
       </div>
 
-      {/* Flujo Visual Simplificado */}
-      <div className="relative max-w-4xl mx-auto">
+      {/* Diagrama de Flujo Horizontal tipo Sankey */}
+      <div className="relative max-w-6xl mx-auto">
         
-        {/* Puntos de Origen - Diseño más limpio */}
-        <div className="flex items-center justify-center mb-6">
-          <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">Puntos de Origen</span>
-        </div>
-
-        <div className="flex justify-center items-center space-x-4 mb-10">
-          <div className="group text-center">
-            <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-xl mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
-              <Building2 className="w-7 h-7 text-white" />
-            </div>
-            <div className="text-xs font-semibold text-gray-700">Casa Club</div>
-          </div>
-
-          <div className="group text-center">
-            <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-xl mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
-              <ChefHat className="w-7 h-7 text-white" />
-            </div>
-            <div className="text-xs font-semibold text-gray-700">Acuarima</div>
-            <div className="text-xs text-gray-500">Restaurante Jose</div>
-          </div>
-
-          <div className="group text-center">
-            <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center shadow-xl mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
-              <Users className="w-7 h-7 text-white" />
-            </div>
-            <div className="text-xs font-semibold text-gray-700">Eventos</div>
-          </div>
-
-          <div className="group text-center">
-            <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-xl mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
-              <TreePine className="w-7 h-7 text-white" />
-            </div>
-            <div className="text-xs font-semibold text-gray-700">Campo</div>
-          </div>
-
-          <div className="group text-center">
-            <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
-              <Zap className="w-7 h-7 text-white" />
-            </div>
-            <div className="text-xs font-semibold text-gray-700">Canchas Tennis</div>
-          </div>
-
-          <div className="group text-center">
-            <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-xl mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
-              <Package className="w-7 h-7 text-white" />
-            </div>
-            <div className="text-xs font-semibold text-gray-700">Canchas Padel</div>
-          </div>
-        </div>
-
-        {/* Líneas de Flujo Animadas */}
-        <div className="relative flex justify-center mb-8">
-          <div className="flex flex-col items-center space-y-2">
-            {/* Partículas animadas */}
-            <div className={`flex items-center space-x-3 transition-all duration-1000 ${
-              animatingParticles ? 'opacity-100' : 'opacity-60'
-            }`}>
-              <div className="w-3 h-3 bg-gradient-to-r from-green-400 to-green-500 rounded-full animate-pulse" style={{ animationDelay: '0s' }}></div>
-              <div className="w-2 h-2 bg-gradient-to-r from-blue-400 to-blue-500 rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
-              <div className="w-2 h-2 bg-gradient-to-r from-gray-400 to-gray-500 rounded-full animate-pulse" style={{ animationDelay: '0.6s' }}></div>
+        {/* Contenedor principal del flujo */}
+        <div className="grid grid-cols-12 gap-4 items-center min-h-96">
+          
+          {/* LADO IZQUIERDO - Puntos de Origen */}
+          <div className="col-span-3 space-y-4">
+            <div className="text-center mb-6">
+              <span className="text-sm font-bold text-gray-500 uppercase tracking-wider">Puntos de Origen</span>
             </div>
             
-            {/* Flecha central elegante */}
-            <div className={`transition-all duration-700 ${
-              animatingParticles ? 'translate-y-0 opacity-100' : 'translate-y-1 opacity-70'
-            }`}>
-              <ArrowDown className="w-8 h-8 text-[#b5e951] animate-bounce" />
-            </div>
-          </div>
-        </div>
-
-        {/* Categorías de Destino - Diseño más impactante */}
-        <div className="grid grid-cols-3 gap-8 mb-12">
-          <div className="group text-center bg-white rounded-3xl p-8 shadow-xl border-2 border-green-200 hover:border-green-300 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
-            <div className="w-20 h-20 bg-gradient-to-br from-green-500 via-green-600 to-emerald-700 rounded-3xl flex items-center justify-center shadow-xl mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
-              <Leaf className="w-10 h-10 text-white" />
-            </div>
-            <div className="text-2xl font-black text-green-700 mb-2">{organicFlows.reduce((sum, flow) => sum + flow.volume, 0).toFixed(1)}%</div>
-            <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">ORGÁNICOS</div>
-            <div className="text-sm text-gray-600">TRUE Zero Waste</div>
-          </div>
-
-          <div className="group text-center bg-white rounded-3xl p-8 shadow-xl border-2 border-blue-200 hover:border-blue-300 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
-            <div className="w-20 h-20 bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-700 rounded-3xl flex items-center justify-center shadow-xl mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
-              <Recycle className="w-10 h-10 text-white" />
-            </div>
-            <div className="text-2xl font-black text-blue-700 mb-2">{recyclableFlows.reduce((sum, flow) => sum + flow.volume, 0).toFixed(1)}%</div>
-            <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">RECICLABLES</div>
-            <div className="text-sm text-gray-600">Economía Circular</div>
-          </div>
-
-          <div className="group text-center bg-white rounded-3xl p-8 shadow-xl border-2 border-gray-200 hover:border-gray-300 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
-            <div className="w-20 h-20 bg-gradient-to-br from-gray-500 via-gray-600 to-slate-700 rounded-3xl flex items-center justify-center shadow-xl mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
-              <Trash2 className="w-10 h-10 text-white" />
-            </div>
-            <div className="text-2xl font-black text-gray-700 mb-2">{inorganicFlows.reduce((sum, flow) => sum + flow.volume, 0).toFixed(1)}%</div>
-            <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">INORGÁNICOS</div>
-            <div className="text-sm text-gray-600">Disposición Controlada</div>
-          </div>
-        </div>
-        
-      </div>
-      {/* Detalles de Flujos - Minimalista */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Orgánicos */}
-        <div className="space-y-4">
-          <div className="flex items-center space-x-2 mb-4">
-            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-            <span className="text-sm font-bold text-green-700 uppercase tracking-wide">Orgánicos</span>
-          </div>
-          {organicFlows.slice(0, 3).map((flow, index) => (
-            <div
-              key={flow.id}
-              className="group cursor-pointer bg-white rounded-2xl p-4 shadow-md hover:shadow-xl border border-green-100 hover:border-green-200 transition-all duration-300"
-              onClick={() => setSelectedFlow(selectedFlow === flow.id ? null : flow.id)}
-            >
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center space-x-3">
-                  <div className={`w-10 h-10 ${flow.bgColor} rounded-xl flex items-center justify-center`}>
-                    <span className={flow.color}>{flow.icon}</span>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-800 text-sm">{flow.name}</div>
-                    <div className="text-xs text-green-600 font-medium">{flow.volume} ton/mes</div>
-                  </div>
+            {/* Puntos de origen con volúmenes */}
+            <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-4 text-white shadow-lg">
+              <div className="flex items-center space-x-3">
+                <Building2 className="w-6 h-6" />
+                <div>
+                  <div className="font-semibold text-sm">Casa Club</div>
+                  <div className="text-xs opacity-90">6.2 ton/mes</div>
                 </div>
-                <ArrowRight className="w-4 h-4 text-green-500 group-hover:translate-x-1 transition-transform duration-300" />
               </div>
-              
-              {selectedFlow === flow.id && (
-                <div className="pt-3 border-t border-green-100">
-                  <div className="text-xs text-gray-600 mb-2">{flow.description}</div>
-                  <div className="text-xs text-green-600 font-medium">{flow.partner}</div>
-                </div>
-              )}
             </div>
-          ))}
+
+            <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-4 text-white shadow-lg">
+              <div className="flex items-center space-x-3">
+                <ChefHat className="w-6 h-6" />
+                <div>
+                  <div className="font-semibold text-sm">Acuarima, Restaurante Jose</div>
+                  <div className="text-xs opacity-90">18.4 ton/mes</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-4 text-white shadow-lg">
+              <div className="flex items-center space-x-3">
+                <Users className="w-6 h-6" />
+                <div>
+                  <div className="font-semibold text-sm">Eventos & Instalaciones</div>
+                  <div className="text-xs opacity-90">8.4 ton/mes</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Total de Entrada */}
+            <div className="bg-gradient-to-r from-[#273949] to-slate-700 rounded-2xl p-4 text-white shadow-xl border-2 border-[#b5e951]">
+              <div className="text-center">
+                <div className="text-lg font-black">33.0 ton/mes</div>
+                <div className="text-xs font-semibold uppercase tracking-wide">Total Generado</div>
+              </div>
+            </div>
+          </div>
+
+          {/* FLUJOS CENTRALES - Líneas animadas */}
+          <div className="col-span-6 relative py-12">
+            
+            {/* Líneas de flujo con animación */}
+            <div className="relative h-64 flex flex-col justify-center space-y-8">
+              
+              {/* Flujo Orgánicos */}
+              <div className="flex items-center space-x-4">
+                <div className="flex-1 relative">
+                  <div className="h-12 bg-gradient-to-r from-green-400 to-green-500 rounded-full relative overflow-hidden shadow-lg">
+                    <div className="absolute inset-0 bg-white opacity-30 transform -skew-x-12"></div>
+                    <div className={`absolute left-0 top-0 w-8 h-full bg-white opacity-40 rounded-full transform transition-transform duration-2000 ${
+                      animatingParticles ? 'translate-x-96' : 'translate-x-0'
+                    }`}></div>
+                  </div>
+                  <div className="absolute -top-2 left-4 text-xs font-bold text-green-700">Orgánicos: 21.6 ton</div>
+                  <div className="absolute -bottom-2 left-4 text-xs text-gray-500">65.5%</div>
+                </div>
+                <MoveRight className="w-6 h-6 text-green-500" />
+              </div>
+
+              {/* Flujo Reciclables */}
+              <div className="flex items-center space-x-4">
+                <div className="flex-1 relative">
+                  <div className="h-8 bg-gradient-to-r from-blue-400 to-blue-500 rounded-full relative overflow-hidden shadow-lg">
+                    <div className="absolute inset-0 bg-white opacity-30 transform -skew-x-12"></div>
+                    <div className={`absolute left-0 top-0 w-6 h-full bg-white opacity-40 rounded-full transform transition-transform duration-2000 delay-300 ${
+                      animatingParticles ? 'translate-x-96' : 'translate-x-0'
+                    }`}></div>
+                  </div>
+                  <div className="absolute -top-2 left-4 text-xs font-bold text-blue-700">Reciclables: 5.2 ton</div>
+                  <div className="absolute -bottom-2 left-4 text-xs text-gray-500">15.8%</div>
+                </div>
+                <MoveRight className="w-6 h-6 text-blue-500" />
+              </div>
+
+              {/* Flujo Inorgánicos */}
+              <div className="flex items-center space-x-4">
+                <div className="flex-1 relative">
+                  <div className="h-6 bg-gradient-to-r from-gray-400 to-gray-500 rounded-full relative overflow-hidden shadow-lg">
+                    <div className="absolute inset-0 bg-white opacity-30 transform -skew-x-12"></div>
+                    <div className={`absolute left-0 top-0 w-4 h-full bg-white opacity-40 rounded-full transform transition-transform duration-2000 delay-600 ${
+                      animatingParticles ? 'translate-x-96' : 'translate-x-0'
+                    }`}></div>
+                  </div>
+                  <div className="absolute -top-2 left-4 text-xs font-bold text-gray-700">Inorgánicos: 6.2 ton</div>
+                  <div className="absolute -bottom-2 left-4 text-xs text-gray-500">18.7%</div>
+                </div>
+                <MoveRight className="w-6 h-6 text-gray-500" />
+              </div>
+
+            </div>
+          </div>
+
+          {/* LADO DERECHO - Destinos Finales */}
+          <div className="col-span-3 space-y-4">
+            <div className="text-center mb-6">
+              <span className="text-sm font-bold text-gray-500 uppercase tracking-wider">Destinos Finales</span>
+            </div>
+
+            {/* Destinos con socios */}
+            <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl p-4 text-white shadow-lg">
+              <div className="flex items-center space-x-3">
+                <Leaf className="w-6 h-6" />
+                <div>
+                  <div className="font-semibold text-sm">Biodegradación</div>
+                  <div className="text-xs opacity-90">ORKA · TEDISD</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-r from-blue-500 to-cyan-600 rounded-2xl p-4 text-white shadow-lg">
+              <div className="flex items-center space-x-3">
+                <Recycle className="w-6 h-6" />
+                <div>
+                  <div className="font-semibold text-sm">Reciclaje</div>
+                  <div className="text-xs opacity-90">Recupera · Verde Ciudad</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-r from-gray-500 to-slate-600 rounded-2xl p-4 text-white shadow-lg">
+              <div className="flex items-center space-x-3">
+                <Trash2 className="w-6 h-6" />
+                <div>
+                  <div className="font-semibold text-sm">Disposición</div>
+                  <div className="text-xs opacity-90">Controlada · KREY</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Impacto Ambiental */}
+            <div className="bg-gradient-to-r from-[#b5e951] to-lime-400 rounded-2xl p-4 text-[#273949] shadow-xl border-2 border-[#273949]">
+              <div className="text-center">
+                <div className="text-lg font-black">81.3%</div>
+                <div className="text-xs font-semibold uppercase tracking-wide">Desviación de Relleno</div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
-        {/* Reciclables */}
-        <div className="space-y-4">
-          <div className="flex items-center space-x-2 mb-4">
-            <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-            <span className="text-sm font-bold text-blue-700 uppercase tracking-wide">Reciclables</span>
-          </div>
-          {recyclableFlows.slice(0, 3).map((flow, index) => (
-            <div
-              key={flow.id}
-              className="group cursor-pointer bg-white rounded-2xl p-4 shadow-md hover:shadow-xl border border-blue-100 hover:border-blue-200 transition-all duration-300"
-              onClick={() => setSelectedFlow(selectedFlow === flow.id ? null : flow.id)}
-            >
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center space-x-3">
-                  <div className={`w-10 h-10 ${flow.bgColor} rounded-xl flex items-center justify-center`}>
-                    <span className={flow.color}>{flow.icon}</span>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-800 text-sm">{flow.name}</div>
-                    <div className="text-xs text-blue-600 font-medium">{flow.volume} ton/mes</div>
-                  </div>
-                </div>
-                <ArrowRight className="w-4 h-4 text-blue-500 group-hover:translate-x-1 transition-transform duration-300" />
-              </div>
-              
-              {selectedFlow === flow.id && (
-                <div className="pt-3 border-t border-blue-100">
-                  <div className="text-xs text-gray-600 mb-2">{flow.description}</div>
-                  <div className="text-xs text-blue-600 font-medium">{flow.partner}</div>
-                </div>
-              )}
+        {/* Métricas de Impacto */}
+        <div className="mt-12 bg-gradient-to-r from-[#273949] to-slate-700 rounded-3xl p-8 text-white">
+          <div className="grid grid-cols-4 gap-8 text-center">
+            <div>
+              <div className="text-2xl font-black text-[#b5e951]">72%</div>
+              <div className="text-xs font-semibold uppercase tracking-wide">Circularidad</div>
             </div>
-          ))}
+            <div>
+              <div className="text-2xl font-black text-green-400">21.6 ton</div>
+              <div className="text-xs font-semibold uppercase tracking-wide">Compostaje</div>
+            </div>
+            <div>
+              <div className="text-2xl font-black text-blue-400">5.2 ton</div>
+              <div className="text-xs font-semibold uppercase tracking-wide">Reciclado</div>
+            </div>
+            <div>
+              <div className="text-2xl font-black text-gray-400">6.2 ton</div>
+              <div className="text-xs font-semibold uppercase tracking-wide">Remanente</div>
+            </div>
+          </div>
         </div>
 
-        {/* Inorgánicos */}
-        <div className="space-y-4">
-          <div className="flex items-center space-x-2 mb-4">
-            <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
-            <span className="text-sm font-bold text-gray-700 uppercase tracking-wide">Inorgánicos</span>
-          </div>
-          {inorganicFlows.slice(0, 3).map((flow, index) => (
-            <div
-              key={flow.id}
-              className="group cursor-pointer bg-white rounded-2xl p-4 shadow-md hover:shadow-xl border border-gray-100 hover:border-gray-200 transition-all duration-300"
-              onClick={() => setSelectedFlow(selectedFlow === flow.id ? null : flow.id)}
-            >
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center space-x-3">
-                  <div className={`w-10 h-10 ${flow.bgColor} rounded-xl flex items-center justify-center`}>
-                    <span className={flow.color}>{flow.icon}</span>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-800 text-sm">{flow.name}</div>
-                    <div className="text-xs text-gray-600 font-medium">{flow.volume} ton/mes</div>
-                  </div>
-                </div>
-                <ArrowRight className="w-4 h-4 text-gray-500 group-hover:translate-x-1 transition-transform duration-300" />
-              </div>
-              
-              {selectedFlow === flow.id && (
-                <div className="pt-3 border-t border-gray-100">
-                  <div className="text-xs text-gray-600 mb-2">{flow.description}</div>
-                  <div className="text-xs text-gray-600 font-medium">{flow.partner}</div>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
       </div>
       
     </div>
