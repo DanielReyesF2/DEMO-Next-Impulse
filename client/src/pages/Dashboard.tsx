@@ -158,11 +158,6 @@ export default function Dashboard() {
               Plataforma integral de sustentabilidad para el 
               <span className="font-semibold text-[#273949]"> Club de Golf Avandaro</span>
             </p>
-            <div className="flex items-center justify-center mt-6 space-x-2">
-              <div className="w-2 h-2 bg-[#b5e951] rounded-full animate-pulse"></div>
-              <span className="text-sm text-gray-500 font-medium">En tiempo real</span>
-              <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse delay-150"></div>
-            </div>
           </div>
 
           {/* Módulos ambientales principales - Diseño mejorado */}
