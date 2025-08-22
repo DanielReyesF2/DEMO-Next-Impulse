@@ -3,7 +3,7 @@ import autoTable from 'jspdf-autotable';
 import { Client, WasteData } from '@shared/schema';
 import { createGradientPattern } from './imageUtils';
 import logoPath from '@assets/Logo-ECONOVA-OF_Blanco.png';
-import cccmLogo from '@assets/CCCM_1754423231662.png';
+import avendaroLogo from '@assets/Logoavandaro_1755897680615.png';
 
 // Acciones pendientes para certificación TRUE
 const truePendingActions = [
@@ -89,9 +89,9 @@ function addMinimalistHeader(doc: jsPDF, title: string = 'REPORTE DE GESTIÓN DE
   
   // Logo del Club Campestre en el lado derecho
   try {
-    doc.addImage(cccmLogo, 'PNG', 170, 2, 15, 15, undefined, 'FAST');
+    doc.addImage(avendaroLogo, 'PNG', 170, 2, 15, 15, undefined, 'FAST');
   } catch (error) {
-    console.error('Error al añadir el logo del Club Campestre:', error);
+    console.error('Error al añadir el logo del Club de Golf Avandaro:', error);
   }
   
   // Título

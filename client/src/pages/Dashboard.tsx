@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 
 import { WasteFlowVisualization } from '@/components/dashboard/WasteFlowVisualization';
 import { WasteData, Alert } from '@shared/schema';
-import cccmLogo from '@assets/CCCM_1754423231662.png';
+import avendaroLogo from '@assets/Logoavandaro_1755897680615.png';
 import { 
   Trash2, 
   Zap, 
@@ -143,7 +143,7 @@ export default function Dashboard() {
           {/* Header principal mejorado */}
           <div className="text-center mb-16">
             <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-xl mb-8 border border-gray-200 backdrop-blur-sm">
-              <img src={cccmLogo} alt="Club de Golf Avandaro" className="w-20 h-20 object-contain" />
+              <img src={avendaroLogo} alt="Club de Golf Avandaro" className="w-20 h-20 object-contain" />
             </div>
             <div className="relative mb-6">
               <h1 className="text-5xl md:text-7xl font-light text-[#273949] mb-2 tracking-tight">
