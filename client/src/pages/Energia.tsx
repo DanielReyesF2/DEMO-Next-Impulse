@@ -56,13 +56,6 @@ export default function Energia() {
         <ClubHeader />
         
         <div className="max-w-7xl mx-auto px-4 py-6">
-          {/* Header del módulo */}
-          <div className="mb-8">
-            <p className="text-gray-600 mt-2">
-              Eficiencia energética y proyecto de paneles solares
-            </p>
-          </div>
-
           {/* Dashboard de Paneles Solares - Espectacular */}
           <div className="bg-gradient-to-br from-yellow-400 via-orange-400 to-red-400 rounded-3xl p-8 mb-8 shadow-2xl border border-yellow-200 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
