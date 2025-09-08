@@ -1,0 +1,355 @@
+1) CUESTIONARIO “PLUG-AND-PLAY” (sin evidencias)
+🧱 MÓDULO A – REQUISITOS DE ELEGIBILIDAD (Gate)
+
+A.1 ¿Tienen política Zero Waste formal? (Sí / En desarrollo / No)
+A.2 ¿Está definido el alcance (áreas incluidas/excluidas)? (Sí / Parcial / No)
+A.3 ¿Cumplimiento legal al día? (Sí / Parcial / No)
+A.4 ¿Cuentan con 12 meses de datos por material? (Sí / Parcial / No)
+A.5 ¿Promedio anual de desvío ≥ 90%? (Sí / No / No sabemos)
+A.6 ¿Miden % de contaminación en reciclables/compost? (Sí / A veces / No)
+A.7 ¿Tienen responsable designado para datos y reporte? (Sí / No)
+
+Regla: si A.1, A.3, A.4, A.5, A.6 o A.7 = No → mostrar “Gate con bloqueos”. (No suma score; es filtro de elegibilidad).
+
+📊 MÓDULO B – MEDICIÓN Y TRAZABILIDAD
+
+B.1 Método de medición de residuos (Báscula fija / Báscula portátil / Proveedor / Estimación)
+B.2 Frecuencia de registro (Diario / Semanal / Mensual / Esporádico)
+B.3 Registro por material (Sí / Parcial / No)
+B.4 Registro por área generadora (Sí / Parcial / No)
+B.5 ¿Reciben reportes mensuales de proveedor (material/volumen)? (Sí / Básicos / No)
+B.6 ¿Registran rechazos del MRF/proveedor? (Siempre / A veces / Nunca)
+B.7 ¿Realizan auditoría física anual (basura y reciclables)? (Sí / Planeada / No)
+
+🛒 MÓDULO C – COMPRAS PREFERIBLES
+
+C.1 ¿Tienen política de compras preferibles (contenido reciclado/RTP/menos empaque)? (Sí / En desarrollo / No)
+C.2 Uso de RTP (retornables) en F&B (Siempre / A veces / Nunca)
+C.3 Exigen contenido reciclado en insumos clave (Sí / Algunos rubros / No)
+C.4 Evitan desechables cuando hay alternativa reutilizable (Siempre / A veces / Nunca)
+C.5 % del gasto con criterios de compras preferibles (0–25% / 26–50% / 51–75% / 76–100%)
+
+⬆️ MÓDULO D – GESTIÓN UPSTREAM (con proveedores)
+
+D.1 Solicitudes a proveedores para reducir o cambiar empaques (Sí / En progreso / No)
+D.2 Retornos de tarimas/cajas/contenedores (0–25% / 26–50% / 51–75% / 76–100%)
+D.3 Evaluación anual de proveedores con criterios ZW (Sí / En diseño / No)
+
+✂️ MÓDULO E – REDISEÑO & REDUCCIÓN EN ORIGEN
+
+E.1 Metas de reducción por material/empaque (Sí / En desarrollo / No)
+E.2 Prácticas: impresión dúplex por defecto (Sí / No), digitalización de procesos (Sí / Parcial / No)
+E.3 Revisión de avances (Trimestral / Semestral / Anual / No)
+
+🔁 MÓDULO F – REUSO Y REPARACIÓN
+
+F.1 Vajilla reutilizable en F&B (Siempre / A veces / Nunca)
+F.2 Programas de reparación (mobiliario/linens/equipos) (Sí / No)
+F.3 Reuso externo (donación de excedentes/bienes) (Sí / Ocasional / No)
+F.4 Refill/dispensado a granel (Sí / Piloto / No)
+
+♻️ MÓDULO G – RECUPERACIÓN DE MATERIALES (Reciclaje)
+
+G.1 # de categorías de separación visibles (1–2 / 3–4 / 5–6 / 7+)
+G.2 Contenedores claramente identificados (Sí / Parcial / No)
+G.3 Bar/Restaurantes: vidrio segregado (Sí / Parcial / No)
+G.4 Cuartos: housekeeping separa PET/papel (Sí / Parcial / No)
+G.5 Mantenimiento: segregación de metales (Sí / Parcial / No)
+G.6 Checklists de contaminación (Sí / No)
+G.7 Muestreo mensual de calidad (Sí / A veces / No)
+
+🌱 MÓDULO H – ORGÁNICOS (Compostaje/Donación/Alimentación animal)
+
+H.1 Separación de orgánicos en cocina/prep (Sí / Parcial / No)
+H.2 Donación de alimentos aptos (Sí / Ocasional / No)
+H.3 Manejo de poda/ramaje (Compost / Mulch / Disposición / Mixto)
+H.4 Área de compost on-site (Sí / Planeada / No)
+H.5 Proveedor de compostaje con reporte (Sí / N/A / No)
+
+🧱 MÓDULO I – C&D Y EVENTOS
+
+I.1 Plan de gestión de residuos C&D (Sí / Por proyecto / No)
+I.2 Desvío estimado C&D (0–25% / 26–50% / 51–75% / 76–90% / 90%+)
+I.3 En eventos: reusables (Siempre / A veces / Nunca)
+I.4 Eventos con staff guiando separación (Sí / A veces / No)
+
+🧑‍🏫 MÓDULO J – CAPACITACIÓN, COMUNICACIÓN Y LIDERAZGO
+
+J.1 Onboarding ZW para todo nuevo ingreso (Sí / No)
+J.2 Reciclaje de capacitación (Trimestral / Semestral / Anual / No)
+J.3 KPIs/Metas visibles en áreas (Sí / No)
+J.4 Incentivos por desempeño ZW (Sí / En diseño / No)
+J.5 Responsable formal ZW y comité activo (Sí / Parcial / No)
+
+📈 MÓDULO K – OBJETIVOS, REPORTE Y MEJORA CONTINUA
+
+K.1 Meta de desvío anual (valor %) [selector: 50–95%]
+K.2 Metas por material (Cartón/Plásticos/Vidrio/Metales/Orgánicos) (Sí / No)
+K.3 Dashboard de seguimiento mensual (Sí / En desarrollo / No)
+K.4 Revisión directiva (Mensual / Trimestral / Anual / No)
+K.5 Case study anual (Sí / En desarrollo / No)
+
+⚡ ENERGÍA (No TRUE)
+
+Energía.1 ¿Tienen paneles solares? (Sí / Planeados / No)
+Energía.2 % de energía cubierta (0–25% / 26–50% / 51–75% / 76–100%)
+Energía.3 Monitoreo de producción (Sí / No)
+Energía.4 % de iluminación LED (0–25% / 26–50% / 51–75% / 76–100%)
+
+💧 AGUA (No TRUE)
+
+Agua.1 PTAR operativa (Sí / En construcción / No)
+Agua.2 Reúso de agua tratada (Riego / Limpieza / Otro / No la usan)
+Agua.3 Captación pluvial (Sí / Planeada / No)
+Agua.4 Monitoreo de consumo (Sí / No)
+
+2) ESQUEMA JSON (para Replit)
+
+Nota: sin campos de evidencia. Incluye pesos por módulo y valores por opción para calcular el TRUE Readiness Index (0–100) y el Gap-to-Cert. Ajusta pesos si lo deseas.
+
+{
+  "version": "1.0",
+  "site": "Club Avándaro",
+  "modules": [
+    {
+      "id": "A",
+      "name": "Gate de elegibilidad",
+      "weight": 0,
+      "questions": [
+        {"id": "A1", "text": "Política Zero Waste", "type": "single", "options": {"Sí":1,"En desarrollo":0.5,"No":0}},
+        {"id": "A2", "text": "Alcance definido", "type": "single", "options": {"Sí":1,"Parcial":0.5,"No":0}},
+        {"id": "A3", "text": "Cumplimiento legal al día", "type": "single", "options": {"Sí":1,"Parcial":0.5,"No":0}},
+        {"id": "A4", "text": "12 meses de datos por material", "type": "single", "options": {"Sí":1,"Parcial":0.5,"No":0}},
+        {"id": "A5", "text": "Desvío anual ≥ 90%", "type": "single", "options": {"Sí":1,"No":0,"No sabemos":0.3}},
+        {"id": "A6", "text": "Medición de % contaminación", "type": "single", "options": {"Sí":1,"A veces":0.5,"No":0}},
+        {"id": "A7", "text": "Responsable designado para reporte", "type": "single", "options": {"Sí":1,"No":0}}
+      ],
+      "gate_blockers": ["A1","A3","A4","A5","A6","A7"],
+      "gate_threshold": 0.8
+    },
+    {
+      "id": "B",
+      "name": "Medición y trazabilidad",
+      "weight": 0.15,
+      "questions": [
+        {"id":"B1","text":"Método de medición","type":"single","options":{"Báscula fija":1,"Báscula portátil":0.8,"Proveedor":0.7,"Estimación":0.3}},
+        {"id":"B2","text":"Frecuencia de registro","type":"single","options":{"Diario":1,"Semanal":0.8,"Mensual":0.6,"Esporádico":0.2}},
+        {"id":"B3","text":"Registro por material","type":"single","options":{"Sí":1,"Parcial":0.6,"No":0}},
+        {"id":"B4","text":"Registro por área","type":"single","options":{"Sí":1,"Parcial":0.6,"No":0}},
+        {"id":"B5","text":"Reportes del proveedor","type":"single","options":{"Sí":1,"Básicos":0.6,"No":0}},
+        {"id":"B6","text":"Registro de rechazos","type":"single","options":{"Siempre":1,"A veces":0.6,"Nunca":0}},
+        {"id":"B7","text":"Auditoría física anual","type":"single","options":{"Sí":1,"Planeada":0.6,"No":0}}
+      ]
+    },
+    {
+      "id": "C",
+      "name": "Compras preferibles",
+      "weight": 0.10,
+      "questions": [
+        {"id":"C1","text":"Política de compras preferibles","type":"single","options":{"Sí":1,"En desarrollo":0.6,"No":0}},
+        {"id":"C2","text":"Uso de RTP en F&B","type":"single","options":{"Siempre":1,"A veces":0.6,"Nunca":0}},
+        {"id":"C3","text":"Contenido reciclado en insumos","type":"single","options":{"Sí":1,"Algunos rubros":0.6,"No":0}},
+        {"id":"C4","text":"Evitan desechables","type":"single","options":{"Siempre":1,"A veces":0.6,"Nunca":0}},
+        {"id":"C5","text":"% gasto con criterios ZW","type":"single","options":{"76–100%":1,"51–75%":0.8,"26–50%":0.6,"0–25%":0.3}}
+      ]
+    },
+    {
+      "id": "D",
+      "name": "Upstream con proveedores",
+      "weight": 0.08,
+      "questions": [
+        {"id":"D1","text":"Solicitudes de cambio de empaque","type":"single","options":{"Sí":1,"En progreso":0.6,"No":0}},
+        {"id":"D2","text":"Retornos de embalajes","type":"single","options":{"76–100%":1,"51–75%":0.8,"26–50%":0.6,"0–25%":0.3}},
+        {"id":"D3","text":"Evaluación anual con criterios ZW","type":"single","options":{"Sí":1,"En diseño":0.6,"No":0}}
+      ]
+    },
+    {
+      "id": "E",
+      "name": "Rediseño y reducción",
+      "weight": 0.08,
+      "questions": [
+        {"id":"E1","text":"Metas de reducción por material","type":"single","options":{"Sí":1,"En desarrollo":0.6,"No":0}},
+        {"id":"E2a","text":"Impresión dúplex por defecto","type":"single","options":{"Sí":1,"No":0}},
+        {"id":"E2b","text":"Digitalización de procesos","type":"single","options":{"Sí":1,"Parcial":0.6,"No":0}},
+        {"id":"E3","text":"Revisión de avances","type":"single","options":{"Trimestral":1,"Semestral":0.8,"Anual":0.6,"No":0}}
+      ]
+    },
+    {
+      "id": "F",
+      "name": "Reuso y reparación",
+      "weight": 0.08,
+      "questions": [
+        {"id":"F1","text":"Vajilla reutilizable en F&B","type":"single","options":{"Siempre":1,"A veces":0.6,"Nunca":0}},
+        {"id":"F2","text":"Programas de reparación","type":"single","options":{"Sí":1,"No":0}},
+        {"id":"F3","text":"Reuso externo/donación","type":"single","options":{"Sí":1,"Ocasional":0.6,"No":0}},
+        {"id":"F4","text":"Refill/dispensado a granel","type":"single","options":{"Sí":1,"Piloto":0.6,"No":0}}
+      ]
+    },
+    {
+      "id": "G",
+      "name": "Recuperación de materiales",
+      "weight": 0.12,
+      "questions": [
+        {"id":"G1","text":"# categorías de separación","type":"single","options":{"7+":1,"5–6":0.8,"3–4":0.6,"1–2":0.3}},
+        {"id":"G2","text":"Señalética y contenedores","type":"single","options":{"Sí":1,"Parcial":0.6,"No":0}},
+        {"id":"G3","text":"Vidrio segregado en bares","type":"single","options":{"Sí":1,"Parcial":0.6,"No":0}},
+        {"id":"G4","text":"PET/papel en cuartos","type":"single","options":{"Sí":1,"Parcial":0.6,"No":0}},
+        {"id":"G5","text":"Metales en mantenimiento","type":"single","options":{"Sí":1,"Parcial":0.6,"No":0}},
+        {"id":"G6","text":"Checklists de contaminación","type":"single","options":{"Sí":1,"No":0}},
+        {"id":"G7","text":"Muestreo mensual de calidad","type":"single","options":{"Sí":1,"A veces":0.6,"No":0}}
+      ]
+    },
+    {
+      "id": "H",
+      "name": "Orgánicos",
+      "weight": 0.10,
+      "questions": [
+        {"id":"H1","text":"Separación de orgánicos en cocina","type":"single","options":{"Sí":1,"Parcial":0.6,"No":0}},
+        {"id":"H2","text":"Donación de alimentos","type":"single","options":{"Sí":1,"Ocasional":0.6,"No":0}},
+        {"id":"H3","text":"Manejo de poda/ramaje","type":"single","options":{"Compost":1,"Mulch":0.8,"Mixto":0.7,"Disposición":0.2}},
+        {"id":"H4","text":"Área de compost on-site","type":"single","options":{"Sí":1,"Planeada":0.6,"No":0}},
+        {"id":"H5","text":"Proveedor de compostaje con reporte","type":"single","options":{"Sí":1,"N/A":0.8,"No":0}}
+      ]
+    },
+    {
+      "id": "I",
+      "name": "C&D y eventos",
+      "weight": 0.05,
+      "questions": [
+        {"id":"I1","text":"Plan de gestión C&D","type":"single","options":{"Sí":1,"Por proyecto":0.6,"No":0}},
+        {"id":"I2","text":"Desvío estimado C&D","type":"single","options":{"90%+":1,"76–90%":0.8,"51–75%":0.6,"26–50%":0.4,"0–25%":0.2}},
+        {"id":"I3","text":"Reusables en eventos","type":"single","options":{"Siempre":1,"A veces":0.6,"Nunca":0}},
+        {"id":"I4","text":"Staff guiando separación","type":"single","options":{"Sí":1,"A veces":0.6,"No":0}}
+      ]
+    },
+    {
+      "id": "J",
+      "name": "Capacitación, comunicación y liderazgo",
+      "weight": 0.12,
+      "questions": [
+        {"id":"J1","text":"Onboarding ZW a todo ingreso","type":"single","options":{"Sí":1,"No":0}},
+        {"id":"J2","text":"Reciclaje de capacitación","type":"single","options":{"Trimestral":1,"Semestral":0.8,"Anual":0.6,"No":0}},
+        {"id":"J3","text":"KPIs/Metas visibles","type":"single","options":{"Sí":1,"No":0}},
+        {"id":"J4","text":"Incentivos por desempeño","type":"single","options":{"Sí":1,"En diseño":0.6,"No":0}},
+        {"id":"J5","text":"Responsable y comité activo","type":"single","options":{"Sí":1,"Parcial":0.6,"No":0}}
+      ]
+    },
+    {
+      "id": "K",
+      "name": "Objetivos, reporte y mejora continua",
+      "weight": 0.12,
+      "questions": [
+        {"id":"K1","text":"Meta de desvío anual","type":"single","options":{"≥90%":1,"80–89%":0.8,"70–79%":0.6,"<70%":0.3}},
+        {"id":"K2","text":"Metas por material","type":"single","options":{"Sí":1,"No":0}},
+        {"id":"K3","text":"Dashboard de seguimiento","type":"single","options":{"Sí":1,"En desarrollo":0.6,"No":0}},
+        {"id":"K4","text":"Revisión directiva","type":"single","options":{"Mensual":1,"Trimestral":0.8,"Anual":0.6,"No":0}},
+        {"id":"K5","text":"Case study anual","type":"single","options":{"Sí":1,"En desarrollo":0.6,"No":0}}
+      ]
+    },
+    {
+      "id": "ENERGIA",
+      "name": "Energía (no TRUE)",
+      "weight": 0,
+      "questions": [
+        {"id":"EN1","text":"Paneles solares","type":"single","options":{"Sí":1,"Planeados":0.6,"No":0}},
+        {"id":"EN2","text":"% energía cubierta","type":"single","options":{"76–100%":1,"51–75%":0.8,"26–50%":0.6,"0–25%":0.3}},
+        {"id":"EN3","text":"Monitoreo de producción","type":"single","options":{"Sí":1,"No":0}},
+        {"id":"EN4","text":"% iluminación LED","type":"single","options":{"76–100%":1,"51–75%":0.8,"26–50%":0.6,"0–25%":0.3}}
+      ]
+    },
+    {
+      "id": "AGUA",
+      "name": "Agua (no TRUE)",
+      "weight": 0,
+      "questions": [
+        {"id":"AG1","text":"PTAR operativa","type":"single","options":{"Sí":1,"En construcción":0.6,"No":0}},
+        {"id":"AG2","text":"Reúso de agua tratada","type":"single","options":{"Riego":1,"Limpieza":0.8,"Otro":0.6,"No la usan":0}},
+        {"id":"AG3","text":"Captación pluvial","type":"single","options":{"Sí":1,"Planeada":0.6,"No":0}},
+        {"id":"AG4","text":"Monitoreo de consumo","type":"single","options":{"Sí":1,"No":0}}
+      ]
+    }
+  ],
+  "scoring": {
+    "readiness_index_name": "TRUE Readiness Index",
+    "scale": "0-100",
+    "gate_logic": "si alguna pregunta en gate_blockers = 0, marcar 'Gate con bloqueos'",
+    "level_bands": {
+      "Potencial bajo": [0, 49],
+      "Potencial medio": [50, 69],
+      "Potencial alto": [70, 100]
+    }
+  }
+}
+
+Cálculo (pseudocódigo JS)
+function scoreModule(module, answers) {
+  const sum = module.questions.reduce((acc,q)=>{
+    const v = q.options[answers[q.id]] ?? 0;
+    return acc + v;
+  }, 0);
+  return (sum / module.questions.length) * module.weight; // 0..module.weight
+}
+
+function computeReadiness(modules, answers) {
+  // Gate
+  const gate = modules.find(m => m.id === "A");
+  const gateOk = gate.gate_blockers.every(id => (gate.questions.find(q=>q.id===id).options[answers[id]] ?? 0) >= gate.gate_threshold);
+  const readiness = modules
+    .filter(m => m.weight > 0)
+    .reduce((acc,m)=> acc + scoreModule(m, answers), 0); // 0..1
+  return { gateOk, readinessIndex: Math.round(readiness*100) };
+}
+
+3) DASHBOARD EJECUTIVO – GRÁFICAS INNOVADORAS
+
+a) Sankey de flujos de materiales
+
+Input: [{source:"Generación", target:"Cartón", value:kg}, ...{source:"Plásticos", target:"Reciclaje", value:kg}, {source:"Plásticos", target:"Relleno", value:kg}]
+
+Uso: Visualiza el mix por material y su destino (recuperado vs. disposición).
+
+Extra: Añade un segundo Sankey para antes/después (escenario con Quick Wins).
+
+b) Radar “Madurez por categoría TRUE”
+
+Input: [{category:"Medición", score:0.73}, ...] usando el score normalizado de cada módulo B–K.
+
+Uso: Comunica brechas de implementación.
+
+c) Heatmap Área × Material (calidad/contaminación)
+
+Input: [{area:"Cocina", material:"Orgánicos", quality:0.9}, ...]
+
+Uso: Identifica hotspots de contaminación y prioridades de capacitación.
+
+d) Gauge “Gap-to-Cert”
+
+Input: {readinessIndex: 68, targetLevel:"Certified"}
+
+Uso: Muestra TRUE Readiness Index (0–100). (El target puedes fijarlo en 70/80/90 para Certified/Silver/Gold como meta interna de proyecto).
+
+e) Waterfall de Ahorros Potenciales
+
+Input: [{name:"RTP bebidas", delta: -120000}, {name:"Compost on-site", delta:-45000}, ...]
+
+Uso: Visualiza impacto económico de Quick Wins (anualizado).
+
+f) Pareto de Incidencias de Contaminación
+
+Input: [{cause:"Vasos con líquido", count:120}, ...]
+
+Uso: Prioriza acciones de training/operación.
+
+g) Treemap de Generación por Área
+
+Input: [{area:"Cocina", kg:12000}, {area:"Golf", kg:8000}, ...]
+
+Uso: Muestra distribución de cargas operativas.
+
+4) TEXTOS DE SALIDA (automáticos)
+
+Resumen Ejecutivo (1 página): Índice actual, 3 fortalezas, 3 oportunidades, potencial de ahorro anual.
+
+Plan 90 días (Quick Wins): 5 acciones con responsable tentativo y resultado esperado.
+
+Ruta a certificación: “Precertificación inmediata (si GateOk) → 12–18 meses a 90%+”.
