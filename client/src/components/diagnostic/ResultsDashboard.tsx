@@ -88,10 +88,30 @@ export function ResultsDashboard({
   const criticalBlockers = gateResults.filter(r => r.isCritical);
 
   const getReadinessLevel = (index: number) => {
-    if (index >= 80) return { level: 'EXCELENTE', color: 'text-green-600', bgColor: 'bg-green-50' };
-    if (index >= 60) return { level: 'BUENO', color: 'text-green-600', bgColor: 'bg-green-50' };
-    if (index >= 40) return { level: 'REGULAR', color: 'text-yellow-600', bgColor: 'bg-yellow-50' };
-    return { level: 'BAJO', color: 'text-red-600', bgColor: 'bg-red-50' };
+    if (index >= 80) return { 
+      level: 'LISTO PARA TRUE', 
+      color: 'text-green-600', 
+      bgColor: 'bg-green-50',
+      description: 'Excelente posicionamiento para certificación completa'
+    };
+    if (index >= 60) return { 
+      level: 'PERFECTAMENTE POSICIONADO', 
+      color: 'text-green-600', 
+      bgColor: 'bg-green-50',
+      description: 'Ideal para iniciar proceso de certificación TRUE'
+    };
+    if (index >= 40) return { 
+      level: 'GRAN OPORTUNIDAD ESTRATÉGICA', 
+      color: 'text-blue-600', 
+      bgColor: 'bg-blue-50',
+      description: 'Excelente base para crecimiento acelerado'
+    };
+    return { 
+      level: 'OPORTUNIDAD DE ALTO IMPACTO', 
+      color: 'text-purple-600', 
+      bgColor: 'bg-purple-50',
+      description: 'Perfecta situación para transformación con máximo ROI'
+    };
   };
 
   const readinessLevel = getReadinessLevel(readinessIndex);
@@ -151,7 +171,7 @@ export function ResultsDashboard({
                       {readinessLevel.level}
                     </div>
                     <p className="text-gray-600 max-w-md">
-                      Su organización tiene un nivel de preparación {readinessLevel.level.toLowerCase()} para la certificación TRUE Zero Waste.
+                      {readinessLevel.description}. TRUE Zero Waste es la estrategia perfecta para sus objetivos de sustentabilidad.
                     </p>
                   </div>
                   
@@ -175,41 +195,37 @@ export function ResultsDashboard({
 
             {/* Gate Status */}
             <Card className="shadow-xl border-0 rounded-3xl overflow-hidden">
-              <CardHeader className={`p-6 ${gateStatus ? 'bg-green-600' : 'bg-red-600'} text-white`}>
+              <CardHeader className="p-6 bg-gradient-to-r from-blue-600 to-green-600 text-white">
                 <CardTitle className="text-lg font-bold flex items-center">
-                  {gateStatus ? (
-                    <CheckCircle className="w-5 h-5 mr-2" />
-                  ) : (
-                    <XCircle className="w-5 h-5 mr-2" />
-                  )}
-                  Gate de Elegibilidad
+                  <Target className="w-5 h-5 mr-2" />
+                  Análisis Estratégico
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6">
                 <div className="space-y-4">
-                  <div className={`text-lg font-bold ${gateStatus ? 'text-green-800' : 'text-red-800'}`}>
-                    {gateStatus ? '✅ ELEGIBLE' : '❌ NO ELEGIBLE'}
+                  <div className="text-lg font-bold text-blue-800">
+                    {gateStatus ? '🚀 LISTO PARA TRUE' : '💎 PRECERTIFICACIÓN ESTRATÉGICA'}
                   </div>
                   <p className="text-sm text-gray-600">
                     {gateStatus 
-                      ? 'Cumple con todos los requisitos mínimos'
-                      : `${criticalBlockers.length} requisitos críticos no cumplidos`
+                      ? 'Excelente posicionamiento para certificación completa'
+                      : 'Oportunidad perfecta para PRECERTIFICACIÓN con impacto inmediato'
                     }
                   </p>
                   
                   {!gateStatus && (
                     <div className="space-y-2">
-                      <div className="text-sm font-semibold text-red-800">Bloqueadores:</div>
-                      <ul className="text-xs text-red-700 space-y-1">
+                      <div className="text-sm font-semibold text-blue-800">Áreas de Mayor Impacto:</div>
+                      <ul className="text-xs text-blue-700 space-y-1">
                         {criticalBlockers.slice(0, 3).map(blocker => (
                           <li key={blocker.id} className="flex items-start">
-                            <span className="w-1 h-1 bg-red-500 rounded-full mt-2 mr-2 flex-shrink-0"></span>
-                            <span className="line-clamp-2">{blocker.question}</span>
+                            <span className="w-1 h-1 bg-blue-500 rounded-full mt-2 mr-2 flex-shrink-0"></span>
+                            <span className="line-clamp-2">Oportunidad de mejora en: {blocker.question.toLowerCase()}</span>
                           </li>
                         ))}
                         {criticalBlockers.length > 3 && (
-                          <li className="text-red-600 font-semibold">
-                            +{criticalBlockers.length - 3} más...
+                          <li className="text-blue-600 font-semibold">
+                            +{criticalBlockers.length - 3} oportunidades más...
                           </li>
                         )}
                       </ul>
@@ -297,12 +313,12 @@ export function ResultsDashboard({
                         <div className={`px-3 py-1 rounded-full text-sm font-bold ${
                           module.score >= 80 ? 'bg-green-100 text-green-800' :
                           module.score >= 60 ? 'bg-green-100 text-green-700' :
-                          module.score >= 40 ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
+                          module.score >= 40 ? 'bg-blue-100 text-blue-800' :
+                          'bg-purple-100 text-purple-800'
                         }`}>
-                          {module.score >= 80 ? 'Excelente' :
-                           module.score >= 60 ? 'Bueno' :
-                           module.score >= 40 ? 'Regular' : 'Bajo'}
+                          {module.score >= 80 ? 'Líder en Sustentabilidad' :
+                           module.score >= 60 ? 'Bien Posicionado' :
+                           module.score >= 40 ? 'Gran Potencial' : 'Máximo Impacto'}
                         </div>
                       </div>
                       
@@ -318,7 +334,10 @@ export function ResultsDashboard({
                       </div>
                       
                       <p className="text-sm text-gray-600">
-                        Peso: {Math.round(module.weight * 100)}% del total
+                        {module.score >= 60 
+                          ? `Fortaleza estratégica (${Math.round(module.weight * 100)}% del total)`
+                          : `Oportunidad de alto ROI (${Math.round(module.weight * 100)}% del total)`
+                        }
                       </p>
                     </div>
                   </CardContent>
@@ -326,6 +345,58 @@ export function ResultsDashboard({
               </motion.div>
             ))}
           </div>
+
+          {/* Strategic Opportunity Section */}
+          <Card className="shadow-xl border-0 rounded-3xl overflow-hidden bg-gradient-to-r from-blue-50 to-green-50">
+            <CardContent className="p-8">
+              <div className="text-center space-y-6">
+                <div className="text-3xl font-black text-gray-900">
+                  🎯 Estrategia Recomendada
+                </div>
+                
+                {gateStatus ? (
+                  <div className="space-y-4">
+                    <h3 className="text-xl font-bold text-green-800">
+                      ¡Excelente! Su organización está lista para TRUE Zero Waste
+                    </h3>
+                    <p className="text-gray-700 max-w-4xl mx-auto">
+                      Su nivel actual de preparación es perfecto para iniciar la certificación TRUE. 
+                      Esta certificación está 100% alineada con sus objetivos de Zero Waste y 
+                      posicionará a {contactInfo.clientName} como líder en sustentabilidad.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <h3 className="text-xl font-bold text-purple-800">
+                      🚀 PRECERTIFICACIÓN: Su Oportunidad de Impacto Inmediato
+                    </h3>
+                    <p className="text-gray-700 max-w-4xl mx-auto">
+                      Su situación actual es <strong>perfecta</strong> para una estrategia de PRECERTIFICACIÓN. 
+                      Esta fase inicial le permitirá lograr impacto inmediato mientras desarrolla las bases 
+                      para la certificación TRUE completa. Es la forma más inteligente de maximizar ROI 
+                      y posicionar a {contactInfo.clientName} como pionero en Zero Waste.
+                    </p>
+                    <div className="bg-white rounded-2xl p-6 shadow-lg">
+                      <h4 className="font-bold text-purple-800 mb-3">Beneficios de PRECERTIFICACIÓN:</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+                        <div>✅ Impacto visible en 3-6 meses</div>
+                        <div>✅ Fundamentos sólidos para TRUE</div>
+                        <div>✅ ROI inmediato en gestión de residuos</div>
+                        <div>✅ Posicionamiento de liderazgo</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                <div className="bg-white rounded-2xl p-6 shadow-lg">
+                  <p className="text-lg font-semibold text-gray-800">
+                    💡 TRUE Zero Waste no es solo una certificación, es la estrategia perfecta 
+                    para lograr sus objetivos de sustentabilidad con máximo impacto y credibilidad internacional.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
@@ -341,10 +412,10 @@ export function ResultsDashboard({
             
             <Button
               size="lg"
-              className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white px-8 py-4 text-lg font-bold rounded-2xl"
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-4 text-lg font-bold rounded-2xl"
             >
               <Download className="w-5 h-5 mr-2" />
-              Descargar Reporte
+              Plan Estratégico Detallado
             </Button>
           </div>
 
