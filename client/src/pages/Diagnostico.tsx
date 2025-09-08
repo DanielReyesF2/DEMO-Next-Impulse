@@ -50,10 +50,7 @@ export function Diagnostico() {
   // Save diagnostic session mutation
   const saveDiagnosticMutation = useMutation({
     mutationFn: async (data: any) => {
-      return await apiRequest('/api/diagnostic/sessions', {
-        method: 'POST',
-        body: JSON.stringify(data)
-      });
+      return await apiRequest('POST', '/api/diagnostic/sessions', data);
     }
   });
 
