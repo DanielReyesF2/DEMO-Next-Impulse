@@ -452,9 +452,13 @@ export function calculateReadinessIndex(answers: Record<string, string>): {
     totalScore += score;
   });
   
+  // Calcular el promedio ponderado para TRUE Readiness
+  const totalWeight = DIAGNOSTIC_CONFIG.reduce((sum, module) => sum + module.weight, 0);
+  const weightedReadiness = totalWeight > 0 ? totalScore / totalWeight : 0;
+
   return {
     gateStatus,
-    readinessIndex: Math.round(totalScore * 100),
+    readinessIndex: Math.round(weightedReadiness * 100),
     moduleScores
   };
 }

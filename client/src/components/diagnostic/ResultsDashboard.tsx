@@ -133,8 +133,12 @@ export function ResultsDashboard({
     let totalWeight = 0;
 
     Object.entries(circularityFactors).forEach(([moduleId, weight]) => {
-      const moduleScore = moduleScores[moduleId] || 0;
-      totalScore += moduleScore * weight;
+      // Obtener el puntaje bruto del módulo (0-1) dividiendo por su peso original
+      const module = DIAGNOSTIC_CONFIG.find(m => m.id === moduleId);
+      if (!module || module.weight === 0) return;
+      
+      const rawScore = (moduleScores[moduleId] || 0) / module.weight; // Esto da el puntaje 0-1
+      totalScore += rawScore * weight;
       totalWeight += weight;
     });
 
@@ -143,12 +147,21 @@ export function ResultsDashboard({
 
   const circularityIndex = calculateCircularityIndex();
 
-  // Datos para gráfica de araña
-  const radarData = moduleData.map(module => ({
-    module: module.name.split(' ')[0], // Tomar primera palabra para que se vea mejor
-    score: module.score,
-    fullName: module.name
-  }));
+  // Datos para gráfica de araña - convertir puntajes ponderados a porcentajes
+  const radarData = moduleData.map(module => {
+    // Encontrar el módulo en la configuración para obtener su peso
+    const configModule = DIAGNOSTIC_CONFIG.find(m => m.id === module.id);
+    const moduleWeight = configModule?.weight || 1;
+    
+    // Convertir el puntaje ponderado a porcentaje (0-100)
+    const percentageScore = moduleWeight > 0 ? Math.round((module.score / moduleWeight) * 100) : 0;
+    
+    return {
+      module: module.name.split(' ')[0], // Tomar primera palabra para que se vea mejor
+      score: percentageScore,
+      fullName: module.name
+    };
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
@@ -201,7 +214,7 @@ export function ResultsDashboard({
                     {readinessIndex}%
                   </div>
                   <div className={`inline-flex px-3 py-1 rounded-full text-xs font-bold ${readinessLevel.bgColor} ${readinessLevel.color}`}>
-                    {readinessLevel.level}
+                    {readinessIndex >= 50 ? 'IDEAL PARA PRECERTIFICACIÓN' : readinessLevel.level}
                   </div>
                   <div className="w-32 h-32 mx-auto">
                     <ResponsiveContainer width="100%" height="100%">
