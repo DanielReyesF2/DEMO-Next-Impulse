@@ -43,10 +43,17 @@ interface TooltipData {
 // Datos para el Club de Golf Avandaro - Flujo de Materiales
 const sankeyData: SankeyData = {
   nodes: [
-    // Puntos de Origen
-    { id: 'Casa Club', nodeColor: '#3b82f6' },
-    { id: 'Acuarima, Restaurante Jose', nodeColor: '#f97316' },
-    { id: 'Eventos & Instalaciones', nodeColor: '#10b981' },
+    // Puntos de Origen - Áreas del Club
+    { id: 'Kiosko 1', nodeColor: '#3b82f6' },
+    { id: 'Kiosko 2', nodeColor: '#1d4ed8' },
+    { id: 'Habitaciones Hotel', nodeColor: '#7c3aed' },
+    { id: 'Suites', nodeColor: '#9333ea' },
+    { id: 'Club Residencial Avandaro', nodeColor: '#059669' },
+    { id: 'Restaurante Acuarimas', nodeColor: '#f97316' },
+    { id: 'Restaurante José', nodeColor: '#ea580c' },
+    { id: 'Campo', nodeColor: '#16a34a' },
+    { id: 'Canchas de Padel', nodeColor: '#0ea5e9' },
+    { id: 'Canchas de Tennis', nodeColor: '#06b6d4' },
     
     // Categorías Intermedias
     { id: 'Orgánicos', nodeColor: '#22c55e' },
@@ -61,17 +68,51 @@ const sankeyData: SankeyData = {
   ],
   links: [
     // Desde Puntos de Origen a Categorías
-    { source: 'Casa Club', target: 'Orgánicos', value: 3.8 },
-    { source: 'Casa Club', target: 'Reciclables', value: 1.2 },
-    { source: 'Casa Club', target: 'Inorgánicos', value: 1.2 },
     
-    { source: 'Acuarima, Restaurante Jose', target: 'Orgánicos', value: 14.2 },
-    { source: 'Acuarima, Restaurante Jose', target: 'Reciclables', value: 2.8 },
-    { source: 'Acuarima, Restaurante Jose', target: 'Inorgánicos', value: 1.4 },
+    // Kioscos (distribución mixta)
+    { source: 'Kiosko 1', target: 'Orgánicos', value: 1.2 },
+    { source: 'Kiosko 1', target: 'Reciclables', value: 1.5 },
+    { source: 'Kiosko 1', target: 'Inorgánicos', value: 0.8 },
     
-    { source: 'Eventos & Instalaciones', target: 'Orgánicos', value: 3.6 },
-    { source: 'Eventos & Instalaciones', target: 'Reciclables', value: 1.2 },
-    { source: 'Eventos & Instalaciones', target: 'Inorgánicos', value: 3.6 },
+    { source: 'Kiosko 2', target: 'Orgánicos', value: 1.0 },
+    { source: 'Kiosko 2', target: 'Reciclables', value: 1.3 },
+    { source: 'Kiosko 2', target: 'Inorgánicos', value: 0.7 },
+    
+    // Hotel y Suites (alto reciclables)
+    { source: 'Habitaciones Hotel', target: 'Orgánicos', value: 2.5 },
+    { source: 'Habitaciones Hotel', target: 'Reciclables', value: 2.2 },
+    { source: 'Habitaciones Hotel', target: 'Inorgánicos', value: 1.3 },
+    
+    { source: 'Suites', target: 'Orgánicos', value: 1.8 },
+    { source: 'Suites', target: 'Reciclables', value: 1.6 },
+    { source: 'Suites', target: 'Inorgánicos', value: 0.9 },
+    
+    // Club Residencial
+    { source: 'Club Residencial Avandaro', target: 'Orgánicos', value: 1.5 },
+    { source: 'Club Residencial Avandaro', target: 'Reciclables', value: 1.0 },
+    { source: 'Club Residencial Avandaro', target: 'Inorgánicos', value: 0.8 },
+    
+    // Restaurantes (alto orgánicos)
+    { source: 'Restaurante Acuarimas', target: 'Orgánicos', value: 7.8 },
+    { source: 'Restaurante Acuarimas', target: 'Reciclables', value: 1.5 },
+    { source: 'Restaurante Acuarimas', target: 'Inorgánicos', value: 0.7 },
+    
+    { source: 'Restaurante José', target: 'Orgánicos', value: 6.4 },
+    { source: 'Restaurante José', target: 'Reciclables', value: 1.3 },
+    { source: 'Restaurante José', target: 'Inorgánicos', value: 0.7 },
+    
+    // Áreas deportivas (orgánicos de mantenimiento)
+    { source: 'Campo', target: 'Orgánicos', value: 2.4 },
+    { source: 'Campo', target: 'Reciclables', value: 0.3 },
+    { source: 'Campo', target: 'Inorgánicos', value: 0.5 },
+    
+    { source: 'Canchas de Padel', target: 'Orgánicos', value: 0.6 },
+    { source: 'Canchas de Padel', target: 'Reciclables', value: 0.4 },
+    { source: 'Canchas de Padel', target: 'Inorgánicos', value: 0.3 },
+    
+    { source: 'Canchas de Tennis', target: 'Orgánicos', value: 0.4 },
+    { source: 'Canchas de Tennis', target: 'Reciclables', value: 0.3 },
+    { source: 'Canchas de Tennis', target: 'Inorgánicos', value: 0.3 },
     
     // Desde Categorías a Destinos Finales
     { source: 'Orgánicos', target: 'Biodegradación ORKA', value: 21.6 },
@@ -87,7 +128,8 @@ const sankeyData: SankeyData = {
 const calculateTotalValue = () => {
   return sankeyData.links.reduce((total, link) => {
     // Solo sumar los links desde puntos de origen
-    if (['Casa Club', 'Acuarima, Restaurante Jose', 'Eventos & Instalaciones'].includes(link.source)) {
+    if (['Kiosko 1', 'Kiosko 2', 'Habitaciones Hotel', 'Suites', 'Club Residencial Avandaro', 
+         'Restaurante Acuarimas', 'Restaurante José', 'Campo', 'Canchas de Padel', 'Canchas de Tennis'].includes(link.source)) {
       return total + link.value;
     }
     return total;
