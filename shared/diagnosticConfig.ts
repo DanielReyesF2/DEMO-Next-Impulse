@@ -90,7 +90,7 @@ export const DIAGNOSTIC_CONFIG: DiagnosticModule[] = [
     questions: [
       {
         id: "B1",
-        text: "¿Cómo prefieren medir sus materiales y residuos?",
+        text: "¿Cómo miden actualmente sus materiales y residuos?",
         type: "single",
         options: {
           "Equipos de pesaje propios": 1,
@@ -101,26 +101,26 @@ export const DIAGNOSTIC_CONFIG: DiagnosticModule[] = [
       },
       {
         id: "B2",
-        text: "¿Con qué frecuencia les gustaría tener información actualizada?",
+        text: "¿Con qué frecuencia reciben información actualizada de residuos?",
         type: "single",
         options: {
-          "Diario (máximo control)": 1,
-          "Semanal (buen balance)": 0.8,
-          "Mensual (práctico)": 0.6,
-          "Cuando sea necesario": 0.2
+          "Diariamente": 1,
+          "Semanalmente": 0.8,
+          "Mensualmente": 0.6,
+          "Esporádicamente": 0.2
         }
       },
       {
         id: "B3",
-        text: "¿Les interesaría conocer el detalle por tipo de material?",
+        text: "¿Tienen registro detallado por tipo de material?",
         type: "single",
-        options: { "Sí, nos daría mucho valor": 1, "Para algunos materiales clave": 0.6, "Con información general es suficiente": 0 }
+        options: { "Sí, todos los tipos": 1, "Solo materiales principales": 0.6, "Solo información general": 0 }
       },
       {
         id: "B4",
-        text: "Registro por área generadora",
+        text: "¿Registran residuos por área generadora?",
         type: "single",
-        options: { "Sí": 1, "Parcial": 0.6, "No": 0 }
+        options: { "Sí, todas las áreas": 1, "Áreas principales": 0.6, "No registramos por área": 0 }
       },
       {
         id: "B5",
@@ -300,26 +300,26 @@ export const DIAGNOSTIC_CONFIG: DiagnosticModule[] = [
       },
       {
         id: "J2",
-        text: "¿Con qué frecuencia les gustaría reforzar la cultura de sustentabilidad?",
+        text: "¿Con qué frecuencia refuerzan la cultura de sustentabilidad?",
         type: "single",
         options: {
-          "Cada 3 meses (alto impacto)": 1,
-          "Cada 6 meses (buen balance)": 0.8,
-          "Anualmente (práctico)": 0.6,
-          "Cuando sea necesario": 0
+          "Cada 3 meses": 1,
+          "Cada 6 meses": 0.8,
+          "Anualmente": 0.6,
+          "No lo hacemos sistemáticamente": 0
         }
       },
       {
         id: "J3",
-        text: "¿Les gustaría que sus logros de sustentabilidad fueran visibles para todos?",
+        text: "¿Sus logros de sustentabilidad son visibles para toda la organización?",
         type: "single",
-        options: { "Sí, nos motivaría mucho": 1, "Preferimos comunicación interna": 0 }
+        options: { "Sí, son públicos internamente": 1, "Solo comunicación directiva": 0.5, "No los comunicamos": 0 }
       },
       {
         id: "J4",
-        text: "¿Considerarían reconocer/premiar los logros en sustentabilidad?",
+        text: "¿Reconocen o premian actualmente los logros en sustentabilidad?",
         type: "single",
-        options: { "Sí, excelente idea": 1, "Lo estamos considerando": 0.6, "Por el momento no": 0 }
+        options: { "Sí, tenemos sistema de reconocimientos": 1, "Reconocimientos informales": 0.6, "No reconocemos": 0 }
       },
       {
         id: "J5",
