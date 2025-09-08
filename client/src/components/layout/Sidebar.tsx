@@ -13,7 +13,8 @@ import {
   RotateCcw,
   Table,
   Download,
-  Save
+  Save,
+  Award
 } from "lucide-react";
 import logoEconova from "../../assets/Logo-ECONOVA-OF_Blanco.png";
 
@@ -107,6 +108,15 @@ export default function Sidebar() {
           isActive={location === "/economia-circular"}
         >
           Economía Circular
+        </SidebarItem>
+        
+        <div className="px-4 py-2 mt-4 text-xs uppercase tracking-wider text-gray-400">Diagnóstico</div>
+        <SidebarItem 
+          to="/diagnostico" 
+          icon={<Award className="w-5 h-5" />} 
+          isActive={location === "/diagnostico"}
+        >
+          TRUE Zero Waste
         </SidebarItem>
         
         <div className="px-4 py-2 mt-4 text-xs uppercase tracking-wider text-gray-400">Administración</div>
