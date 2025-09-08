@@ -17,6 +17,9 @@ import {
 } from 'lucide-react';
 import { DIAGNOSTIC_CONFIG, calculateReadinessIndex } from '@shared/diagnosticConfig';
 import { GateModule } from '@/components/diagnostic/GateModule';
+import { ResultsDashboard } from '@/components/diagnostic/ResultsDashboard';
+import { useMutation } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/queryClient';
 
 type DiagnosticStep = 'welcome' | 'contact' | 'modules' | 'results';
 
@@ -43,6 +46,16 @@ export function Diagnostico() {
   const answeredQuestions = Object.keys(answers).length;
   const progress = (answeredQuestions / totalQuestions) * 100;
 
+  // Save diagnostic session mutation
+  const saveDiagnosticMutation = useMutation({
+    mutationFn: async (data: any) => {
+      return await apiRequest('/api/diagnostic/sessions', {
+        method: 'POST',
+        body: JSON.stringify(data)
+      });
+    }
+  });
+
   const handleAnswer = (questionId: string, answer: string) => {
     setAnswers(prev => ({ ...prev, [questionId]: answer }));
     
@@ -54,7 +67,35 @@ export function Diagnostico() {
         setCurrentModuleIndex(prev => prev + 1);
         setCurrentQuestionIndex(0);
       } else {
-        // All questions answered, go to results
+        // All questions answered, calculate results and save
+        const { gateStatus, readinessIndex, moduleScores } = calculateReadinessIndex(answers);
+        
+        // Prepare responses data for saving
+        const responses = Object.entries(answers).map(([questionId, answer]) => {
+          const moduleId = questionId.match(/^([A-Z]+)/)?.[1] || questionId.charAt(0);
+          const module = DIAGNOSTIC_CONFIG.find(m => m.id === moduleId);
+          const question = module?.questions.find(q => q.id === questionId);
+          const score = question?.options[answer] ?? 0;
+          
+          return {
+            moduleId,
+            questionId,
+            answer,
+            score
+          };
+        });
+
+        // Save to database
+        saveDiagnosticMutation.mutate({
+          clientName: contactInfo.clientName,
+          contactEmail: contactInfo.contactEmail,
+          contactPhone: contactInfo.contactPhone,
+          gateStatus,
+          readinessIndex,
+          moduleScores,
+          responses
+        });
+
         setCurrentStep('results');
       }
     }, 800);
@@ -430,64 +471,18 @@ export function Diagnostico() {
   }
 
   if (currentStep === 'results') {
-    const { gateStatus, readinessIndex } = calculateReadinessIndex(answers);
+    const { gateStatus, readinessIndex, moduleScores } = calculateReadinessIndex(answers);
 
     return (
       <AppLayout>
-        <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
-          <div className="max-w-4xl mx-auto px-4 py-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="text-center space-y-8"
-            >
-              <div className="space-y-4">
-                <div className={`w-20 h-20 mx-auto rounded-2xl flex items-center justify-center ${
-                  gateStatus ? 'bg-green-500' : 'bg-orange-500'
-                } shadow-2xl`}>
-                  <Award className="w-10 h-10 text-white" />
-                </div>
-                
-                <h1 className="text-4xl font-black text-gray-900">
-                  Resultados del Diagnóstico
-                </h1>
-                
-                <div className="bg-white rounded-3xl p-8 shadow-xl">
-                  <div className="text-center space-y-4">
-                    <div className="text-6xl font-black text-gray-900">
-                      {readinessIndex}%
-                    </div>
-                    <div className="text-xl text-gray-600">
-                      TRUE Readiness Index
-                    </div>
-                    
-                    <div className={`inline-flex px-4 py-2 rounded-full text-sm font-bold ${
-                      gateStatus 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-orange-100 text-orange-800'
-                    }`}>
-                      {gateStatus ? '✅ Elegible para TRUE' : '⚠️ Preparación requerida'}
-                    </div>
-                  </div>
-                </div>
-
-                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                  Su diagnóstico ha sido completado. Los resultados detallados y plan de acción 
-                  han sido enviados a <strong>{contactInfo.contactEmail}</strong>.
-                </p>
-
-                <Button
-                  onClick={() => window.location.reload()}
-                  size="lg"
-                  className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white px-8 py-4 text-lg font-bold rounded-2xl"
-                >
-                  Realizar Nuevo Diagnóstico
-                </Button>
-              </div>
-            </motion.div>
-          </div>
-        </div>
+        <ResultsDashboard
+          contactInfo={contactInfo}
+          answers={answers}
+          gateStatus={gateStatus}
+          readinessIndex={readinessIndex}
+          moduleScores={moduleScores}
+          onRestart={() => window.location.reload()}
+        />
       </AppLayout>
     );
   }

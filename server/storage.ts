@@ -10,9 +10,11 @@ import {
   LandfillEntry, InsertLandfillEntry,
   DailyWasteEntry, InsertDailyWasteEntry,
   MonthlySummary, InsertMonthlySummary,
+  DiagnosticSession, InsertDiagnosticSession,
+  DiagnosticResponse, InsertDiagnosticResponse,
   clients, documents, wasteData, alerts,
   months, recyclingEntries, compostEntries, reuseEntries, landfillEntries,
-  dailyWasteEntries, monthlySummaries,
+  dailyWasteEntries, monthlySummaries, diagnosticSessions, diagnosticResponses,
   RECYCLING_MATERIALS, COMPOST_CATEGORIES, REUSE_CATEGORIES, LANDFILL_WASTE_TYPES
 } from "@shared/schema";
 import { db } from "./db";
@@ -79,6 +81,13 @@ export interface IStorage {
   closeMonthlySummary(id: number, closedBy: string): Promise<MonthlySummary>;
   markAsTransferred(id: number): Promise<MonthlySummary>;
   transferToOfficialData(summary: MonthlySummary): Promise<void>;
+  
+  // Diagnostic operations
+  createDiagnosticSession(session: InsertDiagnosticSession): Promise<number>;
+  createDiagnosticResponse(response: InsertDiagnosticResponse): Promise<DiagnosticResponse>;
+  getDiagnosticSessions(): Promise<DiagnosticSession[]>;
+  getDiagnosticSession(id: number): Promise<DiagnosticSession | undefined>;
+  getDiagnosticResponses(sessionId: number): Promise<DiagnosticResponse[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -746,6 +755,46 @@ export class DatabaseStorage implements IStorage {
     
     // Aquí implementaremos la lógica para mapear los datos del resumen mensual
     // a la estructura de monthly_deviation_data que usa el Excel de trazabilidad
+  }
+
+  // Diagnostic operations implementation
+  async createDiagnosticSession(session: InsertDiagnosticSession): Promise<number> {
+    const [created] = await db
+      .insert(diagnosticSessions)
+      .values(session)
+      .returning();
+    return created.id;
+  }
+
+  async createDiagnosticResponse(response: InsertDiagnosticResponse): Promise<DiagnosticResponse> {
+    const [created] = await db
+      .insert(diagnosticResponses)
+      .values(response)
+      .returning();
+    return created;
+  }
+
+  async getDiagnosticSessions(): Promise<DiagnosticSession[]> {
+    return await db
+      .select()
+      .from(diagnosticSessions)
+      .orderBy(diagnosticSessions.completedAt);
+  }
+
+  async getDiagnosticSession(id: number): Promise<DiagnosticSession | undefined> {
+    const [session] = await db
+      .select()
+      .from(diagnosticSessions)
+      .where(eq(diagnosticSessions.id, id));
+    return session;
+  }
+
+  async getDiagnosticResponses(sessionId: number): Promise<DiagnosticResponse[]> {
+    return await db
+      .select()
+      .from(diagnosticResponses)
+      .where(eq(diagnosticResponses.sessionId, sessionId))
+      .orderBy(diagnosticResponses.moduleId, diagnosticResponses.questionId);
   }
 }
 

@@ -759,6 +759,79 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // === DIAGNOSTIC ROUTES ===
+  
+  // Create a new diagnostic session
+  app.post('/api/diagnostic/sessions', async (req: Request, res: Response) => {
+    try {
+      const { clientName, contactEmail, contactPhone, gateStatus, readinessIndex, moduleScores, responses } = req.body;
+      
+      // Create the session
+      const sessionId = await storage.createDiagnosticSession({
+        clientName,
+        contactEmail,
+        contactPhone,
+        gateStatus,
+        readinessIndex,
+        moduleScores
+      });
+      
+      // Save all responses
+      for (const response of responses) {
+        await storage.createDiagnosticResponse({
+          sessionId,
+          moduleId: response.moduleId,
+          questionId: response.questionId,
+          answer: response.answer,
+          score: response.score
+        });
+      }
+      
+      res.json({ 
+        success: true, 
+        sessionId,
+        message: "Diagnóstico guardado exitosamente" 
+      });
+      
+    } catch (error) {
+      console.error("Error creating diagnostic session:", error);
+      res.status(500).json({ message: "Error al guardar el diagnóstico" });
+    }
+  });
+  
+  // Get all diagnostic sessions
+  app.get('/api/diagnostic/sessions', async (req: Request, res: Response) => {
+    try {
+      const sessions = await storage.getDiagnosticSessions();
+      res.json(sessions);
+    } catch (error) {
+      console.error("Error fetching diagnostic sessions:", error);
+      res.status(500).json({ message: "Error al obtener las sesiones" });
+    }
+  });
+  
+  // Get a specific diagnostic session with responses
+  app.get('/api/diagnostic/sessions/:id', async (req: Request, res: Response) => {
+    try {
+      const sessionId = parseInt(req.params.id);
+      const session = await storage.getDiagnosticSession(sessionId);
+      
+      if (!session) {
+        return res.status(404).json({ message: "Sesión no encontrada" });
+      }
+      
+      const responses = await storage.getDiagnosticResponses(sessionId);
+      
+      res.json({
+        ...session,
+        responses
+      });
+    } catch (error) {
+      console.error("Error fetching diagnostic session:", error);
+      res.status(500).json({ message: "Error al obtener la sesión" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
