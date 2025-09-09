@@ -147,15 +147,17 @@ export function Diagnostico() {
                     transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
                   >
                     <motion.h1 
-                      className="text-7xl md:text-8xl font-extralight bg-gradient-to-r from-navy to-lime-600 bg-clip-text text-transparent tracking-tight leading-[0.85] mb-6"
+                      className="text-7xl md:text-8xl font-extralight text-navy tracking-tight leading-[0.85] mb-6"
                       whileHover={{ 
                         scale: 1.02
                       }}
                       transition={{ type: "spring", stiffness: 400, damping: 25 }}
                     >
-                      ECONOMÍA
+                      <span className="bg-gradient-to-r from-navy to-lime-600 bg-clip-text text-transparent">
+                        ECONOMÍA
+                      </span>
                       <br />
-                      <span className="font-light">
+                      <span className="text-lime-600 font-light">
                         CIRCULAR
                       </span>
                     </motion.h1>
