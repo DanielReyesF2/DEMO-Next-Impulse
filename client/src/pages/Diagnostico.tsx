@@ -153,7 +153,7 @@ export function Diagnostico() {
                       }}
                       transition={{ type: "spring", stiffness: 400, damping: 25 }}
                     >
-                      <span className="bg-gradient-to-r from-navy to-lime bg-clip-text text-transparent">
+                      <span className="text-navy">
                         ECONOMÍA
                       </span>
                       <br />
