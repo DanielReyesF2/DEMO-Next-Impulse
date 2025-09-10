@@ -244,9 +244,7 @@ export function WasteFlowVisualization({ totalWasteDiverted }: WasteFlowVisualiz
           <h2 className="text-3xl font-anton uppercase tracking-wide mb-2 text-[#b5e951]">
             Flujos de Materiales
           </h2>
-          <p className="text-lg text-gray-600">
-            Diagrama Sankey interactivo - Club de Golf Avandaro
-          </p>
+          
         </div>
         
         <div className="flex items-center space-x-3">
