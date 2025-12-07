@@ -3,47 +3,48 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
+
+// Health check endpoint - MUST be first, before any middleware
+app.get("/health", (_req, res) => {
+  try {
+    res.status(200).json({ 
+      status: "ok", 
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime()
+    });
+  } catch (e) {
+    res.status(500).json({ 
+      status: "error", 
+      message: e instanceof Error ? e.message : String(e)
+    });
+  }
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Health check endpoint
-app.get("/health", (_req, res) => {
-  res.json({ status: "ok", timestamp: new Date().toISOString() });
-});
-
 app.use((req, res, next) => {
-  const start = Date.now();
-  const path = req.path;
-  let capturedJsonResponse: Record<string, any> | undefined = undefined;
+  try {
+    const start = Date.now();
+    const path = req.path;
 
-  // Log all incoming requests
-  log(`${req.method} ${path}`);
+    // Log all incoming requests
+    log(`${req.method} ${path}`);
 
-  const originalResJson = res.json;
-  res.json = function (bodyJson, ...args) {
-    capturedJsonResponse = bodyJson;
-    return originalResJson.apply(res, [bodyJson, ...args]);
-  };
-
-  res.on("finish", () => {
-    const duration = Date.now() - start;
-    if (path.startsWith("/api")) {
-      let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
-      if (capturedJsonResponse) {
-        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
+    res.on("finish", () => {
+      try {
+        const duration = Date.now() - start;
+        log(`${req.method} ${path} ${res.statusCode} in ${duration}ms`);
+      } catch (e) {
+        // Ignore logging errors
       }
+    });
 
-      if (logLine.length > 80) {
-        logLine = logLine.slice(0, 79) + "…";
-      }
-
-      log(logLine);
-    } else {
-      log(`${req.method} ${path} ${res.statusCode} in ${duration}ms`);
-    }
-  });
-
-  next();
+    next();
+  } catch (e) {
+    log(`Error in request middleware: ${e}`);
+    next(e);
+  }
 });
 
 (async () => {
@@ -90,6 +91,17 @@ app.use((req, res, next) => {
       log(`✓ Server listening on port ${port}`);
       log(`✓ Environment: ${app.get("env")}`);
       log(`✓ Ready to accept connections`);
+      log(`✓ Health check available at: http://0.0.0.0:${port}/health`);
+    });
+
+    // Verify server is actually listening
+    server.on('listening', () => {
+      const address = server.address();
+      log(`✓ Server confirmed listening on ${address ? JSON.stringify(address) : 'unknown'}`);
+    });
+
+    server.on('close', () => {
+      log(`⚠ Server closed`);
     });
 
     // Handle uncaught errors
