@@ -22,7 +22,7 @@ export default function TopNavigation() {
     <header className="bg-white border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
+          {/* Logo + Demo Badge */}
           <Link href="/" className="flex items-center space-x-2">
             <svg viewBox="0 0 60 60" className="h-10 w-10">
               {/* X shape - gray outline */}
@@ -30,7 +30,9 @@ export default function TopNavigation() {
               {/* Green accent - left part */}
               <path d="M15 8 L28 30 L15 52 L22 52 L30 38 L30 22 L22 8 Z" fill="#7CB342" />
             </svg>
-            <span className="text-lg font-semibold text-gray-700">Next Impulse</span>
+            <span className="px-2 py-0.5 text-xs font-medium text-emerald-700 bg-emerald-50 rounded-full border border-emerald-200">
+              Demo
+            </span>
           </Link>
 
           {/* Navigation Tabs */}
@@ -50,21 +52,15 @@ export default function TopNavigation() {
             ))}
           </nav>
 
-          {/* Right side: Demo Badge + Powered by */}
-          <div className="flex items-center gap-4">
-            <span className="px-3 py-1 text-xs font-medium text-emerald-700 bg-emerald-50 rounded-full border border-emerald-200">
-              Demo
-            </span>
-            <div className="flex items-center gap-2 border-l border-gray-200 pl-4">
-              <span className="text-xs text-gray-500">Powered by</span>
-              <img 
-                src="/images/logo-econova.png" 
-                alt="Econova" 
-                className="h-5 w-auto"
-                style={{ filter: 'invert(1) brightness(0.2)' }}
-              />
-              <span className="text-xs font-semibold text-gray-700">Econova</span>
-            </div>
+          {/* Right side: Powered by */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-gray-500">Powered by</span>
+            <img 
+              src="/images/logo-econova.png" 
+              alt="Econova" 
+              className="h-8 w-auto"
+              style={{ filter: 'invert(1) brightness(0.2)' }}
+            />
           </div>
         </div>
       </div>
