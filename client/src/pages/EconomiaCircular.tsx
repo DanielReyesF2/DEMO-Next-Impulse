@@ -1,8 +1,16 @@
-import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
+import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line, AreaChart, Area } from "recharts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AppLayout from "../components/layout/AppLayout";
-import { ClubHeader } from "../components/dashboard/ClubHeader";
-import { RotateCcw, TrendingUp, Award, Target } from "lucide-react";
+import { ExecutiveKPICard } from "@/components/dashboard/ExecutiveKPICard";
+import { RotateCcw, TrendingUp, Award, Target, BarChart3 } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 // Datos del índice de circularidad
 const circularityMetrics = [
@@ -38,17 +46,52 @@ export default function EconomiaCircular() {
   return (
     <AppLayout>
       <div className="min-h-screen bg-gray-50">
-        <ClubHeader />
-        
-        <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="max-w-[1600px] mx-auto px-6 py-8">
           {/* Header del módulo */}
           <div className="mb-8">
-            <h1 className="text-3xl font-anton text-gray-800 uppercase tracking-wider">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
               Economía Circular
             </h1>
-            <p className="text-gray-600 mt-2">
+            <p className="text-gray-600">
               Índice integral de circularidad y sostenibilidad del Club Campestre
             </p>
+          </div>
+
+          {/* KPI Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <ExecutiveKPICard
+              title="Índice de Circularidad"
+              value={`${indiceCircularidad.toFixed(0)}%`}
+              subtitle="Nivel: Avanzado"
+              icon={<RotateCcw className="w-5 h-5" />}
+              variant="success"
+              trend={{
+                value: 14,
+                label: "vs 6 meses",
+                direction: "up"
+              }}
+            />
+            <ExecutiveKPICard
+              title="Mejor Categoría"
+              value={mejorCategoria.subject}
+              subtitle={`${mejorCategoria.score}% - ${mejorCategoria.description}`}
+              icon={<Award className="w-5 h-5" />}
+              variant="success"
+            />
+            <ExecutiveKPICard
+              title="Oportunidad"
+              value={categoriaAMejorar.subject}
+              subtitle={`${categoriaAMejorar.score}% - ${categoriaAMejorar.description}`}
+              icon={<Target className="w-5 h-5" />}
+              variant="warning"
+            />
+            <ExecutiveKPICard
+              title="Tendencia"
+              value="+14%"
+              subtitle="Mejora en 6 meses"
+              icon={<TrendingUp className="w-5 h-5" />}
+              variant="primary"
+            />
           </div>
 
           {/* Indicador principal de circularidad */}

@@ -12,12 +12,14 @@ import {
   MonthlySummary, InsertMonthlySummary,
   DiagnosticSession, InsertDiagnosticSession,
   DiagnosticResponse, InsertDiagnosticResponse,
+  PermisoAmbiental, InsertPermisoAmbiental,
   clients, documents, wasteData, alerts,
   months, recyclingEntries, compostEntries, reuseEntries, landfillEntries,
   dailyWasteEntries, monthlySummaries, diagnosticSessions, diagnosticResponses,
+  permisosAmbientales,
   RECYCLING_MATERIALS, COMPOST_CATEGORIES, REUSE_CATEGORIES, LANDFILL_WASTE_TYPES
 } from "@shared/schema";
-import { db } from "./db";
+import { db, isDatabaseAvailable } from "./db";
 import { eq, and, gte, lte } from "drizzle-orm";
 
 export interface IStorage {
@@ -88,6 +90,13 @@ export interface IStorage {
   getDiagnosticSessions(): Promise<DiagnosticSession[]>;
   getDiagnosticSession(id: number): Promise<DiagnosticSession | undefined>;
   getDiagnosticResponses(sessionId: number): Promise<DiagnosticResponse[]>;
+  
+  // Permisos Ambientales operations
+  getPermisosAmbientales(clientId?: number): Promise<PermisoAmbiental[]>;
+  getPermisoAmbiental(id: number): Promise<PermisoAmbiental | undefined>;
+  createPermisoAmbiental(permiso: InsertPermisoAmbiental): Promise<PermisoAmbiental>;
+  updatePermisoAmbiental(id: number, updates: Partial<PermisoAmbiental>): Promise<PermisoAmbiental | undefined>;
+  deletePermisoAmbiental(id: number): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -341,6 +350,27 @@ export class MemStorage implements IStorage {
   
   async updateWasteDataForYear(year: number, data: any): Promise<void> {
     throw new Error("Detailed waste tracking not implemented in MemStorage");
+  }
+  
+  // Permisos Ambientales operations - stub implementations
+  async getPermisosAmbientales(clientId?: number): Promise<PermisoAmbiental[]> {
+    throw new Error("Permisos ambientales not implemented in MemStorage");
+  }
+  
+  async getPermisoAmbiental(id: number): Promise<PermisoAmbiental | undefined> {
+    throw new Error("Permisos ambientales not implemented in MemStorage");
+  }
+  
+  async createPermisoAmbiental(permiso: InsertPermisoAmbiental): Promise<PermisoAmbiental> {
+    throw new Error("Permisos ambientales not implemented in MemStorage");
+  }
+  
+  async updatePermisoAmbiental(id: number, updates: Partial<PermisoAmbiental>): Promise<PermisoAmbiental | undefined> {
+    throw new Error("Permisos ambientales not implemented in MemStorage");
+  }
+  
+  async deletePermisoAmbiental(id: number): Promise<boolean> {
+    throw new Error("Permisos ambientales not implemented in MemStorage");
   }
 }
 
@@ -796,10 +826,63 @@ export class DatabaseStorage implements IStorage {
       .where(eq(diagnosticResponses.sessionId, sessionId))
       .orderBy(diagnosticResponses.moduleId, diagnosticResponses.questionId);
   }
+  
+  // Permisos Ambientales operations
+  async getPermisosAmbientales(clientId?: number): Promise<PermisoAmbiental[]> {
+    if (clientId) {
+      return await db
+        .select()
+        .from(permisosAmbientales)
+        .where(eq(permisosAmbientales.clientId, clientId))
+        .orderBy(permisosAmbientales.fechaVencimiento);
+    }
+    return await db
+      .select()
+      .from(permisosAmbientales)
+      .orderBy(permisosAmbientales.fechaVencimiento);
+  }
+  
+  async getPermisoAmbiental(id: number): Promise<PermisoAmbiental | undefined> {
+    const results = await db
+      .select()
+      .from(permisosAmbientales)
+      .where(eq(permisosAmbientales.id, id));
+    return results.length > 0 ? results[0] : undefined;
+  }
+  
+  async createPermisoAmbiental(permiso: InsertPermisoAmbiental): Promise<PermisoAmbiental> {
+    const [newPermiso] = await db
+      .insert(permisosAmbientales)
+      .values(permiso)
+      .returning();
+    return newPermiso;
+  }
+  
+  async updatePermisoAmbiental(id: number, updates: Partial<PermisoAmbiental>): Promise<PermisoAmbiental | undefined> {
+    const [updated] = await db
+      .update(permisosAmbientales)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(permisosAmbientales.id, id))
+      .returning();
+    return updated;
+  }
+  
+  async deletePermisoAmbiental(id: number): Promise<boolean> {
+    const result = await db
+      .delete(permisosAmbientales)
+      .where(eq(permisosAmbientales.id, id))
+      .returning();
+    return result.length > 0;
+  }
 }
 
 // Asegurémonos de tener algunos datos iniciales de clientes
 async function initializeDatabase() {
+  if (!isDatabaseAvailable() || !db) {
+    console.log("Base de datos no disponible, usando almacenamiento en memoria");
+    return;
+  }
+  
   try {
     const existingClients = await db.select().from(clients);
     
@@ -828,4 +911,5 @@ async function initializeDatabase() {
 // Inicializar la base de datos y exportar la instancia de almacenamiento
 initializeDatabase().catch(err => console.error("Error al inicializar la base de datos:", err));
 
-export const storage = new DatabaseStorage();
+// Usar DatabaseStorage si la base de datos está disponible, sino usar MemStorage
+export const storage = isDatabaseAvailable() ? new DatabaseStorage() : new MemStorage();

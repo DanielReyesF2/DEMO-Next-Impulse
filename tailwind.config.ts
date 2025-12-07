@@ -61,6 +61,15 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Colores para trazabilidad circular
+        primary: {
+          DEFAULT: "#059669",
+          light: "#10B981",
+          dark: "#047857",
+        },
+        graficos: "#8B5CF6",      // Morado para gráficos/vinilos
+        exhibidores: "#3B82F6",   // Azul para exhibidores
+        proceso: "#F59E0B",       // Naranja para procesamiento
       },
       keyframes: {
         "accordion-down": {

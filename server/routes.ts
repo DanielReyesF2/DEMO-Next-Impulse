@@ -832,6 +832,81 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Permisos Ambientales endpoints
+  // Get all permisos ambientales
+  app.get('/api/permisos-ambientales', async (req: Request, res: Response) => {
+    try {
+      const clientId = req.query.clientId ? parseInt(req.query.clientId as string) : undefined;
+      const permisos = await storage.getPermisosAmbientales(clientId);
+      res.json(permisos);
+    } catch (error) {
+      console.error("Error fetching permisos ambientales:", error);
+      res.status(500).json({ message: "Error al obtener los permisos ambientales" });
+    }
+  });
+
+  // Get a specific permiso ambiental
+  app.get('/api/permisos-ambientales/:id', async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      const permiso = await storage.getPermisoAmbiental(id);
+      
+      if (!permiso) {
+        return res.status(404).json({ message: "Permiso no encontrado" });
+      }
+      
+      res.json(permiso);
+    } catch (error) {
+      console.error("Error fetching permiso ambiental:", error);
+      res.status(500).json({ message: "Error al obtener el permiso" });
+    }
+  });
+
+  // Create a new permiso ambiental
+  app.post('/api/permisos-ambientales', async (req: Request, res: Response) => {
+    try {
+      const permiso = await storage.createPermisoAmbiental(req.body);
+      res.status(201).json(permiso);
+    } catch (error) {
+      console.error("Error creating permiso ambiental:", error);
+      res.status(500).json({ message: "Error al crear el permiso" });
+    }
+  });
+
+  // Update a permiso ambiental
+  app.put('/api/permisos-ambientales/:id', async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updated = await storage.updatePermisoAmbiental(id, req.body);
+      
+      if (!updated) {
+        return res.status(404).json({ message: "Permiso no encontrado" });
+      }
+      
+      res.json(updated);
+    } catch (error) {
+      console.error("Error updating permiso ambiental:", error);
+      res.status(500).json({ message: "Error al actualizar el permiso" });
+    }
+  });
+
+  // Delete a permiso ambiental
+  app.delete('/api/permisos-ambientales/:id', async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      const deleted = await storage.deletePermisoAmbiental(id);
+      
+      if (!deleted) {
+        return res.status(404).json({ message: "Permiso no encontrado" });
+      }
+      
+      res.json({ message: "Permiso eliminado correctamente" });
+    } catch (error) {
+      console.error("Error deleting permiso ambiental:", error);
+      res.status(500).json({ message: "Error al eliminar el permiso" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

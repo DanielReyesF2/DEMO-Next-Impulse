@@ -356,3 +356,28 @@ export type InsertDailyWasteEntry = z.infer<typeof insertDailyWasteEntrySchema>;
 
 export type MonthlySummary = typeof monthlySummaries.$inferSelect;
 export type InsertMonthlySummary = z.infer<typeof insertMonthlySummarySchema>;
+
+// Permisos Ambientales schema
+export const permisosAmbientales = pgTable("permisos_ambientales", {
+  id: serial("id").primaryKey(),
+  clientId: integer("client_id").references(() => clients.id).notNull(),
+  tipo: text("tipo").notNull(), // 'SEMARNAT', 'PROFEPA', 'TRUE Zero Waste', etc.
+  numero: text("numero").notNull(), // Número de permiso
+  descripcion: text("descripcion"),
+  fechaEmision: timestamp("fecha_emision").notNull(),
+  fechaVencimiento: timestamp("fecha_vencimiento").notNull(),
+  estado: text("estado").notNull().default("vigente"), // 'vigente', 'por_vencer', 'vencido', 'renovado'
+  documentos: json("documentos").$type<Array<{ nombre: string; url: string; fecha: string }>>(),
+  notas: text("notas"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const insertPermisoAmbientalSchema = createInsertSchema(permisosAmbientales).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type PermisoAmbiental = typeof permisosAmbientales.$inferSelect;
+export type InsertPermisoAmbiental = z.infer<typeof insertPermisoAmbientalSchema>;
