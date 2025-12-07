@@ -50,11 +50,21 @@ export default function TopNavigation() {
             ))}
           </nav>
 
-          {/* Demo Badge */}
-          <div className="flex items-center space-x-2">
+          {/* Right side: Demo Badge + Powered by */}
+          <div className="flex items-center gap-4">
             <span className="px-3 py-1 text-xs font-medium text-emerald-700 bg-emerald-50 rounded-full border border-emerald-200">
               Demo
             </span>
+            <div className="flex items-center gap-2 border-l border-gray-200 pl-4">
+              <span className="text-xs text-gray-500">Powered by</span>
+              <img 
+                src="/images/logo-econova.png" 
+                alt="Econova" 
+                className="h-5 w-auto"
+                style={{ filter: 'invert(1) brightness(0.2)' }}
+              />
+              <span className="text-xs font-semibold text-gray-700">Econova</span>
+            </div>
           </div>
         </div>
       </div>
