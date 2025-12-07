@@ -23,13 +23,14 @@ export default function TopNavigation() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-3">
-            <img 
-              src="/images/logo-next-impulse.png" 
-              alt="Next Impulse Green" 
-              className="h-10 w-auto"
-            />
-            <span className="text-lg font-medium text-gray-700">Next Impulse Green</span>
+          <Link href="/" className="flex items-center space-x-2">
+            <svg viewBox="0 0 60 60" className="h-10 w-10">
+              {/* X shape - gray outline */}
+              <path d="M10 5 L25 30 L10 55 L18 55 L30 35 L42 55 L50 55 L35 30 L50 5 L42 5 L30 25 L18 5 Z" fill="#9CA3AF" />
+              {/* Green accent - left part */}
+              <path d="M15 8 L28 30 L15 52 L22 52 L30 38 L30 22 L22 8 Z" fill="#7CB342" />
+            </svg>
+            <span className="text-lg font-semibold text-gray-700">Next Impulse</span>
           </Link>
 
           {/* Navigation Tabs */}
