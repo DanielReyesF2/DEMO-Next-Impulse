@@ -24,10 +24,12 @@ export default function TopNavigation() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3">
-            <div className="w-9 h-9 bg-emerald-500 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-sm">NI</span>
-            </div>
-            <span className="text-lg font-semibold text-gray-900">Next Impulse Green</span>
+            <img 
+              src="/images/logo-next-impulse.png" 
+              alt="Next Impulse Green" 
+              className="h-10 w-auto"
+            />
+            <span className="text-lg font-medium text-gray-700">Next Impulse Green</span>
           </Link>
 
           {/* Navigation Tabs */}
