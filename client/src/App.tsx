@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Dashboard from "@/pages/Dashboard";
 import MisExhibidores from "@/pages/MisExhibidores";
+import Trazabilidad from "@/pages/Trazabilidad";
 import TrazabilidadDetalle from "@/pages/TrazabilidadDetalle";
 import ControlDocumental from "@/pages/ControlDocumental";
 import Reportes from "@/pages/Reportes";
@@ -34,7 +35,7 @@ function Router() {
       <Route path="/" component={Dashboard} />
       <Route path="/exhibidores" component={MisExhibidores} />
       <Route path="/trazabilidad/:exhibitorId" component={TrazabilidadDetalle} />
-      <Route path="/trazabilidad" component={MisExhibidores} />
+      <Route path="/trazabilidad" component={Trazabilidad} />
       <Route path="/documentos" component={ControlDocumental} />
       <Route path="/reportes" component={Reportes} />
       
