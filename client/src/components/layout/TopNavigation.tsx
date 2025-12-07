@@ -50,10 +50,11 @@ export default function TopNavigation() {
             ))}
           </nav>
 
-          {/* Client Info */}
-          <div className="flex items-center space-x-3">
-            <span className="text-sm text-gray-500">Cliente:</span>
-            <span className="text-sm font-semibold text-gray-900">{CURRENT_CLIENT.company}</span>
+          {/* Demo Badge */}
+          <div className="flex items-center space-x-2">
+            <span className="px-3 py-1 text-xs font-medium text-emerald-700 bg-emerald-50 rounded-full border border-emerald-200">
+              Demo
+            </span>
           </div>
         </div>
       </div>
