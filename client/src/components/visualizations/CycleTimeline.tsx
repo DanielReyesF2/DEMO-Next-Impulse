@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { GraphicCycle } from '@/data/mockExhibitors';
-import { ChevronDown, ChevronUp, ArrowDownRight, Recycle, Package, Sparkles } from 'lucide-react';
+import { ChevronDown, ArrowDownRight, Recycle } from 'lucide-react';
 
 interface CycleTimelineProps {
   cycles: GraphicCycle[];
@@ -57,20 +57,21 @@ export function CycleTimeline({ cycles, selectedCycleNumber }: CycleTimelineProp
           
           <ArrowDownRight className="w-6 h-6 text-gray-300 rotate-[-45deg]" />
           
-          {/* Destinos */}
-          <div className="flex gap-2">
-            <div className="flex flex-col items-center">
-              <div className="w-16 h-16 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-sm">
-                <Sparkles className="w-8 h-8 text-white" />
-              </div>
-              <span className="text-xs font-medium text-emerald-700 mt-1">{toGraphics} gráficos</span>
+          {/* Destino - Imagen del producto */}
+          <div className="flex flex-col items-center">
+            <div className="w-20 h-20 rounded-2xl bg-emerald-50 border-2 border-emerald-300 flex items-center justify-center overflow-hidden shadow-sm">
+              <img 
+                src="/images/jarritos/produccion-planta.jpg" 
+                alt="Producto reciclado" 
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  target.parentElement!.innerHTML = '<div class="text-center"><span class="text-2xl">📦</span></div>';
+                }}
+              />
             </div>
-            <div className="flex flex-col items-center">
-              <div className="w-16 h-16 rounded-2xl bg-indigo-500 flex items-center justify-center shadow-sm">
-                <Package className="w-8 h-8 text-white" />
-              </div>
-              <span className="text-xs font-medium text-indigo-700 mt-1">{toExhibitors} exhib.</span>
-            </div>
+            <span className="text-xs font-medium text-emerald-700 mt-1">Producto final</span>
           </div>
         </div>
 
