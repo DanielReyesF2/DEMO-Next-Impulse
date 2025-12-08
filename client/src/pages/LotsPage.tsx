@@ -22,30 +22,30 @@ export default function LotsPage() {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-gray-50">
-        <div className="container mx-auto px-4 py-8">
-          <Link href="/">
-            <button className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6">
-              <ArrowLeft className="w-4 h-4" />
-              Volver
-            </button>
-          </Link>
-          
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-3xl font-bold">{flowTypeInfo?.name}</h1>
-              <p className="text-muted-foreground mt-1">{flowTypeInfo?.description}</p>
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto px-4 py-8">
+        <Link href="/">
+          <button className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6">
+            <ArrowLeft className="w-4 h-4" />
+            Volver
+          </button>
+        </Link>
+        
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-3xl font-bold">{flowTypeInfo?.name}</h1>
+            <p className="text-muted-foreground mt-1">{flowTypeInfo?.description}</p>
               <p className="text-sm text-gray-500 mt-2">Lotes de {currentClient.name}</p>
-            </div>
-            <div className="text-right">
-              <p className="text-2xl font-bold text-primary">{lots.length}</p>
-              <p className="text-sm text-muted-foreground">mis lotes</p>
-            </div>
           </div>
-
-          <LotList lots={lots} />
+          <div className="text-right">
+            <p className="text-2xl font-bold text-primary">{lots.length}</p>
+              <p className="text-sm text-muted-foreground">mis lotes</p>
+          </div>
         </div>
+
+        <LotList lots={lots} />
       </div>
+    </div>
     </AppLayout>
   );
 }

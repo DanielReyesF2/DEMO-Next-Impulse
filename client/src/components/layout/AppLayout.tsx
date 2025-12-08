@@ -23,7 +23,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 style={{ filter: 'invert(1) brightness(0.2)' }}
               />
               <span className="text-sm font-semibold text-gray-700">Econova</span>
-            </div>
+      </div>
           </div>
         </div>
       </footer>

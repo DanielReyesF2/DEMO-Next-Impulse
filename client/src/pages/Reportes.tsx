@@ -53,7 +53,7 @@ export default function Reportes() {
       </div>
 
       {/* Selector de estándar */}
-      <div className="flex space-x-2 mb-6">
+      <div data-tour="reportes-selector" className="flex space-x-2 mb-6">
         {standards.map((standard) => (
           <button
             key={standard.id}
@@ -71,14 +71,14 @@ export default function Reportes() {
       </div>
 
       {/* Contenido del reporte */}
-      <div className="bg-white rounded-xl border border-gray-200">
+      <div data-tour="reportes-preview" className="bg-white rounded-xl border border-gray-200">
         {/* Acciones */}
         <div className="flex items-center justify-between p-4 border-b border-gray-100">
           <div className="flex items-center space-x-2">
             <span className="text-sm font-medium text-gray-700">{standards.find(s => s.id === selectedStandard)?.full}</span>
             <span className="text-xs text-gray-400">• Período {selectedYear}</span>
           </div>
-          <div className="flex items-center space-x-2">
+          <div data-tour="reportes-download" className="flex items-center space-x-2">
             <button className="flex items-center px-3 py-1.5 text-sm text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200">
               <Download className="w-4 h-4 mr-1" />PDF
             </button>

@@ -1,16 +1,19 @@
 import { Link, useLocation } from "wouter";
 import { CURRENT_CLIENT } from "@/data/mockExhibitors";
+import { useWalkthrough } from "@/components/walkthrough";
+import { Play } from "lucide-react";
 
 const navTabs = [
-  { path: "/", label: "Dashboard" },
-  { path: "/exhibidores", label: "Mis Exhibidores" },
-  { path: "/trazabilidad", label: "Trazabilidad" },
-  { path: "/documentos", label: "Control Documental" },
-  { path: "/reportes", label: "Reportes" },
+  { path: "/", label: "Dashboard", tourId: "nav-dashboard" },
+  { path: "/exhibidores", label: "Mis Exhibidores", tourId: "nav-exhibidores" },
+  { path: "/trazabilidad", label: "Trazabilidad", tourId: "nav-trazabilidad" },
+  { path: "/documentos", label: "Control Documental", tourId: "nav-documentos" },
+  { path: "/reportes", label: "Reportes", tourId: "nav-reportes" },
 ];
 
 export default function TopNavigation() {
   const [location] = useLocation();
+  const { openModal } = useWalkthrough();
 
   const isActive = (path: string) => {
     if (path === "/" && location === "/") return true;
@@ -40,6 +43,7 @@ export default function TopNavigation() {
             {navTabs.map((tab) => (
               <Link key={tab.path} href={tab.path}>
                 <span
+                  data-tour={tab.tourId}
                   className={`px-4 py-2 text-sm font-medium rounded-md transition-colors cursor-pointer ${
                     isActive(tab.path)
                       ? "text-emerald-600 bg-emerald-50"
@@ -52,15 +56,27 @@ export default function TopNavigation() {
             ))}
           </nav>
 
-          {/* Right side: Powered by */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-500">Powered by</span>
-            <img 
-              src="/images/logo-econova.png" 
-              alt="Econova" 
-              className="h-8 w-auto"
-              style={{ filter: 'invert(1) brightness(0.2)' }}
-            />
+          {/* Right side: Demo Guiado + Powered by */}
+          <div className="flex items-center gap-4">
+            {/* Demo Guiado Button */}
+            <button
+              onClick={openModal}
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm font-medium rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all pulse-demo"
+            >
+              <Play className="w-4 h-4" />
+              Demo Guiado
+            </button>
+
+            {/* Powered by */}
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] text-gray-400">Powered by</span>
+              <img 
+                src="/images/logo-econova.png" 
+                alt="Econova" 
+                className="h-12 w-auto"
+                style={{ filter: 'invert(1) brightness(0.2)' }}
+              />
+            </div>
           </div>
         </div>
       </div>

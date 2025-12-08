@@ -19,14 +19,14 @@ export default function LotDetailPage() {
     return (
       <AppLayout>
         <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold mb-2">Lote no encontrado</h1>
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-2">Lote no encontrado</h1>
             <p className="text-gray-500 mb-4">El lote {lotId} no existe</p>
-            <Link href="/">
+          <Link href="/">
               <button className="text-green-600 hover:underline">Volver al inicio</button>
-            </Link>
-          </div>
+          </Link>
         </div>
+      </div>
       </AppLayout>
     );
   }
@@ -49,12 +49,12 @@ export default function LotDetailPage() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href={`/lots/${lot.flowType}`}>
+        <Link href={`/lots/${lot.flowType}`}>
               <button className="flex items-center gap-2 text-gray-500 hover:text-gray-800 text-sm">
-                <ArrowLeft className="w-4 h-4" />
-                Volver
-              </button>
-            </Link>
+            <ArrowLeft className="w-4 h-4" />
+            Volver
+          </button>
+        </Link>
             <Breadcrumbs
               items={[
                 { label: "Trazabilidad", href: "/trazabilidad" },
@@ -121,10 +121,10 @@ export default function LotDetailPage() {
             {/* Timeline */}
             <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
               <p className="text-sm font-semibold text-gray-900 mb-4">Historial de ciclos</p>
-              <CycleTimeline lot={lot} />
+            <CycleTimeline lot={lot} />
             </div>
           </div>
-
+          
           {/* Right panel */}
           <div className="lg:col-span-1 space-y-4">
             <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-5">

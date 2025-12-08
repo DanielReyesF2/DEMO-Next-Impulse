@@ -14,7 +14,7 @@ export default function Dashboard() {
   const avgCyclesPerExhibitor = (totalCycles / totalExhibitors).toFixed(1);
   const co2PerCycle = (emissions.avoided / totalCycles).toFixed(2);
   const savingsPerExhibitor = Math.round((comparison.traditionalCost - comparison.circularCost) / totalExhibitors);
-  
+
   // Equivalencias de impacto ambiental (basadas en emisiones evitadas)
   const co2Avoided = emissions.avoided; // kg CO2
   const waterSaved = Math.round(co2Avoided * 8.2); // litros de agua (aprox 8.2L por kg CO2)
@@ -50,101 +50,101 @@ export default function Dashboard() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-semibold text-gray-900">Dashboard Ejecutivo</h1>
         <span className="text-sm text-gray-400">Actualizado: {new Date().toLocaleDateString('es-MX')}</span>
-      </div>
+            </div>
 
       {/* KPIs principales - 2 filas */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div data-tour="dashboard-kpis" className="grid grid-cols-4 gap-4 mb-6">
         <div className="bg-white rounded-xl border border-gray-200 p-4">
           <div className="flex items-center justify-between mb-2">
             <Package className="w-5 h-5 text-emerald-500" />
             <span className="text-xs text-emerald-600 flex items-center"><TrendingUp className="w-3 h-3 mr-1" />+2 YTD</span>
-          </div>
+            </div>
           <div className="text-2xl font-semibold text-gray-700">{totalExhibitors}</div>
           <div className="text-xs text-gray-500">Exhibidores activos</div>
-        </div>
-        
+          </div>
+
         <div className="bg-white rounded-xl border border-gray-200 p-4">
           <div className="flex items-center justify-between mb-2">
             <Recycle className="w-5 h-5 text-blue-500" />
             <span className="text-xs text-emerald-600 flex items-center"><TrendingUp className="w-3 h-3 mr-1" />+23%</span>
-          </div>
+                  </div>
           <div className="text-2xl font-semibold text-gray-700">{totalGraphicsRecycled}</div>
           <div className="text-xs text-gray-500">Gráficos reciclados (2024)</div>
-        </div>
+                  </div>
         
         <div className="bg-white rounded-xl border border-gray-200 p-4">
           <div className="flex items-center justify-between mb-2">
             <Clock className="w-5 h-5 text-purple-500" />
-          </div>
+                </div>
           <div className="text-2xl font-semibold text-gray-700">{avgCyclesPerExhibitor}</div>
           <div className="text-xs text-gray-500">Ciclos promedio / exhibidor</div>
-        </div>
+              </div>
         
         <div className="bg-emerald-50 rounded-xl border border-emerald-200 p-4">
           <div className="flex items-center justify-between mb-2">
             <Leaf className="w-5 h-5 text-emerald-600" />
             <span className="text-xs text-emerald-600">-{emissionsSavings}% vs tradicional</span>
-          </div>
+                  </div>
           <div className="text-2xl font-bold text-emerald-600">-{Math.abs(emissions.netBalance).toFixed(0)} kg</div>
           <div className="text-xs text-gray-500">CO₂e balance neto</div>
-        </div>
-      </div>
+                </div>
+              </div>
 
       {/* IMPACTO AMBIENTAL EN TIEMPO REAL - Nueva sección */}
-      <div className="bg-gradient-to-br from-emerald-50 to-blue-50 rounded-xl border border-emerald-200 p-6 mb-6">
+      <div data-tour="dashboard-impacto" className="bg-gradient-to-br from-emerald-50 to-blue-50 rounded-xl border border-emerald-200 p-6 mb-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-sm font-semibold text-emerald-800">🌍 Impacto Ambiental Total - {company}</h3>
           <span className="text-xs text-emerald-600 bg-emerald-100 px-2 py-1 rounded-full">En tiempo real</span>
-        </div>
+                  </div>
         
         <div className="grid grid-cols-6 gap-4">
           <div className="bg-white rounded-lg p-4 text-center shadow-sm">
             <Leaf className="w-6 h-6 mx-auto mb-2 text-emerald-600" />
             <div className="text-xl font-bold text-emerald-600">{co2Avoided}</div>
             <div className="text-xs text-gray-500">kg CO₂ evitados</div>
-          </div>
+              </div>
           
           <div className="bg-white rounded-lg p-4 text-center shadow-sm">
             <Droplets className="w-6 h-6 mx-auto mb-2 text-blue-500" />
             <div className="text-xl font-bold text-blue-600">{waterSaved.toLocaleString()}</div>
             <div className="text-xs text-gray-500">litros agua ahorrados</div>
           </div>
-          
+
           <div className="bg-white rounded-lg p-4 text-center shadow-sm">
             <Zap className="w-6 h-6 mx-auto mb-2 text-yellow-500" />
             <div className="text-xl font-bold text-yellow-600">{energySaved.toLocaleString()}</div>
             <div className="text-xs text-gray-500">kWh energía evitada</div>
           </div>
-          
+
           <div className="bg-white rounded-lg p-4 text-center shadow-sm">
             <TreePine className="w-6 h-6 mx-auto mb-2 text-green-600" />
             <div className="text-xl font-bold text-green-600">{treesEquivalent}</div>
             <div className="text-xs text-gray-500">árboles equivalentes</div>
-          </div>
-          
+              </div>
+              
           <div className="bg-white rounded-lg p-4 text-center shadow-sm">
             <Car className="w-6 h-6 mx-auto mb-2 text-gray-600" />
             <div className="text-xl font-bold text-gray-700">{kmCarAvoided.toLocaleString()}</div>
             <div className="text-xs text-gray-500">km auto evitados</div>
-          </div>
-          
+                        </div>
+                        
           <div className="bg-white rounded-lg p-4 text-center shadow-sm">
             <Factory className="w-6 h-6 mx-auto mb-2 text-purple-500" />
             <div className="text-xl font-bold text-purple-600">{plasticDiverted}</div>
             <div className="text-xs text-gray-500">kg plástico reciclado</div>
-          </div>
-        </div>
-        
+                          </div>
+                        </div>
+                        
         <div className="mt-4 text-center">
           <p className="text-xs text-gray-500">
             Equivalente a <span className="font-medium text-emerald-700">{treesEquivalent} árboles absorbiendo CO₂ por 1 año</span> 
             {' '}o <span className="font-medium text-blue-700">{kmCarAvoided.toLocaleString()} km</span> que un auto dejó de recorrer
           </p>
-        </div>
-      </div>
-
+                          </div>
+                        </div>
+                        
       {/* Comparativa + Gráfico */}
-      <div className="grid grid-cols-2 gap-6 mb-6">
+      <div data-tour="dashboard-comparativa" className="grid grid-cols-2 gap-6 mb-6">
         {/* Comparativa */}
         <div className="bg-white rounded-xl border border-gray-200 p-5">
           <h3 className="text-sm font-medium text-gray-700 mb-4">Comparativa: Tradicional vs Circular</h3>
@@ -157,11 +157,11 @@ export default function Dashboard() {
                   <span className="font-bold text-emerald-600">{comparison.circularEmissions} kg</span>
                   <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded">-{emissionsSavings}%</span>
                 </div>
-              </div>
+                          </div>
               <div className="h-2 bg-gray-200 rounded-full">
                 <div className="h-2 bg-emerald-500 rounded-full" style={{ width: `${100 - emissionsSavings}%` }}></div>
-              </div>
-            </div>
+                        </div>
+                      </div>
             <div>
               <div className="flex justify-between text-sm mb-1">
                 <span className="text-gray-600">Costo anual</span>
@@ -169,12 +169,12 @@ export default function Dashboard() {
                   <span className="text-red-500 line-through">${(comparison.traditionalCost/1000).toFixed(0)}k</span>
                   <span className="font-bold text-emerald-600">${(comparison.circularCost/1000).toFixed(0)}k</span>
                   <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded">-{costSavings}%</span>
-                </div>
-              </div>
+                    </div>
+                          </div>
               <div className="h-2 bg-gray-200 rounded-full">
                 <div className="h-2 bg-emerald-500 rounded-full" style={{ width: `${100 - costSavings}%` }}></div>
-              </div>
-            </div>
+                        </div>
+                          </div>
             <div>
               <div className="flex justify-between text-sm mb-1">
                 <span className="text-gray-600">Residuos generados</span>
@@ -182,20 +182,20 @@ export default function Dashboard() {
                   <span className="text-red-500 line-through">{comparison.traditionalWaste} kg</span>
                   <span className="font-bold text-emerald-600">0 kg</span>
                   <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded">-100%</span>
-                </div>
-              </div>
+                        </div>
+                          </div>
               <div className="h-2 bg-gray-200 rounded-full">
                 <div className="h-2 bg-emerald-500 rounded-full" style={{ width: '0%' }}></div>
-              </div>
-            </div>
+                        </div>
+                          </div>
             <div className="pt-3 border-t">
               <div className="flex justify-between">
                 <span className="text-sm font-medium text-gray-700">Ahorro total anual</span>
                 <span className="text-lg font-bold text-emerald-600">${((comparison.traditionalCost - comparison.circularCost)/1000).toFixed(0)}k MXN</span>
-              </div>
-            </div>
-          </div>
-        </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
         {/* Gráfico de ciclos por año */}
         <div className="bg-white rounded-xl border border-gray-200 p-5">
@@ -212,10 +212,10 @@ export default function Dashboard() {
                 <Bar dataKey="cycles" fill="#10B981" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
-          </div>
+                        </div>
           <div className="text-xs text-gray-400 text-center mt-2">Total histórico: {totalCycles} ciclos</div>
-        </div>
-      </div>
+                      </div>
+                    </div>
 
       {/* Flujos circulares + Top Exhibidores */}
       <div className="grid grid-cols-3 gap-6">
@@ -251,7 +251,7 @@ export default function Dashboard() {
               ))}
             </div>
           </div>
-        </div>
+              </div>
 
         {/* Top Exhibidores */}
         <div className="col-span-2 bg-white rounded-xl border border-gray-200 p-5">
@@ -260,7 +260,7 @@ export default function Dashboard() {
             <Link href="/exhibidores">
               <span className="text-xs text-emerald-600 hover:text-emerald-700 cursor-pointer">Ver todos →</span>
             </Link>
-          </div>
+                </div>
           <div className="space-y-3">
             {topExhibitors.map((exhibitor, index) => (
               <div key={exhibitor.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
@@ -273,7 +273,7 @@ export default function Dashboard() {
                   <div>
                     <div className="font-medium text-sm">{exhibitor.id}</div>
                     <div className="text-xs text-gray-400">{exhibitor.location.store}</div>
-                  </div>
+              </div>
                 </div>
                 <div className="text-right">
                   <div className="font-bold text-emerald-600">{exhibitor.graphicChanges} ciclos</div>

@@ -88,7 +88,7 @@ export default function ControlDocumental() {
 
       {/* Alertas de próximos vencimientos */}
       {stats.proximosAVencer.length > 0 && (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
+        <div data-tour="documentos-kpis" className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
           <div className="flex items-start space-x-3">
             <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5" />
             <div className="flex-1">
@@ -125,7 +125,7 @@ export default function ControlDocumental() {
         <div className="lg:col-span-2">
           <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
             {/* Filtros */}
-            <div className="p-4 border-b border-gray-100 flex items-center space-x-3">
+            <div data-tour="documentos-filtros" className="p-4 border-b border-gray-100 flex items-center space-x-3">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
@@ -151,7 +151,7 @@ export default function ControlDocumental() {
             </div>
 
             {/* Header de tabla */}
-            <div className="grid grid-cols-12 gap-2 px-4 py-2 bg-gray-50 text-xs font-medium text-gray-500 uppercase">
+            <div data-tour="documentos-tabla" className="grid grid-cols-12 gap-2 px-4 py-2 bg-gray-50 text-xs font-medium text-gray-500 uppercase">
               <div className="col-span-5">Documento</div>
               <div className="col-span-2">Autoridad</div>
               <div className="col-span-2">Vence</div>

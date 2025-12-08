@@ -3,6 +3,7 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { WalkthroughProvider, WalkthroughModal, LotSearchModal } from "@/components/walkthrough";
 import NotFound from "@/pages/not-found";
 import Dashboard from "@/pages/Dashboard";
 import MisExhibidores from "@/pages/MisExhibidores";
@@ -65,8 +66,12 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Router />
+        <WalkthroughProvider>
+          <Toaster />
+          <Router />
+          <WalkthroughModal />
+          <LotSearchModal />
+        </WalkthroughProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

@@ -109,6 +109,16 @@ export default function TrazabilidadDetalle() {
     },
   ];
 
+  // Calcular datos para el storytelling
+  const sortedCycles = [...exhibitor.graphicHistory].sort((a, b) => a.cycleNumber - b.cycleNumber);
+  const firstCycle = sortedCycles[0];
+  const firstCycleDate = firstCycle ? new Date(firstCycle.startDate).toLocaleDateString('es-MX', { 
+    year: 'numeric', 
+    month: 'long',
+    day: 'numeric'
+  }) : '';
+  const initialWeight = firstCycle ? (firstCycle.weight * 1.015).toFixed(0) : '0';
+
   return (
     <AppLayout>
       <nav className="flex items-center space-x-2 text-sm text-gray-400 mb-4">
@@ -116,6 +126,24 @@ export default function TrazabilidadDetalle() {
         <span>/</span>
         <span className="text-gray-600">{exhibitor.id}</span>
       </nav>
+
+      {/* Banner Narrativo Sutil */}
+      <div data-tour="trazabilidad-banner" className="bg-gradient-to-r from-emerald-50 to-blue-50 rounded-xl border border-emerald-200 p-4 mb-6">
+        <div className="flex items-start gap-3">
+          <Recycle className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" />
+          <div className="flex-1 text-sm text-gray-700 space-y-2">
+            <p>
+              Este exhibidor comenzó su vida circular el <span className="font-semibold text-gray-900">{firstCycleDate}</span> a partir de <span className="font-semibold text-gray-900">{initialWeight} kg</span> de residuos gráficos post-consumo.
+            </p>
+            <p>
+              Ha completado <span className="font-semibold text-gray-900">{stats.totalCycles} ciclos</span> de economía circular en <span className="font-semibold text-gray-900">{exhibitor.yearsInOperation.toFixed(1)} años</span> de operación. Cada ciclo representa una campaña de marketing diferente.
+            </p>
+            <p className="text-xs text-gray-600 pt-1 border-t border-emerald-200">
+              <span className="font-medium text-gray-700">Cómo funciona el ciclo:</span> Cuando una campaña termina, los gráficos usados se recolectan y reciclan. Este material se convierte en nuevos gráficos o en materia prima para exhibidores, iniciando un nuevo ciclo. Así, el mismo material se reutiliza una y otra vez, reduciendo residuos y emisiones.
+            </p>
+          </div>
+        </div>
+      </div>
 
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -205,8 +233,18 @@ export default function TrazabilidadDetalle() {
           </div>
 
           {/* Vista Espiral - Ciclo de Vida Circular */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
+          <div data-tour="trazabilidad-espiral" className="bg-white rounded-xl border border-gray-200 p-6">
             <h3 className="text-base font-medium text-gray-600 text-center mb-4 tracking-wide">Ciclo de Vida Circular</h3>
+            
+            {/* Texto Explicativo Sutil */}
+            <div className="mb-4 space-y-2 max-w-2xl mx-auto">
+              <p className="text-sm text-gray-600 text-center">
+                Cada punto en el espiral representa un ciclo de vida. El punto central (naranja) es el origen: residuos gráficos post-consumo. Los puntos verdes se reciclaron en nuevos gráficos, los azules en nuevos exhibidores.
+              </p>
+              <p className="text-xs text-gray-500 text-center">
+                El flujo es continuo: cada campaña termina, el material se recicla y regresa al ciclo como nuevo producto, creando un círculo virtuoso de reutilización.
+              </p>
+            </div>
             
             <CycleSpiral 
               cycles={exhibitor.graphicHistory}
@@ -264,7 +302,7 @@ export default function TrazabilidadDetalle() {
           </div>
 
           {/* Tabs */}
-          <div className="bg-white rounded-xl border border-gray-200">
+          <div data-tour="trazabilidad-timeline" className="bg-white rounded-xl border border-gray-200">
             <div className="flex border-b border-gray-200">
               {tabs.map((tab) => (
                 <button

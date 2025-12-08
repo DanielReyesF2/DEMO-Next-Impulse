@@ -122,3 +122,110 @@
     --tw-ring-color: #b5e951;
   }
 }
+
+/* Driver.js Walkthrough Styles */
+.driver-popover {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  border: none;
+  max-width: 350px;
+}
+
+.driver-popover-title {
+  color: #059669;
+  font-family: 'Ruda', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.driver-popover-description {
+  color: #4b5563;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.driver-popover-progress-text {
+  color: #9ca3af;
+  font-size: 12px;
+}
+
+.driver-popover-navigation-btns {
+  gap: 8px;
+}
+
+.driver-popover-prev-btn {
+  background: #f3f4f6;
+  color: #4b5563;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.driver-popover-prev-btn:hover {
+  background: #e5e7eb;
+}
+
+.driver-popover-next-btn,
+.driver-popover-done-btn {
+  background: linear-gradient(to right, #059669, #10b981);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.driver-popover-next-btn:hover,
+.driver-popover-done-btn:hover {
+  background: linear-gradient(to right, #047857, #059669);
+}
+
+.driver-popover-close-btn {
+  color: #9ca3af;
+}
+
+.driver-popover-close-btn:hover {
+  color: #4b5563;
+}
+
+.driver-popover-arrow-side-left.driver-popover-arrow,
+.driver-popover-arrow-side-right.driver-popover-arrow,
+.driver-popover-arrow-side-top.driver-popover-arrow,
+.driver-popover-arrow-side-bottom.driver-popover-arrow {
+  border-color: white;
+}
+
+/* Animate in for modals */
+@keyframes animate-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-in {
+  animation: animate-in 0.2s ease-out;
+}
+
+/* Pulse animation for demo button */
+@keyframes pulse-subtle {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(5, 150, 105, 0);
+  }
+}
+
+.pulse-demo {
+  animation: pulse-subtle 2s ease-in-out infinite;
+}

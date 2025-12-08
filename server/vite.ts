@@ -71,7 +71,7 @@ export function serveStatic(app: Express) {
   const distPath = path.resolve(import.meta.dirname, "..", "dist", "public");
 
   log(`Looking for static files in: ${distPath}`);
-  
+
   if (!fs.existsSync(distPath)) {
     const errorMsg = `Could not find the build directory: ${distPath}, make sure to build the client first`;
     log(`ERROR: ${errorMsg}`);

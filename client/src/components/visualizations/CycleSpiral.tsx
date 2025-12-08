@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { GraphicCycle } from '@/data/mockExhibitors';
+import { GraphicCycle, getCampaignByLotId } from '@/data/mockExhibitors';
 
 interface CycleSpiralProps {
   cycles: GraphicCycle[];
@@ -178,9 +178,14 @@ export function CycleSpiral({ cycles, onCycleSelect, selectedCycleNumber }: Cycl
           <div className="text-[11px] text-gray-400 mt-0.5">
             {hoveredCycle.startDate} → {hoveredCycle.endDate || 'En curso'}
           </div>
-          {hoveredCycle.recycledInto && (
+          {hoveredCycle.sourceFromLotId && (
             <div className="text-[11px] text-gray-500 mt-2 pt-2 border-t border-gray-100">
-              {hoveredCycle.materialSent} kg → {hoveredCycle.recycledInto === 'graphic' ? 'Nuevos gráficos' : 'Nuevo exhibidor'}
+              Material reciclado del ciclo {hoveredCycle.cycleNumber - 1} ({getCampaignByLotId(hoveredCycle.sourceFromLotId)})
+            </div>
+          )}
+          {hoveredCycle.recycledInto && hoveredCycle.recycledToLotId && (
+            <div className="text-[11px] text-gray-500 mt-1">
+              Se convirtió en: {hoveredCycle.recycledInto === 'graphic' ? 'Nuevos gráficos' : 'Nuevo exhibidor'} ({hoveredCycle.materialSent.toFixed(1)} kg)
             </div>
           )}
         </div>

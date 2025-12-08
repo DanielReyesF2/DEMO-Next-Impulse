@@ -88,7 +88,7 @@ export default function MisExhibidores() {
       </div>
 
       {/* Lista de exhibidores - más detalle */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div data-tour="exhibidores-lista" className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div className="grid grid-cols-12 gap-4 px-4 py-3 bg-gray-50 border-b text-xs font-medium text-gray-500 uppercase">
           <div className="col-span-3">Exhibidor</div>
           <div className="col-span-2">Ubicación</div>
@@ -100,11 +100,14 @@ export default function MisExhibidores() {
           <div className="col-span-1"></div>
         </div>
         
-        {filteredExhibitors.map((exhibitor) => {
+        {filteredExhibitors.map((exhibitor, index) => {
           const stats = calculateExhibitorStats(exhibitor);
           return (
             <Link key={exhibitor.id} href={`/trazabilidad/${exhibitor.id}`}>
-              <div className="grid grid-cols-12 gap-4 px-4 py-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer items-center">
+              <div 
+                data-tour={index === 0 ? "exhibidor-card" : undefined}
+                className="grid grid-cols-12 gap-4 px-4 py-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer items-center"
+              >
                 <div className="col-span-3">
                   <div className="flex items-center space-x-2">
                     <span className={`w-2 h-2 rounded-full ${

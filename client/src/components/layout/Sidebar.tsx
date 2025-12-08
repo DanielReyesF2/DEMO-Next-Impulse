@@ -5,7 +5,7 @@ import {
   GitBranch,
   MapPin,
   BarChart3,
-  FileText,
+  FileText, 
   LogOut
 } from "lucide-react";
 import { CURRENT_CLIENT } from "@/data/mockLots";
@@ -114,10 +114,10 @@ export default function Sidebar() {
           <div>
             <p className="text-sm font-medium">{CURRENT_CLIENT.name}</p>
             <p className="text-xs text-gray-400">{CURRENT_CLIENT.type}</p>
-          </div>
-          <button className="text-gray-400 hover:text-white">
-            <LogOut className="w-5 h-5" />
-          </button>
+        </div>
+        <button className="text-gray-400 hover:text-white">
+          <LogOut className="w-5 h-5" />
+        </button>
         </div>
       </div>
     </div>
