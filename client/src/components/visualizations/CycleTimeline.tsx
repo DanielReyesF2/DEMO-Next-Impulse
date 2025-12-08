@@ -31,8 +31,8 @@ export function CycleTimeline({ cycles, selectedCycleNumber }: CycleTimelineProp
       {/* Header con resumen visual */}
       <div className="bg-gradient-to-r from-emerald-50 via-blue-50 to-indigo-50 rounded-2xl p-6">
         <div className="text-center mb-4">
-          <h3 className="text-lg font-semibold text-gray-800">El recorrido del material</h3>
-          <p className="text-sm text-gray-500">{totalWeight.toFixed(0)} kg que se reciclaron una y otra vez</p>
+          <h3 className="text-lg font-semibold text-gray-800">Historia del Reciclaje</h3>
+          <p className="text-sm text-gray-500">El viaje de {totalWeight.toFixed(0)} kg de material reciclado</p>
         </div>
         
         {/* Flow visual del proceso */}
@@ -42,7 +42,7 @@ export function CycleTimeline({ cycles, selectedCycleNumber }: CycleTimelineProp
             <div className="w-16 h-16 rounded-2xl bg-amber-100 border-2 border-amber-300 flex items-center justify-center overflow-hidden shadow-sm">
               <img src="/images/residuos-graficos.png" alt="" className="w-full h-full object-cover" />
             </div>
-            <span className="text-xs font-medium text-amber-700 mt-1">Empezó aquí</span>
+            <span className="text-xs font-medium text-amber-700 mt-1">Residuos</span>
           </div>
           
           <ArrowDownRight className="w-6 h-6 text-gray-300 rotate-[-45deg]" />
@@ -52,7 +52,7 @@ export function CycleTimeline({ cycles, selectedCycleNumber }: CycleTimelineProp
             <div className="w-16 h-16 rounded-2xl bg-emerald-100 border-2 border-emerald-300 flex items-center justify-center shadow-sm">
               <Recycle className="w-8 h-8 text-emerald-600" />
             </div>
-            <span className="text-xs font-medium text-emerald-700 mt-1">{sortedCycles.length} veces</span>
+            <span className="text-xs font-medium text-emerald-700 mt-1">{sortedCycles.length} ciclos</span>
           </div>
           
           <ArrowDownRight className="w-6 h-6 text-gray-300 rotate-[-45deg]" />
@@ -78,11 +78,11 @@ export function CycleTimeline({ cycles, selectedCycleNumber }: CycleTimelineProp
         <div className="flex justify-center gap-8 mt-4 pt-4 border-t border-gray-200">
           <div className="text-center">
             <div className="text-2xl font-bold text-emerald-600">{totalWeight.toFixed(0)}</div>
-            <div className="text-xs text-gray-500">kg reciclados</div>
+            <div className="text-xs text-gray-500">kg procesados</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-emerald-600">-{totalSavings.toFixed(0)}</div>
-            <div className="text-xs text-gray-500">kg CO₂ ahorrado</div>
+            <div className="text-xs text-gray-500">kg CO₂ evitado</div>
           </div>
         </div>
       </div>
@@ -90,7 +90,7 @@ export function CycleTimeline({ cycles, selectedCycleNumber }: CycleTimelineProp
       {/* Lista de ciclos - Estilo acordeón */}
       <div className="space-y-2">
         <div className="flex items-center justify-between px-2">
-          <h4 className="text-sm font-medium text-gray-600">Cada vez que se recicló</h4>
+          <h4 className="text-sm font-medium text-gray-600">Detalle por ciclo</h4>
           {hiddenCount > 0 && (
             <button
               onClick={() => setShowAll(!showAll)}
@@ -145,7 +145,7 @@ export function CycleTimeline({ cycles, selectedCycleNumber }: CycleTimelineProp
                     <div className="text-right">
                       <div className="text-sm font-semibold text-gray-700">{cycle.weight.toFixed(0)} kg</div>
                       <div className={`text-xs ${isActive ? 'text-amber-600' : isGraphic ? 'text-emerald-600' : 'text-indigo-600'}`}>
-                        {isActive ? '🔄 En uso' : isGraphic ? '→ Gráficos nuevos' : '→ Exhibidor nuevo'}
+                        {isActive ? '🔄 En uso' : isGraphic ? '→ Gráficos' : '→ Exhibidor'}
                       </div>
                     </div>
                     <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />

@@ -57,10 +57,10 @@ export default function TrazabilidadDetalle() {
   };
 
   const tabs = [
-    { id: 'timeline' as const, label: 'Cada reciclaje', count: stats.totalCycles },
-    { id: 'emissions' as const, label: 'Contaminación' },
-    { id: 'flows' as const, label: '¿A dónde fue?' },
-    { id: 'evidence' as const, label: 'Fotos', icon: Camera },
+    { id: 'timeline' as const, label: 'Ciclos', count: stats.totalCycles },
+    { id: 'emissions' as const, label: 'Emisiones' },
+    { id: 'flows' as const, label: 'Flujos' },
+    { id: 'evidence' as const, label: 'Evidencia', icon: Camera },
   ];
 
   // Fotos del proceso - usar las del exhibidor si existen
