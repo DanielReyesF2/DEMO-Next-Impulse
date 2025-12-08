@@ -6,11 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { WalkthroughProvider, WalkthroughModal, LotSearchModal } from "@/components/walkthrough";
 import NotFound from "@/pages/not-found";
 import Dashboard from "@/pages/Dashboard";
-import MisExhibidores from "@/pages/MisExhibidores";
 import Trazabilidad from "@/pages/Trazabilidad";
 import TrazabilidadDetalle from "@/pages/TrazabilidadDetalle";
-import ControlDocumental from "@/pages/ControlDocumental";
-import Reportes from "@/pages/Reportes";
 
 // Legacy pages (kept for backwards compatibility)
 import Documents from "@/pages/documents";
@@ -34,11 +31,8 @@ function Router() {
     <Switch>
       {/* Main Portal Routes */}
       <Route path="/" component={Dashboard} />
-      <Route path="/exhibidores" component={MisExhibidores} />
       <Route path="/trazabilidad/:exhibitorId" component={TrazabilidadDetalle} />
       <Route path="/trazabilidad" component={Trazabilidad} />
-      <Route path="/documentos" component={ControlDocumental} />
-      <Route path="/reportes" component={Reportes} />
       
       {/* Legacy Routes (kept for backwards compatibility) */}
       <Route path="/home" component={Home} />

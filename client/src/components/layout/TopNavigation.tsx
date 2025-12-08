@@ -1,14 +1,10 @@
 import { Link, useLocation } from "wouter";
-import { CURRENT_CLIENT } from "@/data/mockExhibitors";
 import { useWalkthrough } from "@/components/walkthrough";
 import { Play } from "lucide-react";
 
 const navTabs = [
   { path: "/", label: "Dashboard", tourId: "nav-dashboard" },
-  { path: "/exhibidores", label: "Mis Exhibidores", tourId: "nav-exhibidores" },
   { path: "/trazabilidad", label: "Trazabilidad", tourId: "nav-trazabilidad" },
-  { path: "/documentos", label: "Control Documental", tourId: "nav-documentos" },
-  { path: "/reportes", label: "Reportes", tourId: "nav-reportes" },
 ];
 
 export default function TopNavigation() {
