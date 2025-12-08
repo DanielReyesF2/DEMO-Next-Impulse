@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { GraphicCycle, getCampaignByLotId } from '@/data/mockExhibitors';
-import { MapPin, ArrowDown, ArrowUp, Recycle, Package, Palette, Calendar, Truck, Leaf, AlertTriangle, ChevronDown, ChevronUp } from 'lucide-react';
+import { MapPin, ArrowDown, ArrowUp, Recycle, Calendar, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface CycleTimelineProps {
   cycles: GraphicCycle[];
@@ -246,8 +246,6 @@ export function CycleTimeline({ cycles, selectedCycleNumber, exhibitorId = 'EXH-
                 </div>
               );
             })}
-            );
-          })}
           </div>
         </div>
 
