@@ -18,3 +18,4 @@ export function CycleIndicator({ current, total }: CycleIndicatorProps) {
     </div>
   );
 }
+

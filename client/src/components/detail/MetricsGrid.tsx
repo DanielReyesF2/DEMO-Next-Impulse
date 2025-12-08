@@ -53,3 +53,4 @@ export function MetricsGrid({ lot }: MetricsGridProps) {
     </div>
   );
 }
+

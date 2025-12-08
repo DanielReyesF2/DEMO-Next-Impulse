@@ -34,6 +34,28 @@ export interface GraphicCycle {
   weight: number; // kg del gráfico
 }
 
+export interface ProductionSpecs {
+  orderNumber: string;
+  material: string;
+  weightPerUnit: number; // gramos
+  totalUnits: number;
+  totalPallets: number;
+  injectionMachine: string;
+  cycleTime: number; // segundos
+  unitsPerHour: number;
+  totalHDPE: number; // kg
+  totalMasterBatch: number; // kg
+}
+
+export interface ProcessPhoto {
+  id: number;
+  title: string;
+  description: string;
+  imageUrl: string;
+  date: string;
+  weight?: string;
+}
+
 export interface Exhibitor {
   id: string;
   model: string;
@@ -53,6 +75,8 @@ export interface Exhibitor {
   recycledContent: number;
   capacityPerShelf: number;
   clientOwner: string;
+  productionSpecs?: ProductionSpecs;
+  processPhotos?: ProcessPhoto[];
 }
 
 export interface ClientData {
@@ -304,8 +328,8 @@ function generateGraphicHistoryForExhibitor(exhibitorId: string, cycles: number,
 export const egoExhibitors: Exhibitor[] = [
   {
     id: "EXH-EGO-001",
-    model: "4R PLANET Isla",
-    dimensions: "82cm x 82cm",
+    model: "Charola New Era Verde",
+    dimensions: "Charola estándar",
     location: {
       store: "Walmart Polanco",
       address: "Av. Ejército Nacional 843-B",
@@ -314,17 +338,54 @@ export const egoExhibitors: Exhibitor[] = [
     manufactureDate: "2019-03-15",
     yearsInOperation: 5.9,
     currentGraphic: {
-      campaign: "Navidad EGO 2024",
-      installedDate: "2024-11-01",
-      client: "EGO",
-      brand: "EGO"
+      campaign: "Jarritos 2025",
+      installedDate: "2024-12-01",
+      client: "Jarritos",
+      brand: "Jarritos"
     },
     graphicChanges: 23,
     graphicHistory: exh001GraphicHistory,
     condition: "excellent",
     recycledContent: 60,
     capacityPerShelf: 60,
-    clientOwner: "EGO"
+    clientOwner: "EGO",
+    productionSpecs: {
+      orderNumber: "OT-90A-2025",
+      material: "HDPE MARLEX HMN 6060 UV (BPO 631024)",
+      weightPerUnit: 975, // gramos
+      totalUnits: 8000,
+      totalPallets: 38,
+      injectionMachine: "Inyectora #4 Haitian 530T",
+      cycleTime: 110, // segundos
+      unitsPerHour: 32.727,
+      totalHDPE: 7722, // kg
+      totalMasterBatch: 78, // kg (1% MB VR-1561-10)
+    },
+    processPhotos: [
+      {
+        id: 1,
+        title: "Charolas listas para envío",
+        description: "8,000 charolas Jarritos emplayadas en tarima",
+        imageUrl: "/images/jarritos/tarima-emplayada.jpg",
+        date: "Dic 2024",
+        weight: "7,800 kg"
+      },
+      {
+        id: 2,
+        title: "Producción en planta",
+        description: "Charolas recién salidas de inyectora Haitian",
+        imageUrl: "/images/jarritos/produccion-planta.jpg",
+        date: "Dic 2024",
+        weight: "975 gr c/u"
+      },
+      {
+        id: 3,
+        title: "Hoja de proceso",
+        description: "Especificaciones técnicas OT-90A-2025",
+        imageUrl: "/images/jarritos/hoja-proceso.jpg",
+        date: "Dic 2024"
+      }
+    ]
   },
   {
     id: "EXH-EGO-002",

@@ -19,3 +19,4 @@ export function ReportHeader({ lot }: ReportHeaderProps) {
     </div>
   );
 }
+

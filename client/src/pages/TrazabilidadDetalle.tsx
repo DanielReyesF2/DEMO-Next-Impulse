@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { useRoute } from 'wouter';
 import { Link } from 'wouter';
 import AppLayout from '@/components/layout/AppLayout';
-import { getExhibitorById, calculateExhibitorStats, GraphicCycle } from '@/data/mockExhibitors';
+import { getExhibitorById, calculateExhibitorStats, GraphicCycle, ProcessPhoto, ProductionSpecs } from '@/data/mockExhibitors';
 import { CycleSpiral } from '@/components/visualizations/CycleSpiral';
 import { CycleTimeline } from '@/components/visualizations/CycleTimeline';
 import { EmissionsChart } from '@/components/visualizations/EmissionsChart';
 import { CircularFlowDiagram } from '@/components/visualizations/CircularFlowDiagram';
-import { Download, FileText, MapPin, Calendar, Recycle, Route, Scale, Leaf, Clock, TrendingUp, Package, Palette, Droplets, Zap, TreePine, Camera } from 'lucide-react';
+import { Download, FileText, MapPin, Calendar, Recycle, Route, Scale, Leaf, Clock, TrendingUp, Package, Palette, Droplets, Zap, TreePine, Camera, Factory, Gauge, Box } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 
 type TabType = 'timeline' | 'emissions' | 'flows' | 'evidence';
@@ -63,19 +63,13 @@ export default function TrazabilidadDetalle() {
     { id: 'evidence' as const, label: 'Fotos', icon: Camera },
   ];
 
-  // Fotos del proceso de reciclaje
-  const processPhotos = [
+  // Fotos del proceso - usar las del exhibidor si existen
+  const processPhotos: ProcessPhoto[] = exhibitor.processPhotos || [
     {
       id: 1,
       title: 'Recolectamos los gráficos',
       description: 'Vinilos y gráficos listos para reciclar',
-      imageUrl: 'data:image/svg+xml,' + encodeURIComponent(`
-        <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
-          <rect fill="#f3f4f6" width="400" height="300"/>
-          <text x="200" y="140" text-anchor="middle" fill="#9ca3af" font-family="system-ui" font-size="14">📷 Foto real del proceso</text>
-          <text x="200" y="165" text-anchor="middle" fill="#6b7280" font-family="system-ui" font-size="12">Big bag con recortes de vinilos</text>
-        </svg>
-      `),
+      imageUrl: '',
       date: 'Nov 2024',
       weight: '45 kg',
     },
@@ -83,13 +77,7 @@ export default function TrazabilidadDetalle() {
       id: 2,
       title: 'Lo procesamos',
       description: 'Separamos y trituramos',
-      imageUrl: 'data:image/svg+xml,' + encodeURIComponent(`
-        <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
-          <rect fill="#f3f4f6" width="400" height="300"/>
-          <text x="200" y="140" text-anchor="middle" fill="#9ca3af" font-family="system-ui" font-size="14">📷 Proceso de reciclaje</text>
-          <text x="200" y="165" text-anchor="middle" fill="#6b7280" font-family="system-ui" font-size="12">Material en proceso</text>
-        </svg>
-      `),
+      imageUrl: '',
       date: 'Nov 2024',
       weight: '42 kg',
     },
@@ -97,17 +85,13 @@ export default function TrazabilidadDetalle() {
       id: 3,
       title: 'Listo para usar',
       description: 'Material reciclado para nuevos productos',
-      imageUrl: 'data:image/svg+xml,' + encodeURIComponent(`
-        <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
-          <rect fill="#f3f4f6" width="400" height="300"/>
-          <text x="200" y="140" text-anchor="middle" fill="#9ca3af" font-family="system-ui" font-size="14">📷 Material reciclado</text>
-          <text x="200" y="165" text-anchor="middle" fill="#6b7280" font-family="system-ui" font-size="12">Pellets de HDPE reciclado</text>
-        </svg>
-      `),
+      imageUrl: '',
       date: 'Nov 2024',
       weight: '40 kg',
     },
   ];
+  
+  const productionSpecs = exhibitor.productionSpecs;
 
   // Calcular datos para el storytelling
   const sortedCycles = [...exhibitor.graphicHistory].sort((a, b) => a.cycleNumber - b.cycleNumber);
@@ -330,34 +314,122 @@ export default function TrazabilidadDetalle() {
               {activeTab === 'flows' && <CircularFlowDiagram cycles={exhibitor.graphicHistory} />}
               {activeTab === 'evidence' && (
                 <div className="space-y-6">
+                  {/* Fotos del proceso */}
                   <div className="text-center mb-4">
-                    <h3 className="text-lg font-medium text-gray-600">Fotos del Proceso</h3>
-                    <p className="text-sm text-gray-500">Así se ve el reciclaje paso a paso</p>
+                    <h3 className="text-lg font-medium text-gray-600">Fotos del Ciclo 23 - {exhibitor.currentGraphic.campaign}</h3>
+                    <p className="text-sm text-gray-500">Evidencia fotográfica de la producción actual</p>
                   </div>
                   
                   <div className="grid grid-cols-3 gap-4">
                     {processPhotos.map((photo) => (
-                      <div key={photo.id} className="bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
-                        <div className="aspect-video bg-gray-200 flex items-center justify-center">
-                          <div className="text-center p-4">
-                            <Camera className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-                            <p className="text-sm text-gray-500">{photo.title}</p>
-                            <p className="text-xs text-gray-400 mt-1">{photo.description}</p>
+                      <div key={photo.id} className="bg-gray-50 rounded-lg overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow">
+                        {photo.imageUrl ? (
+                          <div className="aspect-video bg-gray-100 relative overflow-hidden">
+                            <img 
+                              src={photo.imageUrl} 
+                              alt={photo.title}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                // Si no carga la imagen, mostrar placeholder
+                                const target = e.target as HTMLImageElement;
+                                target.style.display = 'none';
+                                target.parentElement?.classList.add('flex', 'items-center', 'justify-center');
+                                const placeholder = document.createElement('div');
+                                placeholder.className = 'text-center p-4';
+                                placeholder.innerHTML = `
+                                  <svg class="w-8 h-8 mx-auto mb-2 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                  </svg>
+                                  <p class="text-sm text-gray-500">${photo.title}</p>
+                                  <p class="text-xs text-emerald-500 mt-1">Guarda la imagen en: ${photo.imageUrl}</p>
+                                `;
+                                target.parentElement?.appendChild(placeholder);
+                              }}
+                            />
                           </div>
-                        </div>
+                        ) : (
+                          <div className="aspect-video bg-gray-200 flex items-center justify-center">
+                            <div className="text-center p-4">
+                              <Camera className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                              <p className="text-sm text-gray-500">{photo.title}</p>
+                              <p className="text-xs text-gray-400 mt-1">{photo.description}</p>
+                            </div>
+                          </div>
+                        )}
                         <div className="p-3">
-                          <div className="flex justify-between items-center">
+                          <p className="text-sm font-medium text-gray-700">{photo.title}</p>
+                          <p className="text-xs text-gray-500 mt-1">{photo.description}</p>
+                          <div className="flex justify-between items-center mt-2 pt-2 border-t border-gray-100">
                             <span className="text-xs text-gray-500">{photo.date}</span>
-                            <span className="text-xs font-medium text-emerald-600">{photo.weight}</span>
+                            {photo.weight && <span className="text-xs font-medium text-emerald-600">{photo.weight}</span>}
                           </div>
                         </div>
                       </div>
                     ))}
                   </div>
 
+                  {/* Especificaciones técnicas */}
+                  {productionSpecs && (
+                    <div className="mt-8">
+                      <h3 className="text-lg font-medium text-gray-600 mb-4 text-center">Especificaciones Técnicas</h3>
+                      <div className="bg-gradient-to-br from-gray-50 to-emerald-50 rounded-xl border border-gray-200 p-6">
+                        <div className="flex items-center gap-3 mb-4 pb-4 border-b border-gray-200">
+                          <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
+                            <Factory className="w-6 h-6 text-emerald-600" />
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-gray-800">Orden de Trabajo: {productionSpecs.orderNumber}</h4>
+                            <p className="text-sm text-gray-500">{exhibitor.currentGraphic.campaign}</p>
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                          <div className="bg-white rounded-lg p-3 text-center border border-gray-100">
+                            <Box className="w-5 h-5 mx-auto mb-1 text-blue-500" />
+                            <div className="text-lg font-bold text-gray-700">{productionSpecs.totalUnits.toLocaleString()}</div>
+                            <div className="text-xs text-gray-500">Piezas totales</div>
+                          </div>
+                          <div className="bg-white rounded-lg p-3 text-center border border-gray-100">
+                            <Scale className="w-5 h-5 mx-auto mb-1 text-emerald-500" />
+                            <div className="text-lg font-bold text-gray-700">{productionSpecs.weightPerUnit} gr</div>
+                            <div className="text-xs text-gray-500">Peso por pieza</div>
+                          </div>
+                          <div className="bg-white rounded-lg p-3 text-center border border-gray-100">
+                            <Package className="w-5 h-5 mx-auto mb-1 text-purple-500" />
+                            <div className="text-lg font-bold text-gray-700">{productionSpecs.totalPallets}</div>
+                            <div className="text-xs text-gray-500">Tarimas</div>
+                          </div>
+                          <div className="bg-white rounded-lg p-3 text-center border border-gray-100">
+                            <Gauge className="w-5 h-5 mx-auto mb-1 text-orange-500" />
+                            <div className="text-lg font-bold text-gray-700">{productionSpecs.cycleTime}s</div>
+                            <div className="text-xs text-gray-500">Tiempo ciclo</div>
+                          </div>
+                        </div>
+
+                        <div className="mt-4 grid grid-cols-2 gap-4">
+                          <div className="bg-white rounded-lg p-4 border border-gray-100">
+                            <h5 className="text-sm font-medium text-gray-600 mb-2">Material</h5>
+                            <p className="text-sm text-gray-800 font-mono">{productionSpecs.material}</p>
+                            <div className="flex gap-4 mt-2 text-xs text-gray-500">
+                              <span>HDPE: <strong className="text-emerald-600">{productionSpecs.totalHDPE.toLocaleString()} kg</strong></span>
+                              <span>Pigmento: <strong className="text-emerald-600">{productionSpecs.totalMasterBatch} kg</strong></span>
+                            </div>
+                          </div>
+                          <div className="bg-white rounded-lg p-4 border border-gray-100">
+                            <h5 className="text-sm font-medium text-gray-600 mb-2">Máquina</h5>
+                            <p className="text-sm text-gray-800">{productionSpecs.injectionMachine}</p>
+                            <p className="text-xs text-gray-500 mt-2">
+                              Capacidad: <strong className="text-emerald-600">{productionSpecs.unitsPerHour.toFixed(0)} piezas/hora</strong>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="bg-emerald-50 rounded-lg p-4 text-center">
                     <p className="text-sm text-emerald-700">
-                      📸 Las fotos se actualizan cada vez que reciclamos
+                      📸 Las fotos y especificaciones se actualizan en cada ciclo de producción
                     </p>
                   </div>
                 </div>

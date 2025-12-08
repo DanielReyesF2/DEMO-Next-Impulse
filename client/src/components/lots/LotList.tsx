@@ -22,3 +22,4 @@ export function LotList({ lots }: LotListProps) {
     </div>
   );
 }
+

@@ -42,3 +42,4 @@ export function ReportMetrics({ lot }: ReportMetricsProps) {
     </div>
   );
 }
+

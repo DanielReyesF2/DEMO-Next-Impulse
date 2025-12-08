@@ -21,3 +21,4 @@ export function LotHeader({ lot }: LotHeaderProps) {
     </div>
   );
 }
+

@@ -24,3 +24,4 @@ export function CycleTimeline({ lot }: CycleTimelineProps) {
     </div>
   );
 }
+

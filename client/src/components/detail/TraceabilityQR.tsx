@@ -21,3 +21,4 @@ export function TraceabilityQR({ lotId }: TraceabilityQRProps) {
     </div>
   );
 }
+
