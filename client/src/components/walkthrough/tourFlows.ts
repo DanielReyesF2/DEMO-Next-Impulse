@@ -26,14 +26,14 @@ export const tourFlows: TourFlow[] = [
   {
     id: 'reports',
     name: 'Generar Reporte',
-    description: 'Crear reporte ESR, GRI, NIS o Alcance 3',
+    description: 'Para tu informe de sustentabilidad',
     icon: 'FileText',
     steps: [
       {
         element: '[data-tour="nav-trazabilidad"]',
         popover: {
-          title: '¡Generemos tu reporte!',
-          description: 'Los reportes de sustentabilidad están dentro de Trazabilidad.',
+          title: '¡Vamos a crear tu reporte!',
+          description: 'Primero entramos a Trazabilidad.',
           side: 'bottom',
         },
       },
@@ -42,8 +42,8 @@ export const tourFlows: TourFlow[] = [
         delay: 500,
         element: '[data-tour="tab-reportes"]',
         popover: {
-          title: 'Pestaña de Reportes',
-          description: 'Haz clic en "Reportes" para ver todos los estándares disponibles.',
+          title: 'Aquí están los reportes',
+          description: 'Haz clic aquí para elegir qué tipo de reporte necesitas.',
           side: 'bottom',
         },
       },
@@ -51,15 +51,15 @@ export const tourFlows: TourFlow[] = [
   },
   {
     id: 'traceability',
-    name: '¿Dónde está mi lote?',
-    description: 'Rastrear un exhibidor específico',
+    name: '¿Dónde está mi exhibidor?',
+    description: 'Buscar un exhibidor específico',
     icon: 'Search',
     steps: [
       {
         element: '[data-tour="nav-trazabilidad"]',
         popover: {
-          title: '¡Vamos a encontrar tu exhibidor!',
-          description: 'En Trazabilidad puedes ver todos los exhibidores de tu empresa.',
+          title: '¡Busquemos tu exhibidor!',
+          description: 'Aquí están todos tus exhibidores.',
           side: 'bottom',
         },
       },
@@ -68,8 +68,8 @@ export const tourFlows: TourFlow[] = [
         delay: 500,
         element: '[data-tour="tab-exhibidores"]',
         popover: {
-          title: 'Tus exhibidores',
-          description: 'En "Mis Exhibidores" están todos tus exhibidores. Haz clic en cualquiera para ver su trazabilidad.',
+          title: 'Tu inventario',
+          description: 'Aquí ves todos. Haz clic en uno para ver su historia completa.',
           side: 'bottom',
         },
       },
@@ -77,15 +77,15 @@ export const tourFlows: TourFlow[] = [
   },
   {
     id: 'impact',
-    name: 'Mi Impacto Ambiental',
-    description: 'Ver el impacto de mi empresa',
+    name: '¿Cuánto he ahorrado?',
+    description: 'Ver tu ahorro ambiental',
     icon: 'Leaf',
     steps: [
       {
         element: '[data-tour="nav-dashboard"]',
         popover: {
-          title: '¡Veamos tu impacto!',
-          description: 'El Dashboard te muestra un resumen ejecutivo de todo tu impacto ambiental.',
+          title: '¡Veamos tus ahorros!',
+          description: 'Aquí está el resumen de todo lo que has logrado.',
           side: 'bottom',
         },
       },
@@ -94,24 +94,24 @@ export const tourFlows: TourFlow[] = [
         delay: 500,
         element: '[data-tour="dashboard-kpis"]',
         popover: {
-          title: 'Métricas clave',
-          description: 'Exhibidores activos, ciclos de gráficos, y tu balance de CO2. Lo más importante de un vistazo.',
+          title: 'Los números importantes',
+          description: 'Cuántos exhibidores tienes, cuántas veces has reciclado, y cuánto CO₂ has evitado.',
           side: 'bottom',
         },
       },
       {
         element: '[data-tour="dashboard-impacto"]',
         popover: {
-          title: 'Impacto ambiental',
-          description: 'CO2 evitado, agua ahorrada, energía... Todo lo que tu empresa ha logrado con economía circular.',
+          title: 'Tu huella verde',
+          description: 'Mira cuánta agua, energía y recursos has ahorrado. ¡Todo gracias al reciclaje!',
           side: 'top',
         },
       },
       {
         element: '[data-tour="dashboard-comparativa"]',
         popover: {
-          title: 'Comparativa',
-          description: '¡Impresionante! Así te comparas con el sistema tradicional. Mira cuánto has ahorrado.',
+          title: '¿Cuánto te ahorraste?',
+          description: 'Esto es lo que habrías gastado sin reciclar vs. lo que gastaste reciclando. ¡Mira la diferencia!',
           side: 'top',
         },
       },
@@ -124,24 +124,24 @@ export const traceabilityDetailSteps: TourStep[] = [
   {
     element: '[data-tour="trazabilidad-banner"]',
     popover: {
-      title: 'Historia del exhibidor',
-      description: 'Aquí ves la historia completa: cuándo comenzó, cuántos ciclos ha completado y su impacto acumulado.',
+      title: 'La vida de tu exhibidor',
+      description: 'Cuándo llegó, cuántas veces se ha reciclado, y cuánto ha ayudado al planeta.',
       side: 'bottom',
     },
   },
   {
     element: '[data-tour="trazabilidad-espiral"]',
     popover: {
-      title: 'Ciclo de vida circular',
-      description: 'Cada punto en el espiral es un ciclo de vida. El material se recicla y regresa al ciclo una y otra vez.',
+      title: 'Su historia de reciclaje',
+      description: 'Cada círculo es una vez que el material se recicló y volvió a usarse. ¡Entre más círculos, más veces se recicló!',
       side: 'left',
     },
   },
   {
     element: '[data-tour="trazabilidad-timeline"]',
     popover: {
-      title: 'Historial de reciclaje',
-      description: 'El flujo completo de reciclaje: origen del material, campañas de marketing, y destino de cada ciclo.',
+      title: 'Todo el recorrido',
+      description: 'De dónde vino el material, qué campañas tuvo, y a dónde fue después de cada uso.',
       side: 'top',
     },
   },
@@ -150,3 +150,4 @@ export const traceabilityDetailSteps: TourStep[] = [
 export function getFlowById(id: TourFlowType): TourFlow | undefined {
   return tourFlows.find(flow => flow.id === id);
 }
+
