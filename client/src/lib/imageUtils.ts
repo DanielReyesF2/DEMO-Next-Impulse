@@ -1,28 +1,3 @@
-import { createCanvas, loadImage } from 'canvas';
-import econovaLogo from '@assets/Logo-ECONOVA-OF_Blanco.png';
-
-export async function getEconovaLogoAsBase64(): Promise<string> {
-  try {
-    // Carga la imagen
-    const img = await loadImage(econovaLogo);
-    
-    // Crea un canvas con las dimensiones de la imagen
-    const canvas = createCanvas(img.width, img.height);
-    const ctx = canvas.getContext('2d');
-    
-    // Dibuja la imagen en el canvas
-    ctx.drawImage(img, 0, 0);
-    
-    // Convierte el canvas a una cadena base64
-    const base64 = canvas.toDataURL('image/png').split(',')[1];
-    
-    return base64;
-  } catch (error) {
-    console.error('Error al cargar el logo de Econova:', error);
-    return '';
-  }
-}
-
 // Función para crear gradientes simulados en jsPDF
 export function createGradientPattern(
   doc: any, 
