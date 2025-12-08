@@ -19,12 +19,23 @@ interface WalkthroughContextType {
 
 const WalkthroughContext = createContext<WalkthroughContextType | null>(null);
 
+// Default context for when provider is not yet mounted (prevents SSR/HMR issues)
+const defaultContext: WalkthroughContextType = {
+  isModalOpen: false,
+  isLotSearchOpen: false,
+  currentFlow: null,
+  openModal: () => {},
+  closeModal: () => {},
+  openLotSearch: () => {},
+  closeLotSearch: () => {},
+  startTour: () => {},
+  endTour: () => {},
+};
+
 export function useWalkthrough() {
   const context = useContext(WalkthroughContext);
-  if (!context) {
-    throw new Error('useWalkthrough must be used within WalkthroughProvider');
-  }
-  return context;
+  // Return default context if provider not mounted (prevents HMR/initialization errors)
+  return context ?? defaultContext;
 }
 
 interface WalkthroughProviderProps {
