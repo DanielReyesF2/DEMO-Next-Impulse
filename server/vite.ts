@@ -1,12 +1,17 @@
 import express, { type Express } from "express";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 import { createServer as createViteServer, createLogger } from "vite";
 import { type Server } from "http";
 import viteConfig from "../vite.config";
 import { nanoid } from "nanoid";
 
 const viteLogger = createLogger();
+
+// Get __dirname equivalent for ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export function log(message: string, source = "express") {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
@@ -46,7 +51,7 @@ export async function setupVite(app: Express, server: Server) {
 
     try {
       const clientTemplate = path.resolve(
-        import.meta.dirname,
+        __dirname,
         "..",
         "client",
         "index.html",
@@ -68,41 +73,82 @@ export async function setupVite(app: Express, server: Server) {
 }
 
 export function serveStatic(app: Express) {
-  const distPath = path.resolve(import.meta.dirname, "..", "dist", "public");
+  // In production, dist/index.js is in the same folder as dist/public
+  // So we need to go from dist/ to dist/public
+  const distPath = path.resolve(__dirname, "public");
+  
+  // Fallback: try the old path structure
+  const altDistPath = path.resolve(__dirname, "..", "dist", "public");
 
-  log(`Looking for static files in: ${distPath}`);
+  log(`Primary static path: ${distPath}`);
+  log(`Alternative static path: ${altDistPath}`);
+  log(`Current __dirname: ${__dirname}`);
+  log(`Process cwd: ${process.cwd()}`);
 
+  let staticPath = distPath;
+  
   if (!fs.existsSync(distPath)) {
-    const errorMsg = `Could not find the build directory: ${distPath}, make sure to build the client first`;
-    log(`ERROR: ${errorMsg}`);
-    log(`Current working directory: ${process.cwd()}`);
-    log(`__dirname equivalent: ${import.meta.dirname}`);
-    
-    // Instead of throwing, serve an error page
-    app.use("*", (_req, res) => {
-      res.status(500).send(`
-        <html>
-          <head><title>Build Error</title></head>
-          <body style="font-family: sans-serif; padding: 40px; text-align: center;">
-            <h1>Build Directory Not Found</h1>
-            <p>Expected path: ${distPath}</p>
-            <p>Please ensure the build completed successfully.</p>
-            <p>Check the deployment logs for build errors.</p>
-          </body>
-        </html>
-      `);
-    });
-    return;
+    log(`Primary path not found, trying alternative...`);
+    if (fs.existsSync(altDistPath)) {
+      staticPath = altDistPath;
+      log(`Using alternative path: ${staticPath}`);
+    } else {
+      // Try process.cwd() based path
+      const cwdPath = path.resolve(process.cwd(), "dist", "public");
+      log(`Trying cwd-based path: ${cwdPath}`);
+      if (fs.existsSync(cwdPath)) {
+        staticPath = cwdPath;
+        log(`Using cwd-based path: ${staticPath}`);
+      } else {
+        const errorMsg = `Could not find the build directory in any location`;
+        log(`ERROR: ${errorMsg}`);
+        
+        // List what we can find
+        try {
+          const distContents = fs.readdirSync(path.resolve(process.cwd(), "dist"));
+          log(`Contents of dist/: ${distContents.join(", ")}`);
+        } catch (e) {
+          log(`Cannot read dist/: ${e}`);
+        }
+        
+        app.use("*", (_req, res) => {
+          res.status(500).send(`
+            <html>
+              <head><title>Build Error</title></head>
+              <body style="font-family: sans-serif; padding: 40px; text-align: center;">
+                <h1>Build Directory Not Found</h1>
+                <p>Tried paths:</p>
+                <ul style="list-style: none;">
+                  <li>${distPath}</li>
+                  <li>${altDistPath}</li>
+                  <li>${path.resolve(process.cwd(), "dist", "public")}</li>
+                </ul>
+                <p>Please ensure the build completed successfully.</p>
+              </body>
+            </html>
+          `);
+        });
+        return;
+      }
+    }
   }
 
-  log(`✓ Found static files directory: ${distPath}`);
+  log(`✓ Using static files directory: ${staticPath}`);
+  
+  // List contents for debugging
+  try {
+    const contents = fs.readdirSync(staticPath);
+    log(`Static directory contents: ${contents.join(", ")}`);
+  } catch (e) {
+    log(`Cannot list static directory: ${e}`);
+  }
   
   // Serve static files, but exclude /health and /api routes
   app.use((req, res, next) => {
     if (req.path === "/health" || req.path.startsWith("/api")) {
       return next();
     }
-    express.static(distPath)(req, res, next);
+    express.static(staticPath)(req, res, next);
   });
 
   // fall through to index.html if the file doesn't exist (but not for /health or /api)
@@ -111,35 +157,19 @@ export function serveStatic(app: Express) {
     if (req.path === "/health" || req.path.startsWith("/api")) {
       return next();
     }
-    const indexPath = path.resolve(distPath, "index.html");
+    const indexPath = path.resolve(staticPath, "index.html");
     if (fs.existsSync(indexPath)) {
       res.sendFile(indexPath, (err) => {
         if (err) {
           log(`Error sending index.html: ${err.message}`);
           if (!res.headersSent) {
-            res.status(500).send(`
-              <html>
-                <head><title>Server Error</title></head>
-                <body style="font-family: sans-serif; padding: 40px; text-align: center;">
-                  <h1>500 - Server Error</h1>
-                  <p>Error loading index.html: ${err.message}</p>
-                </body>
-              </html>
-            `);
+            res.status(500).send("Error loading page");
           }
         }
       });
     } else {
       log(`index.html not found at: ${indexPath}`);
-      res.status(404).send(`
-        <html>
-          <head><title>Not Found</title></head>
-          <body style="font-family: sans-serif; padding: 40px; text-align: center;">
-            <h1>404 - File Not Found</h1>
-            <p>index.html not found at: ${indexPath}</p>
-          </body>
-        </html>
-      `);
+      res.status(404).send("Page not found");
     }
   });
 }
