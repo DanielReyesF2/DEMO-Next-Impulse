@@ -2,11 +2,10 @@
 nixPkgs = ["nodejs_20"]
 
 [phases.install]
-cmds = ["npm ci --prefer-offline --no-audit || npm install --prefer-offline --no-audit"]
+cmds = ["npm ci"]
 
 [phases.build]
-cmds = ["rm -rf dist", "npm run build"]
+cmds = ["npm run build"]
 
 [start]
 cmd = "npm start"
-
