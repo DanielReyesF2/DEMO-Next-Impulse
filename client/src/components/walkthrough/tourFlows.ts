@@ -1,6 +1,6 @@
 // Definición de los flujos de tour para el walkthrough
 
-export type TourFlowType = 'permits' | 'reports' | 'traceability' | 'impact';
+export type TourFlowType = 'reports' | 'traceability' | 'impact';
 
 export interface TourStep {
   element?: string; // data-tour selector
@@ -24,85 +24,27 @@ export interface TourFlow {
 
 export const tourFlows: TourFlow[] = [
   {
-    id: 'permits',
-    name: 'Permisos Ambientales',
-    description: 'Ver el estado de mis permisos y autorizaciones',
-    icon: 'FileCheck',
-    steps: [
-      {
-        element: '[data-tour="nav-documentos"]',
-        popover: {
-          title: '¡Vamos a revisar tus permisos!',
-          description: 'En Control Documental tienes todos tus permisos y autorizaciones ambientales.',
-          side: 'bottom',
-        },
-      },
-      {
-        navigateTo: '/documentos',
-        delay: 500,
-        element: '[data-tour="documentos-kpis"]',
-        popover: {
-          title: 'Resumen de permisos',
-          description: 'Aquí ves el estado general: permisos vigentes, por vencer y vencidos. Todo de un vistazo.',
-          side: 'bottom',
-        },
-      },
-      {
-        element: '[data-tour="documentos-tabla"]',
-        popover: {
-          title: 'Lista completa',
-          description: 'Todos tus documentos con fechas de emisión, vencimiento y estado. Los que están por vencer se marcan en amarillo.',
-          side: 'top',
-        },
-      },
-      {
-        element: '[data-tour="documentos-filtros"]',
-        popover: {
-          title: 'Filtra fácilmente',
-          description: 'Puedes filtrar por tipo de documento o estado para encontrar lo que buscas rápidamente.',
-          side: 'bottom',
-        },
-      },
-    ],
-  },
-  {
     id: 'reports',
-    name: 'Mi Reporte Ambiental',
-    description: 'Generar reporte GRI, SASB, ISSB o CDP',
+    name: 'Generar Reporte',
+    description: 'Crear reporte ESR, GRI, NIS o Alcance 3',
     icon: 'FileText',
     steps: [
       {
-        element: '[data-tour="nav-reportes"]',
+        element: '[data-tour="nav-trazabilidad"]',
         popover: {
           title: '¡Generemos tu reporte!',
-          description: 'En Reportes puedes generar informes de sustentabilidad en diferentes estándares internacionales.',
+          description: 'Los reportes de sustentabilidad están dentro de Trazabilidad.',
           side: 'bottom',
         },
       },
       {
-        navigateTo: '/reportes',
+        navigateTo: '/trazabilidad',
         delay: 500,
-        element: '[data-tour="reportes-selector"]',
+        element: '[data-tour="tab-reportes"]',
         popover: {
-          title: 'Elige el estándar',
-          description: 'Selecciona el formato que necesitas: GRI Standards, SASB, ISSB (IFRS S2) o CDP Climate. Cada uno tiene métricas específicas.',
+          title: 'Pestaña de Reportes',
+          description: 'Haz clic en "Reportes" para ver todos los estándares disponibles.',
           side: 'bottom',
-        },
-      },
-      {
-        element: '[data-tour="reportes-preview"]',
-        popover: {
-          title: 'Vista previa',
-          description: 'Aquí ves cómo quedará tu reporte. El contenido cambia automáticamente según el estándar seleccionado.',
-          side: 'top',
-        },
-      },
-      {
-        element: '[data-tour="reportes-download"]',
-        popover: {
-          title: 'Descarga tu reporte',
-          description: '¡Listo! Puedes descargar en PDF o Excel para compartir con tu equipo o auditorías.',
-          side: 'left',
         },
       },
     ],
@@ -114,32 +56,23 @@ export const tourFlows: TourFlow[] = [
     icon: 'Search',
     steps: [
       {
-        element: '[data-tour="nav-exhibidores"]',
+        element: '[data-tour="nav-trazabilidad"]',
         popover: {
           title: '¡Vamos a encontrar tu exhibidor!',
-          description: 'En Mis Exhibidores puedes ver todos los exhibidores activos de tu empresa.',
+          description: 'En Trazabilidad puedes ver todos los exhibidores de tu empresa.',
           side: 'bottom',
         },
       },
       {
-        navigateTo: '/exhibidores',
+        navigateTo: '/trazabilidad',
         delay: 500,
-        element: '[data-tour="exhibidores-lista"]',
+        element: '[data-tour="tab-exhibidores"]',
         popover: {
           title: 'Tus exhibidores',
-          description: 'Aquí están todos tus exhibidores. Cada tarjeta muestra el ID, ubicación, ciclos completados y estado.',
-          side: 'top',
+          description: 'En "Mis Exhibidores" están todos tus exhibidores. Haz clic en cualquiera para ver su trazabilidad.',
+          side: 'bottom',
         },
       },
-      {
-        element: '[data-tour="exhibidor-card"]',
-        popover: {
-          title: 'Selecciona uno',
-          description: 'Haz clic en cualquier exhibidor para ver su trazabilidad completa. Vamos a ver este...',
-          side: 'right',
-        },
-      },
-      // Los siguientes steps se agregan dinámicamente con el ID del lote
     ],
   },
   {
@@ -217,4 +150,3 @@ export const traceabilityDetailSteps: TourStep[] = [
 export function getFlowById(id: TourFlowType): TourFlow | undefined {
   return tourFlows.find(flow => flow.id === id);
 }
-

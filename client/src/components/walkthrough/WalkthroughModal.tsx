@@ -1,9 +1,8 @@
 import { useWalkthrough } from './WalkthroughContext';
 import { tourFlows, TourFlowType } from './tourFlows';
-import { FileCheck, FileText, Search, Leaf, X, Play } from 'lucide-react';
+import { FileText, Search, Leaf, X, Play } from 'lucide-react';
 
 const iconMap = {
-  FileCheck,
   FileText,
   Search,
   Leaf,
@@ -32,7 +31,7 @@ export function WalkthroughModal() {
       />
       
       {/* Modal */}
-      <div className="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 overflow-hidden animate-in fade-in zoom-in duration-300">
+      <div className="relative bg-white rounded-2xl shadow-2xl max-w-xl w-full mx-4 overflow-hidden animate-in fade-in zoom-in duration-300">
         {/* Header */}
         <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 px-6 py-5 text-white">
           <button 
@@ -58,16 +57,16 @@ export function WalkthroughModal() {
             ¿Qué necesitas encontrar hoy?
           </h3>
           
-          <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-3">
             {tourFlows.map((flow) => {
               const Icon = iconMap[flow.icon as keyof typeof iconMap];
               return (
                 <button
                   key={flow.id}
                   onClick={() => handleFlowSelect(flow.id)}
-                  className="group p-5 bg-gray-50 hover:bg-emerald-50 border-2 border-gray-200 hover:border-emerald-300 rounded-xl transition-all duration-200 text-left"
+                  className="group w-full p-4 bg-gray-50 hover:bg-emerald-50 border-2 border-gray-200 hover:border-emerald-300 rounded-xl transition-all duration-200 text-left"
                 >
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-center gap-4">
                     <div className="w-12 h-12 bg-white group-hover:bg-emerald-100 rounded-xl flex items-center justify-center shadow-sm transition-colors">
                       <Icon className="w-6 h-6 text-emerald-600" />
                     </div>
@@ -75,7 +74,7 @@ export function WalkthroughModal() {
                       <h4 className="font-medium text-gray-800 group-hover:text-emerald-700 transition-colors">
                         {flow.name}
                       </h4>
-                      <p className="text-sm text-gray-500 mt-1">
+                      <p className="text-sm text-gray-500">
                         {flow.description}
                       </p>
                     </div>
@@ -93,4 +92,3 @@ export function WalkthroughModal() {
     </div>
   );
 }
-

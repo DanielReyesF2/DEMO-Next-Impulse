@@ -106,6 +106,7 @@ export default function Trazabilidad() {
             ].map(tab => (
               <button
                 key={tab.id}
+                data-tour={`tab-${tab.id}`}
                 onClick={() => setActiveTab(tab.id as TabType)}
                 className={`py-4 text-sm font-medium border-b-2 transition-colors ${
                   activeTab === tab.id
