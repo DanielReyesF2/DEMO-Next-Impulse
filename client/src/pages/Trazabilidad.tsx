@@ -1,10 +1,13 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'wouter';
+import { Link } from 'wouter';
 import AppLayout from '@/components/layout/AppLayout';
 import { egoExhibitors, CURRENT_CLIENT, calculateExhibitorStats } from '@/data/mockExhibitors';
-import { CleanStatCard } from '@/components/ui/CleanStatCard';
 import { ESRCemefiReport, GRIReport, NISMexicoReport, GHGProtocolReport } from '@/components/reports';
-import { Package, RefreshCw, Leaf, TrendingUp, ArrowRight, MapPin, FileText, Award, BarChart3, Eye, Download, Clock, CheckCircle2 } from 'lucide-react';
+import { 
+  Package, RefreshCw, Leaf, TrendingUp, ArrowRight, MapPin, 
+  FileText, Award, BarChart3, Eye, Download, Clock, CheckCircle2,
+  Recycle, Factory, Truck, Zap
+} from 'lucide-react';
 
 type TabType = 'overview' | 'exhibidores' | 'reportes';
 type ReportStandard = 'esr' | 'gri' | 'nis' | 'ghg';
@@ -26,7 +29,6 @@ export default function Trazabilidad() {
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [selectedStandard, setSelectedStandard] = useState<ReportStandard>('esr');
   const [showReport, setShowReport] = useState(false);
-  const [, setLocation] = useLocation();
   
   const exhibitors = egoExhibitors.filter(e => e.clientOwner === CURRENT_CLIENT.company);
   const { company, emissions, materials } = CURRENT_CLIENT;
@@ -42,7 +44,6 @@ export default function Trazabilidad() {
     const stats = calculateExhibitorStats(e);
     return sum + stats.totalWeight;
   }, 0);
-  const avgCycles = totalExhibitors > 0 ? (totalCycles / totalExhibitors).toFixed(1) : '0';
   
   // Top exhibidores por impacto
   const topExhibitors = exhibitors
@@ -51,6 +52,10 @@ export default function Trazabilidad() {
       return { ...exhibitor, stats, impact: stats.emissionsAvoided };
     })
     .sort((a, b) => b.impact - a.impact);
+
+  // Flujos
+  const graphicsToGraphics = exhibitors.reduce((sum, e) => sum + e.graphicHistory.filter(g => g.recycledInto === 'graphic').length, 0);
+  const graphicsToExhibitors = exhibitors.reduce((sum, e) => sum + e.graphicHistory.filter(g => g.recycledInto === 'exhibitor').length, 0);
 
   const reportData = {
     exhibitors: totalExhibitors,
@@ -92,169 +97,229 @@ export default function Trazabilidad() {
     <AppLayout>
       <div className="min-h-screen bg-gray-50">
         {/* Sub-navegación */}
-        <div className="bg-white border-b border-gray-200 px-8 py-3">
-          <div className="max-w-7xl mx-auto flex items-center gap-6">
-            <button
-              onClick={() => setActiveTab('overview')}
-              className={`text-sm font-medium pb-2 border-b-2 transition-colors ${
-                activeTab === 'overview'
-                  ? 'text-emerald-600 border-emerald-600'
-                  : 'text-gray-500 border-transparent hover:text-gray-700'
-              }`}
-            >
-              Resumen
-            </button>
-            <button
-              onClick={() => setActiveTab('exhibidores')}
-              className={`text-sm font-medium pb-2 border-b-2 transition-colors ${
-                activeTab === 'exhibidores'
-                  ? 'text-emerald-600 border-emerald-600'
-                  : 'text-gray-500 border-transparent hover:text-gray-700'
-              }`}
-            >
-              Mis Exhibidores
-            </button>
-            <button
-              onClick={() => setActiveTab('reportes')}
-              className={`text-sm font-medium pb-2 border-b-2 transition-colors ${
-                activeTab === 'reportes'
-                  ? 'text-emerald-600 border-emerald-600'
-                  : 'text-gray-500 border-transparent hover:text-gray-700'
-              }`}
-            >
-              Reportes
-            </button>
+        <div className="bg-white border-b border-gray-200 px-8">
+          <div className="max-w-7xl mx-auto flex items-center gap-8">
+            {[
+              { id: 'overview', label: 'Resumen' },
+              { id: 'exhibidores', label: 'Mis Exhibidores' },
+              { id: 'reportes', label: 'Reportes' },
+            ].map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as TabType)}
+                className={`py-4 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === tab.id
+                    ? 'text-emerald-600 border-emerald-600'
+                    : 'text-gray-500 border-transparent hover:text-gray-700'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
         </div>
 
         <div className="p-8">
           <div className="max-w-7xl mx-auto">
-            {/* TAB: Resumen */}
+            
+            {/* ===== TAB: RESUMEN ===== */}
             {activeTab === 'overview' && (
               <>
-                <div className="mb-8">
-                  <h1 className="text-2xl font-medium text-gray-700 mb-2">Trazabilidad</h1>
-                  <p className="text-gray-600">Visión general de tus exhibidores y gráficos</p>
+                {/* Hero con impacto total */}
+                <div className="bg-gradient-to-br from-emerald-600 to-emerald-700 rounded-2xl p-8 mb-8 text-white">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h1 className="text-3xl font-bold mb-2">Trazabilidad Circular</h1>
+                      <p className="text-emerald-100 text-lg">Tu impacto ambiental en tiempo real</p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-5xl font-bold">-{(totalEmissionsAvoided/1000).toFixed(1)}t</div>
+                      <div className="text-emerald-200">CO₂e evitado</div>
+                    </div>
+                  </div>
+                  
+                  {/* Stats en hero */}
+                  <div className="grid grid-cols-4 gap-6 mt-8 pt-6 border-t border-emerald-500/30">
+                    <div className="text-center">
+                      <div className="flex items-center justify-center gap-2 mb-2">
+                        <Package className="w-5 h-5 text-emerald-200" />
+                      </div>
+                      <div className="text-3xl font-bold">{totalExhibitors}</div>
+                      <div className="text-emerald-200 text-sm">Exhibidores</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="flex items-center justify-center gap-2 mb-2">
+                        <RefreshCw className="w-5 h-5 text-emerald-200" />
+                      </div>
+                      <div className="text-3xl font-bold">{totalCycles}</div>
+                      <div className="text-emerald-200 text-sm">Ciclos completados</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="flex items-center justify-center gap-2 mb-2">
+                        <Recycle className="w-5 h-5 text-emerald-200" />
+                      </div>
+                      <div className="text-3xl font-bold">{(totalWeight/1000).toFixed(1)}t</div>
+                      <div className="text-emerald-200 text-sm">Material reciclado</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="flex items-center justify-center gap-2 mb-2">
+                        <Zap className="w-5 h-5 text-emerald-200" />
+                      </div>
+                      <div className="text-3xl font-bold">100%</div>
+                      <div className="text-emerald-200 text-sm">Tasa de recuperación</div>
+                    </div>
+                  </div>
                 </div>
 
-                {/* KPIs */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                  <CleanStatCard title="Exhibidores" value={totalExhibitors} description="en operación" icon="Package" color="emerald" />
-                  <CleanStatCard title="Ciclos totales" value={totalCycles} description={`${avgCycles} por exhibidor`} icon="RefreshCw" color="blue" />
-                  <CleanStatCard title="CO₂e evitado" value={totalEmissionsAvoided.toFixed(0)} unit="kg" description="acumulado" icon="Leaf" color="emerald" />
-                  <CleanStatCard title="Material reciclado" value={totalWeight.toFixed(0)} unit="kg" description="acumulado" icon="TrendingUp" color="purple" />
+                {/* Flujos circulares - visual mejorado */}
+                <div className="grid grid-cols-3 gap-6 mb-8">
+                  <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
+                        <Recycle className="w-6 h-6 text-emerald-600" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-gray-900">Gráficos → Gráficos</h3>
+                        <p className="text-sm text-gray-500">Ciclo más frecuente</p>
+                      </div>
+                    </div>
+                    <div className="text-4xl font-bold text-emerald-600">{graphicsToGraphics}</div>
+                    <div className="text-sm text-gray-500 mt-1">ciclos registrados</div>
+                    <div className="mt-4 pt-4 border-t border-gray-100">
+                      <div className="flex items-center text-sm text-gray-600">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>
+                        Vinilos usados → Nuevos vinilos
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
+                        <Factory className="w-6 h-6 text-blue-600" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-gray-900">Gráficos → Exhibidores</h3>
+                        <p className="text-sm text-gray-500">Transformación completa</p>
+                      </div>
+                    </div>
+                    <div className="text-4xl font-bold text-blue-600">{graphicsToExhibitors}</div>
+                    <div className="text-sm text-gray-500 mt-1">ciclos registrados</div>
+                    <div className="mt-4 pt-4 border-t border-gray-100">
+                      <div className="flex items-center text-sm text-gray-600">
+                        <span className="w-2 h-2 rounded-full bg-blue-500 mr-2"></span>
+                        Vinilos usados → Materia prima
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center">
+                        <TrendingUp className="w-6 h-6 text-purple-600" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-gray-900">Proyección 2025</h3>
+                        <p className="text-sm text-gray-500">Impacto esperado</p>
+                      </div>
+                    </div>
+                    <div className="text-4xl font-bold text-purple-600">+35%</div>
+                    <div className="text-sm text-gray-500 mt-1">crecimiento estimado</div>
+                    <div className="mt-4 pt-4 border-t border-gray-100">
+                      <div className="flex items-center text-sm text-gray-600">
+                        <span className="w-2 h-2 rounded-full bg-purple-500 mr-2"></span>
+                        ~120 ciclos proyectados
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Top Exhibidores */}
-                <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8">
+                <div className="bg-white rounded-xl border border-gray-200 p-6">
                   <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-lg font-medium text-gray-700">Top Exhibidores</h2>
-                    <button onClick={() => setActiveTab('exhibidores')} className="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1">
+                    <h2 className="text-lg font-semibold text-gray-900">Top Exhibidores por Impacto</h2>
+                    <button 
+                      onClick={() => setActiveTab('exhibidores')} 
+                      className="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1"
+                    >
                       Ver todos <ArrowRight className="w-4 h-4" />
                     </button>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {topExhibitors.slice(0, 3).map((exhibitor, index) => (
+                  <div className="space-y-3">
+                    {topExhibitors.slice(0, 5).map((exhibitor, index) => (
                       <Link key={exhibitor.id} href={`/trazabilidad/${exhibitor.id}`}>
-                        <div className="bg-gray-50 rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer">
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="text-xs font-medium text-gray-500">#{index + 1}</span>
-                            <h3 className="font-semibold text-gray-900">{exhibitor.id}</h3>
+                        <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer">
+                          <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold text-sm">
+                            {index + 1}
                           </div>
-                          <p className="text-sm text-gray-600 mb-3">{exhibitor.model}</p>
-                          <div className="flex items-center justify-between pt-2 border-t border-gray-200">
-                            <div className="flex items-center gap-1 text-emerald-600">
-                              <Leaf className="w-4 h-4" />
-                              <span className="font-semibold">{exhibitor.stats.emissionsAvoided.toFixed(0)} kg</span>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <span className="font-semibold text-gray-900">{exhibitor.id}</span>
+                              <span className="text-sm text-gray-500">{exhibitor.model}</span>
                             </div>
-                            <div className="flex items-center gap-1 text-blue-600">
-                              <RefreshCw className="w-4 h-4" />
-                              <span>{exhibitor.graphicChanges}</span>
+                            <div className="flex items-center gap-1 text-sm text-gray-500 mt-0.5">
+                              <MapPin className="w-3 h-3" />
+                              {exhibitor.location.store}
                             </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-lg font-bold text-emerald-600">{exhibitor.stats.emissionsAvoided.toFixed(0)} kg</div>
+                            <div className="text-xs text-gray-500">CO₂ evitado</div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-lg font-bold text-blue-600">{exhibitor.graphicChanges}</div>
+                            <div className="text-xs text-gray-500">ciclos</div>
                           </div>
                         </div>
                       </Link>
                     ))}
                   </div>
                 </div>
-
-                {/* Flujos */}
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
-                  <h2 className="text-lg font-medium text-gray-700 mb-4">Flujos de Economía Circular</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-100">
-                      <div className="flex items-center gap-2 mb-2">
-                        <RefreshCw className="w-5 h-5 text-emerald-600" />
-                        <h3 className="font-semibold text-gray-900">Gráficos → Gráficos</h3>
-                      </div>
-                      <div className="text-2xl font-bold text-emerald-600">
-                        {exhibitors.reduce((sum, e) => sum + e.graphicHistory.filter(g => g.recycledInto === 'graphic').length, 0)}
-                      </div>
-                      <div className="text-xs text-gray-500">ciclos</div>
-                    </div>
-                    <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Package className="w-5 h-5 text-blue-600" />
-                        <h3 className="font-semibold text-gray-900">Gráficos → Exhibidores</h3>
-                      </div>
-                      <div className="text-2xl font-bold text-blue-600">
-                        {exhibitors.reduce((sum, e) => sum + e.graphicHistory.filter(g => g.recycledInto === 'exhibitor').length, 0)}
-                      </div>
-                      <div className="text-xs text-gray-500">ciclos</div>
-                    </div>
-                    <div className="bg-purple-50 rounded-lg p-4 border border-purple-100">
-                      <div className="flex items-center gap-2 mb-2">
-                        <TrendingUp className="w-5 h-5 text-purple-600" />
-                        <h3 className="font-semibold text-gray-900">Impacto Total</h3>
-                      </div>
-                      <div className="text-lg font-bold text-purple-600">-{totalEmissionsAvoided.toFixed(0)} kg CO₂</div>
-                      <div className="text-xs text-gray-500">{totalWeight.toFixed(0)} kg reciclado</div>
-                    </div>
-                  </div>
-                </div>
               </>
             )}
 
-            {/* TAB: Exhibidores */}
+            {/* ===== TAB: EXHIBIDORES ===== */}
             {activeTab === 'exhibidores' && (
               <>
-                <div className="mb-8">
-                  <h1 className="text-2xl font-medium text-gray-700 mb-2">Mis Exhibidores</h1>
-                  <p className="text-gray-600">{totalExhibitors} exhibidores en operación</p>
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h1 className="text-2xl font-semibold text-gray-900">Mis Exhibidores</h1>
+                    <p className="text-gray-500">{totalExhibitors} exhibidores activos</p>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {topExhibitors.map((exhibitor) => (
                     <Link key={exhibitor.id} href={`/trazabilidad/${exhibitor.id}`}>
-                      <div className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-lg transition-all cursor-pointer">
+                      <div className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-lg transition-all cursor-pointer group">
                         <div className="flex items-start justify-between mb-3">
                           <div>
-                            <h3 className="font-bold text-gray-900">{exhibitor.id}</h3>
+                            <h3 className="font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">{exhibitor.id}</h3>
                             <p className="text-sm text-gray-500">{exhibitor.model}</p>
                           </div>
                           <span className={`text-xs px-2 py-1 rounded-full ${
-                            exhibitor.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-600'
+                            exhibitor.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
                           }`}>
                             {exhibitor.status === 'active' ? 'Activo' : 'En tránsito'}
                           </span>
                         </div>
                         
-                        <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
+                        <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
                           <MapPin className="w-4 h-4 text-gray-400" />
                           {exhibitor.location.store}, {exhibitor.location.city}
                         </div>
 
                         <div className="grid grid-cols-3 gap-2 pt-3 border-t border-gray-100">
                           <div className="text-center">
-                            <div className="text-lg font-bold text-blue-600">{exhibitor.graphicChanges}</div>
+                            <div className="text-xl font-bold text-blue-600">{exhibitor.graphicChanges}</div>
                             <div className="text-xs text-gray-500">ciclos</div>
                           </div>
                           <div className="text-center">
-                            <div className="text-lg font-bold text-emerald-600">{exhibitor.stats.emissionsAvoided.toFixed(0)}</div>
+                            <div className="text-xl font-bold text-emerald-600">{(exhibitor.stats.emissionsAvoided/1000).toFixed(1)}k</div>
                             <div className="text-xs text-gray-500">kg CO₂</div>
                           </div>
                           <div className="text-center">
-                            <div className="text-lg font-bold text-purple-600">{exhibitor.stats.totalWeight.toFixed(0)}</div>
+                            <div className="text-xl font-bold text-purple-600">{(exhibitor.stats.totalWeight/1000).toFixed(1)}k</div>
                             <div className="text-xs text-gray-500">kg rec.</div>
                           </div>
                         </div>
@@ -265,12 +330,12 @@ export default function Trazabilidad() {
               </>
             )}
 
-            {/* TAB: Reportes */}
+            {/* ===== TAB: REPORTES ===== */}
             {activeTab === 'reportes' && (
               <>
-                <div className="mb-8">
-                  <h1 className="text-2xl font-medium text-gray-700 mb-2">Reportes</h1>
-                  <p className="text-gray-600">Genera reportes de sustentabilidad</p>
+                <div className="mb-6">
+                  <h1 className="text-2xl font-semibold text-gray-900">Reportes de Sustentabilidad</h1>
+                  <p className="text-gray-500">Genera reportes en diferentes estándares</p>
                 </div>
 
                 {/* Selector de estándares */}
@@ -283,7 +348,7 @@ export default function Trazabilidad() {
                         key={standard.id}
                         onClick={() => setSelectedStandard(standard.id as ReportStandard)}
                         className={`relative p-4 rounded-xl border-2 transition-all text-left ${
-                          isSelected ? 'border-emerald-500 bg-emerald-50' : 'border-gray-200 bg-white hover:border-gray-300'
+                          isSelected ? 'border-emerald-500 bg-emerald-50 shadow-md' : 'border-gray-200 bg-white hover:border-gray-300'
                         }`}
                       >
                         <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-2" style={{ backgroundColor: standard.color }}>
@@ -310,10 +375,10 @@ export default function Trazabilidad() {
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <button onClick={() => setShowReport(true)} className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+                      <button onClick={() => setShowReport(true)} className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
                         <Eye className="w-4 h-4" />Vista previa
                       </button>
-                      <button className="flex items-center gap-2 px-5 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700">
+                      <button className="flex items-center gap-2 px-5 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors">
                         <Download className="w-4 h-4" />Descargar PDF
                       </button>
                     </div>
@@ -324,14 +389,14 @@ export default function Trazabilidad() {
                 <div className="bg-white rounded-xl border border-gray-200">
                   <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
                     <Clock className="w-4 h-4 text-gray-400" />
-                    <h3 className="font-semibold text-gray-700">Historial</h3>
+                    <h3 className="font-semibold text-gray-700">Reportes generados</h3>
                   </div>
                   <div className="divide-y divide-gray-100">
                     {reportHistory.map((report) => {
                       const info = getStandardInfo(report.standard);
                       const Icon = info?.icon || FileText;
                       return (
-                        <div key={report.id} className="px-6 py-4 flex items-center justify-between hover:bg-gray-50">
+                        <div key={report.id} className="px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
                           <div className="flex items-center gap-4">
                             <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: info?.color }}>
                               <Icon className="w-5 h-5 text-white" />
@@ -343,9 +408,9 @@ export default function Trazabilidad() {
                           </div>
                           <div className="flex items-center gap-4">
                             <span className="flex items-center gap-1 text-xs text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">
-                              <CheckCircle2 className="w-3 h-3" />Generado
+                              <CheckCircle2 className="w-3 h-3" />Listo
                             </span>
-                            <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg">
+                            <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
                               <Download className="w-4 h-4" />
                             </button>
                           </div>
