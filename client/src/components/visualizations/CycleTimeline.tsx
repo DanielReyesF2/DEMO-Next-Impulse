@@ -31,8 +31,8 @@ export function CycleTimeline({ cycles, selectedCycleNumber }: CycleTimelineProp
       {/* Header con resumen visual */}
       <div className="bg-gradient-to-r from-emerald-50 via-blue-50 to-indigo-50 rounded-2xl p-6">
         <div className="text-center mb-4">
-          <h3 className="text-lg font-semibold text-gray-800">Trazabilidad del Material</h3>
-          <p className="text-sm text-gray-500">El viaje de {totalWeight.toFixed(0)} kg de material reciclado</p>
+          <h3 className="text-lg font-semibold text-gray-800">El recorrido del material</h3>
+          <p className="text-sm text-gray-500">{totalWeight.toFixed(0)} kg que se reciclaron una y otra vez</p>
         </div>
         
         {/* Flow visual del proceso */}
@@ -42,7 +42,7 @@ export function CycleTimeline({ cycles, selectedCycleNumber }: CycleTimelineProp
             <div className="w-16 h-16 rounded-2xl bg-amber-100 border-2 border-amber-300 flex items-center justify-center overflow-hidden shadow-sm">
               <img src="/images/residuos-graficos.png" alt="" className="w-full h-full object-cover" />
             </div>
-            <span className="text-xs font-medium text-amber-700 mt-1">Residuos</span>
+            <span className="text-xs font-medium text-amber-700 mt-1">Empezó aquí</span>
           </div>
           
           <ArrowDownRight className="w-6 h-6 text-gray-300 rotate-[-45deg]" />
@@ -52,7 +52,7 @@ export function CycleTimeline({ cycles, selectedCycleNumber }: CycleTimelineProp
             <div className="w-16 h-16 rounded-2xl bg-emerald-100 border-2 border-emerald-300 flex items-center justify-center shadow-sm">
               <Recycle className="w-8 h-8 text-emerald-600" />
             </div>
-            <span className="text-xs font-medium text-emerald-700 mt-1">{sortedCycles.length} ciclos</span>
+            <span className="text-xs font-medium text-emerald-700 mt-1">{sortedCycles.length} veces</span>
           </div>
           
           <ArrowDownRight className="w-6 h-6 text-gray-300 rotate-[-45deg]" />
@@ -78,11 +78,11 @@ export function CycleTimeline({ cycles, selectedCycleNumber }: CycleTimelineProp
         <div className="flex justify-center gap-8 mt-4 pt-4 border-t border-gray-200">
           <div className="text-center">
             <div className="text-2xl font-bold text-emerald-600">{totalWeight.toFixed(0)}</div>
-            <div className="text-xs text-gray-500">kg procesados</div>
+            <div className="text-xs text-gray-500">kg reciclados</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-emerald-600">-{totalSavings.toFixed(0)}</div>
-            <div className="text-xs text-gray-500">kg CO₂ evitado</div>
+            <div className="text-xs text-gray-500">kg CO₂ ahorrado</div>
           </div>
         </div>
       </div>
@@ -90,7 +90,7 @@ export function CycleTimeline({ cycles, selectedCycleNumber }: CycleTimelineProp
       {/* Lista de ciclos - Estilo acordeón */}
       <div className="space-y-2">
         <div className="flex items-center justify-between px-2">
-          <h4 className="text-sm font-medium text-gray-600">Detalle por ciclo</h4>
+          <h4 className="text-sm font-medium text-gray-600">Cada vez que se recicló</h4>
           {hiddenCount > 0 && (
             <button
               onClick={() => setShowAll(!showAll)}
@@ -145,7 +145,7 @@ export function CycleTimeline({ cycles, selectedCycleNumber }: CycleTimelineProp
                     <div className="text-right">
                       <div className="text-sm font-semibold text-gray-700">{cycle.weight.toFixed(0)} kg</div>
                       <div className={`text-xs ${isActive ? 'text-amber-600' : isGraphic ? 'text-emerald-600' : 'text-indigo-600'}`}>
-                        {isActive ? '🔄 En uso' : isGraphic ? '→ Gráficos' : '→ Exhibidor'}
+                        {isActive ? '🔄 En uso' : isGraphic ? '→ Gráficos nuevos' : '→ Exhibidor nuevo'}
                       </div>
                     </div>
                     <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
@@ -158,34 +158,34 @@ export function CycleTimeline({ cycles, selectedCycleNumber }: CycleTimelineProp
                     <div className="grid grid-cols-2 gap-4 p-3 bg-white rounded-lg border border-gray-100">
                       {/* De dónde viene */}
                       <div>
-                        <div className="text-xs font-medium text-gray-500 mb-1">📥 Origen del material</div>
+                        <div className="text-xs font-medium text-gray-500 mb-1">📥 ¿De dónde vino?</div>
                         {cycle.sourceFromLotId ? (
                           <div className="text-sm text-gray-700">
-                            <span className="font-semibold">{cycle.materialRecovered} kg</span> reciclado
+                            <span className="font-semibold">{cycle.materialRecovered} kg</span> del reciclaje anterior
                             <div className="text-xs text-gray-400 font-mono">{cycle.sourceFromLotId}</div>
                           </div>
                         ) : (
-                          <div className="text-sm text-amber-600">Material inicial (residuos)</div>
+                          <div className="text-sm text-amber-600">Era el material inicial</div>
                         )}
                       </div>
                       
                       {/* A dónde va */}
                       <div>
-                        <div className="text-xs font-medium text-gray-500 mb-1">📤 Destino</div>
+                        <div className="text-xs font-medium text-gray-500 mb-1">📤 ¿A dónde fue?</div>
                         {cycle.recycledInto ? (
                           <div className="text-sm text-gray-700">
-                            <span className="font-semibold">{cycle.materialSent} kg</span> → {cycle.recycledInto === 'graphic' ? 'Nuevos gráficos' : 'Nuevo exhibidor'}
+                            <span className="font-semibold">{cycle.materialSent} kg</span> → {cycle.recycledInto === 'graphic' ? 'Gráficos nuevos' : 'Exhibidor nuevo'}
                             <div className="text-xs text-gray-400 font-mono">{cycle.recycledToLotId}</div>
                           </div>
                         ) : (
-                          <div className="text-sm text-amber-600">Actualmente en uso</div>
+                          <div className="text-sm text-amber-600">Todavía está en uso</div>
                         )}
                       </div>
                       
                       {/* Impacto */}
                       <div className="col-span-2 pt-2 border-t border-gray-100">
                         <div className="flex items-center justify-between text-sm">
-                          <span className="text-gray-500">Impacto ambiental:</span>
+                          <span className="text-gray-500">Lo que ahorraste:</span>
                           <span className="font-semibold text-emerald-600">-{cycle.savingsVsVirgin.toFixed(1)} kg CO₂</span>
                         </div>
                       </div>

@@ -35,8 +35,8 @@ export default function Dashboard() {
 
   // Datos para pie chart de flujos
   const flowData = [
-    { name: '→ Gráficos', value: 64, color: '#10B981' },
-    { name: '→ Exhibidores', value: 36, color: '#3B82F6' },
+    { name: 'Nuevos gráficos', value: 64, color: '#10B981' },
+    { name: 'Nuevos exhibidores', value: 36, color: '#3B82F6' },
   ];
 
   // Top exhibidores por ciclos
@@ -48,7 +48,7 @@ export default function Dashboard() {
     <AppLayout>
       {/* Header con fecha */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold text-gray-900">Dashboard Ejecutivo</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">Tu Resumen</h1>
         <span className="text-sm text-gray-400">Actualizado: {new Date().toLocaleDateString('es-MX')}</span>
             </div>
 
@@ -57,10 +57,10 @@ export default function Dashboard() {
         <div className="bg-white rounded-xl border border-gray-200 p-4">
           <div className="flex items-center justify-between mb-2">
             <Package className="w-5 h-5 text-emerald-500" />
-            <span className="text-xs text-emerald-600 flex items-center"><TrendingUp className="w-3 h-3 mr-1" />+2 YTD</span>
+            <span className="text-xs text-emerald-600 flex items-center"><TrendingUp className="w-3 h-3 mr-1" />+2 este año</span>
             </div>
           <div className="text-2xl font-semibold text-gray-700">{totalExhibitors}</div>
-          <div className="text-xs text-gray-500">Exhibidores activos</div>
+          <div className="text-xs text-gray-500">Exhibidores</div>
           </div>
 
         <div className="bg-white rounded-xl border border-gray-200 p-4">
@@ -69,7 +69,7 @@ export default function Dashboard() {
             <span className="text-xs text-emerald-600 flex items-center"><TrendingUp className="w-3 h-3 mr-1" />+23%</span>
                   </div>
           <div className="text-2xl font-semibold text-gray-700">{totalGraphicsRecycled}</div>
-          <div className="text-xs text-gray-500">Gráficos reciclados (2024)</div>
+          <div className="text-xs text-gray-500">Veces que reciclaste (2024)</div>
                   </div>
         
         <div className="bg-white rounded-xl border border-gray-200 p-4">
@@ -77,23 +77,23 @@ export default function Dashboard() {
             <Clock className="w-5 h-5 text-purple-500" />
                 </div>
           <div className="text-2xl font-semibold text-gray-700">{avgCyclesPerExhibitor}</div>
-          <div className="text-xs text-gray-500">Ciclos promedio / exhibidor</div>
+          <div className="text-xs text-gray-500">Promedio por exhibidor</div>
               </div>
         
         <div className="bg-emerald-50 rounded-xl border border-emerald-200 p-4">
           <div className="flex items-center justify-between mb-2">
             <Leaf className="w-5 h-5 text-emerald-600" />
-            <span className="text-xs text-emerald-600">-{emissionsSavings}% vs tradicional</span>
+            <span className="text-xs text-emerald-600">-{emissionsSavings}% vs sin reciclar</span>
                   </div>
           <div className="text-2xl font-bold text-emerald-600">-{Math.abs(emissions.netBalance).toFixed(0)} kg</div>
-          <div className="text-xs text-gray-500">CO₂e balance neto</div>
+          <div className="text-xs text-gray-500">CO₂ que ahorraste</div>
                 </div>
               </div>
 
       {/* IMPACTO AMBIENTAL EN TIEMPO REAL - Nueva sección */}
       <div data-tour="dashboard-impacto" className="bg-gradient-to-br from-emerald-50 to-blue-50 rounded-xl border border-emerald-200 p-6 mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-emerald-800">🌍 Impacto Ambiental Total - {company}</h3>
+          <h3 className="text-sm font-semibold text-emerald-800">🌍 Lo que has logrado - {company}</h3>
           <span className="text-xs text-emerald-600 bg-emerald-100 px-2 py-1 rounded-full">En tiempo real</span>
                   </div>
         
@@ -101,7 +101,7 @@ export default function Dashboard() {
           <div className="bg-white rounded-lg p-4 text-center shadow-sm">
             <Leaf className="w-6 h-6 mx-auto mb-2 text-emerald-600" />
             <div className="text-xl font-bold text-emerald-600">{co2Avoided}</div>
-            <div className="text-xs text-gray-500">kg CO₂ evitados</div>
+            <div className="text-xs text-gray-500">kg CO₂ no emitidos</div>
               </div>
           
           <div className="bg-white rounded-lg p-4 text-center shadow-sm">
@@ -113,19 +113,19 @@ export default function Dashboard() {
           <div className="bg-white rounded-lg p-4 text-center shadow-sm">
             <Zap className="w-6 h-6 mx-auto mb-2 text-yellow-500" />
             <div className="text-xl font-bold text-yellow-600">{energySaved.toLocaleString()}</div>
-            <div className="text-xs text-gray-500">kWh energía evitada</div>
+            <div className="text-xs text-gray-500">kWh energía ahorrada</div>
           </div>
 
           <div className="bg-white rounded-lg p-4 text-center shadow-sm">
             <TreePine className="w-6 h-6 mx-auto mb-2 text-green-600" />
             <div className="text-xl font-bold text-green-600">{treesEquivalent}</div>
-            <div className="text-xs text-gray-500">árboles equivalentes</div>
+            <div className="text-xs text-gray-500">árboles plantados</div>
               </div>
               
           <div className="bg-white rounded-lg p-4 text-center shadow-sm">
             <Car className="w-6 h-6 mx-auto mb-2 text-gray-600" />
             <div className="text-xl font-bold text-gray-700">{kmCarAvoided.toLocaleString()}</div>
-            <div className="text-xs text-gray-500">km auto evitados</div>
+            <div className="text-xs text-gray-500">km de auto evitados</div>
                         </div>
                         
           <div className="bg-white rounded-lg p-4 text-center shadow-sm">
@@ -137,7 +137,7 @@ export default function Dashboard() {
                         
         <div className="mt-4 text-center">
           <p className="text-xs text-gray-500">
-            Equivalente a <span className="font-medium text-emerald-700">{treesEquivalent} árboles absorbiendo CO₂ por 1 año</span> 
+            Es como si <span className="font-medium text-emerald-700">{treesEquivalent} árboles</span> absorbieran CO₂ por 1 año, 
             {' '}o <span className="font-medium text-blue-700">{kmCarAvoided.toLocaleString()} km</span> que un auto dejó de recorrer
           </p>
                           </div>
@@ -147,11 +147,11 @@ export default function Dashboard() {
       <div data-tour="dashboard-comparativa" className="grid grid-cols-2 gap-6 mb-6">
         {/* Comparativa */}
         <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <h3 className="text-sm font-medium text-gray-700 mb-4">Comparativa: Tradicional vs Circular</h3>
+          <h3 className="text-sm font-medium text-gray-700 mb-4">¿Cuánto te ahorras reciclando?</h3>
           <div className="space-y-4">
             <div>
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-600">Emisiones CO₂e</span>
+                <span className="text-gray-600">Contaminación (CO₂)</span>
                 <div className="flex items-center space-x-2">
                   <span className="text-red-500 line-through">{comparison.traditionalEmissions.toLocaleString()}</span>
                   <span className="font-bold text-emerald-600">{comparison.circularEmissions} kg</span>
@@ -164,7 +164,7 @@ export default function Dashboard() {
                       </div>
             <div>
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-600">Costo anual</span>
+                <span className="text-gray-600">Lo que gastas al año</span>
                 <div className="flex items-center space-x-2">
                   <span className="text-red-500 line-through">${(comparison.traditionalCost/1000).toFixed(0)}k</span>
                   <span className="font-bold text-emerald-600">${(comparison.circularCost/1000).toFixed(0)}k</span>
@@ -177,7 +177,7 @@ export default function Dashboard() {
                           </div>
             <div>
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-600">Residuos generados</span>
+                <span className="text-gray-600">Basura generada</span>
                 <div className="flex items-center space-x-2">
                   <span className="text-red-500 line-through">{comparison.traditionalWaste} kg</span>
                   <span className="font-bold text-emerald-600">0 kg</span>
@@ -190,7 +190,7 @@ export default function Dashboard() {
                           </div>
             <div className="pt-3 border-t">
               <div className="flex justify-between">
-                <span className="text-sm font-medium text-gray-700">Ahorro total anual</span>
+                <span className="text-sm font-medium text-gray-700">Tu ahorro anual</span>
                 <span className="text-lg font-bold text-emerald-600">${((comparison.traditionalCost - comparison.circularCost)/1000).toFixed(0)}k MXN</span>
                         </div>
                       </div>
@@ -199,7 +199,7 @@ export default function Dashboard() {
 
         {/* Gráfico de ciclos por año */}
         <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <h3 className="text-sm font-medium text-gray-700 mb-4">Ciclos de Reciclaje por Año</h3>
+          <h3 className="text-sm font-medium text-gray-700 mb-4">¿Cuántas veces reciclaste por año?</h3>
           <div className="h-48">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={cyclesByYear}>
@@ -207,13 +207,13 @@ export default function Dashboard() {
                 <YAxis tick={{ fontSize: 11 }} />
                 <Tooltip 
                   contentStyle={{ fontSize: 12 }}
-                  formatter={(value: number) => [`${value} ciclos`, 'Ciclos']}
+                  formatter={(value: number) => [`${value} veces`, 'Reciclajes']}
                 />
                 <Bar dataKey="cycles" fill="#10B981" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
                         </div>
-          <div className="text-xs text-gray-400 text-center mt-2">Total histórico: {totalCycles} ciclos</div>
+          <div className="text-xs text-gray-400 text-center mt-2">Total: {totalCycles} veces reciclado</div>
                       </div>
                     </div>
 
@@ -221,7 +221,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-3 gap-6">
         {/* Flujos */}
         <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <h3 className="text-sm font-medium text-gray-700 mb-4">Destino del Reciclaje</h3>
+          <h3 className="text-sm font-medium text-gray-700 mb-4">¿En qué se convierte el material?</h3>
           <div className="flex items-center justify-center">
             <div className="w-32 h-32">
               <ResponsiveContainer width="100%" height="100%">
@@ -256,8 +256,8 @@ export default function Dashboard() {
         {/* Top Exhibidores */}
         <div className="col-span-2 bg-white rounded-xl border border-gray-200 p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-medium text-gray-700">Top Exhibidores por Rendimiento</h3>
-            <Link href="/exhibidores">
+            <h3 className="text-sm font-medium text-gray-700">Tus exhibidores que más reciclan</h3>
+            <Link href="/trazabilidad">
               <span className="text-xs text-emerald-600 hover:text-emerald-700 cursor-pointer">Ver todos →</span>
             </Link>
                 </div>
@@ -276,7 +276,7 @@ export default function Dashboard() {
               </div>
                 </div>
                 <div className="text-right">
-                  <div className="font-bold text-emerald-600">{exhibitor.graphicChanges} ciclos</div>
+                  <div className="font-bold text-emerald-600">{exhibitor.graphicChanges} veces</div>
                   <div className="text-xs text-gray-400">{exhibitor.yearsInOperation.toFixed(1)} años</div>
                 </div>
               </div>

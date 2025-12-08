@@ -25,7 +25,7 @@ export default function TrazabilidadDetalle() {
       <AppLayout>
         <div className="text-center py-12">
           <h1 className="text-xl text-gray-900">Exhibidor no encontrado</h1>
-          <Link href="/exhibidores">
+          <Link href="/trazabilidad">
             <button className="mt-4 text-emerald-600 hover:text-emerald-700">Volver</button>
           </Link>
         </div>
@@ -57,18 +57,18 @@ export default function TrazabilidadDetalle() {
   };
 
   const tabs = [
-    { id: 'timeline' as const, label: 'Ciclos', count: stats.totalCycles },
-    { id: 'emissions' as const, label: 'Emisiones' },
-    { id: 'flows' as const, label: 'Flujos' },
-    { id: 'evidence' as const, label: 'Evidencia', icon: Camera },
+    { id: 'timeline' as const, label: 'Cada reciclaje', count: stats.totalCycles },
+    { id: 'emissions' as const, label: 'Contaminación' },
+    { id: 'flows' as const, label: '¿A dónde fue?' },
+    { id: 'evidence' as const, label: 'Fotos', icon: Camera },
   ];
 
   // Fotos del proceso de reciclaje
   const processPhotos = [
     {
       id: 1,
-      title: 'Recolección de gráficos',
-      description: 'Residuos de vinilos y gráficos listos para reciclaje',
+      title: 'Recolectamos los gráficos',
+      description: 'Vinilos y gráficos listos para reciclar',
       imageUrl: 'data:image/svg+xml,' + encodeURIComponent(`
         <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
           <rect fill="#f3f4f6" width="400" height="300"/>
@@ -81,8 +81,8 @@ export default function TrazabilidadDetalle() {
     },
     {
       id: 2,
-      title: 'Procesamiento',
-      description: 'Separación y triturado del material',
+      title: 'Lo procesamos',
+      description: 'Separamos y trituramos',
       imageUrl: 'data:image/svg+xml,' + encodeURIComponent(`
         <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
           <rect fill="#f3f4f6" width="400" height="300"/>
@@ -95,8 +95,8 @@ export default function TrazabilidadDetalle() {
     },
     {
       id: 3,
-      title: 'Material reciclado',
-      description: 'Pellets listos para nuevos productos',
+      title: 'Listo para usar',
+      description: 'Material reciclado para nuevos productos',
       imageUrl: 'data:image/svg+xml,' + encodeURIComponent(`
         <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
           <rect fill="#f3f4f6" width="400" height="300"/>
@@ -122,7 +122,7 @@ export default function TrazabilidadDetalle() {
   return (
     <AppLayout>
       <nav className="flex items-center space-x-2 text-sm text-gray-400 mb-4">
-        <Link href="/exhibidores"><span className="hover:text-gray-600 cursor-pointer">Exhibidores</span></Link>
+        <Link href="/trazabilidad"><span className="hover:text-gray-600 cursor-pointer">Exhibidores</span></Link>
         <span>/</span>
         <span className="text-gray-600">{exhibitor.id}</span>
       </nav>
@@ -133,13 +133,13 @@ export default function TrazabilidadDetalle() {
           <Recycle className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" />
           <div className="flex-1 text-sm text-gray-700 space-y-2">
             <p>
-              Este exhibidor comenzó su vida circular el <span className="font-semibold text-gray-900">{firstCycleDate}</span> a partir de <span className="font-semibold text-gray-900">{initialWeight} kg</span> de residuos gráficos post-consumo.
+              Este exhibidor empezó el <span className="font-semibold text-gray-900">{firstCycleDate}</span> con <span className="font-semibold text-gray-900">{initialWeight} kg</span> de vinilos usados.
             </p>
             <p>
-              Ha completado <span className="font-semibold text-gray-900">{stats.totalCycles} ciclos</span> de economía circular en <span className="font-semibold text-gray-900">{exhibitor.yearsInOperation.toFixed(1)} años</span> de operación. Cada ciclo representa una campaña de marketing diferente.
+              Ya se recicló <span className="font-semibold text-gray-900">{stats.totalCycles} veces</span> en <span className="font-semibold text-gray-900">{exhibitor.yearsInOperation.toFixed(1)} años</span>. Cada vez que cambia una campaña, el material vuelve a usarse.
             </p>
             <p className="text-xs text-gray-600 pt-1 border-t border-emerald-200">
-              <span className="font-medium text-gray-700">Cómo funciona el ciclo:</span> Cuando una campaña termina, los gráficos usados se recolectan y reciclan. Este material se convierte en nuevos gráficos o en materia prima para exhibidores, iniciando un nuevo ciclo. Así, el mismo material se reutiliza una y otra vez, reduciendo residuos y emisiones.
+              <span className="font-medium text-gray-700">¿Cómo funciona?</span> Cuando termina una campaña, recogemos los gráficos y los reciclamos. Ese material se convierte en nuevos gráficos o en exhibidores nuevos. Así se usa una y otra vez.
             </p>
           </div>
         </div>
@@ -176,7 +176,7 @@ export default function TrazabilidadDetalle() {
             <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
               <Recycle className="w-5 h-5 mx-auto mb-1 text-emerald-500" />
               <div className="text-xl font-semibold text-gray-700">{stats.totalCycles}</div>
-              <div className="text-xs text-gray-500">Ciclos</div>
+              <div className="text-xs text-gray-500">Veces reciclado</div>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
               <Scale className="w-5 h-5 mx-auto mb-1 text-blue-500" />
@@ -186,33 +186,33 @@ export default function TrazabilidadDetalle() {
             <div className="bg-emerald-50 rounded-xl border border-emerald-200 p-4 text-center">
               <Leaf className="w-5 h-5 mx-auto mb-1 text-emerald-600" />
               <div className="text-xl font-bold text-emerald-600">-{stats.netBalance.toFixed(0)}</div>
-              <div className="text-xs text-gray-500">kg CO2</div>
+              <div className="text-xs text-gray-500">kg CO₂ ahorrado</div>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
               <Route className="w-5 h-5 mx-auto mb-1 text-purple-500" />
               <div className="text-xl font-semibold text-gray-700">{stats.totalDistance}</div>
-              <div className="text-xs text-gray-500">km total</div>
+              <div className="text-xs text-gray-500">km recorridos</div>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
               <TrendingUp className="w-5 h-5 mx-auto mb-1 text-orange-500" />
               <div className="text-xl font-semibold text-gray-700">{cyclesPerYear}</div>
-              <div className="text-xs text-gray-500">ciclos/año</div>
+              <div className="text-xs text-gray-500">veces al año</div>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
               <Clock className="w-5 h-5 mx-auto mb-1 text-gray-500" />
               <div className="text-xl font-semibold text-gray-700">{avgCycleDuration}</div>
-              <div className="text-xs text-gray-500">meses/ciclo</div>
+              <div className="text-xs text-gray-500">meses cada uno</div>
             </div>
           </div>
 
           {/* Impacto Ambiental - Equivalencias */}
           <div className="bg-gradient-to-r from-emerald-50 to-blue-50 rounded-xl border border-emerald-200 p-4">
-            <h3 className="text-sm font-medium text-emerald-800 mb-3">🌍 Impacto Ambiental de este Exhibidor</h3>
+            <h3 className="text-sm font-medium text-emerald-800 mb-3">🌍 Lo que lograste con este exhibidor</h3>
             <div className="grid grid-cols-4 gap-3">
               <div className="bg-white rounded-lg p-3 text-center">
                 <Leaf className="w-5 h-5 mx-auto mb-1 text-emerald-600" />
                 <div className="text-lg font-bold text-emerald-600">{co2Avoided.toFixed(0)}</div>
-                <div className="text-xs text-gray-500">kg CO₂ evitados</div>
+                <div className="text-xs text-gray-500">kg CO₂ no emitidos</div>
               </div>
               <div className="bg-white rounded-lg p-3 text-center">
                 <Droplets className="w-5 h-5 mx-auto mb-1 text-blue-500" />
@@ -227,22 +227,22 @@ export default function TrazabilidadDetalle() {
               <div className="bg-white rounded-lg p-3 text-center">
                 <TreePine className="w-5 h-5 mx-auto mb-1 text-green-600" />
                 <div className="text-lg font-bold text-green-600">{treesEquivalent}</div>
-                <div className="text-xs text-gray-500">árboles equiv.</div>
+                <div className="text-xs text-gray-500">árboles plantados</div>
               </div>
             </div>
           </div>
 
           {/* Vista Espiral - Ciclo de Vida Circular */}
           <div data-tour="trazabilidad-espiral" className="bg-white rounded-xl border border-gray-200 p-6">
-            <h3 className="text-base font-medium text-gray-600 text-center mb-4 tracking-wide">Ciclo de Vida Circular</h3>
+            <h3 className="text-base font-medium text-gray-600 text-center mb-4 tracking-wide">Historia de este exhibidor</h3>
             
             {/* Texto Explicativo Sutil */}
             <div className="mb-4 space-y-2 max-w-2xl mx-auto">
               <p className="text-sm text-gray-600 text-center">
-                Cada punto en el espiral representa un ciclo de vida. El punto central (naranja) es el origen: residuos gráficos post-consumo. Los puntos verdes se reciclaron en nuevos gráficos, los azules en nuevos exhibidores.
+                Cada círculo es una vez que se recicló. El punto naranja del centro es el inicio: los vinilos usados que recolectamos. Los verdes se hicieron nuevos gráficos, los azules se hicieron exhibidores.
               </p>
               <p className="text-xs text-gray-500 text-center">
-                El flujo es continuo: cada campaña termina, el material se recicla y regresa al ciclo como nuevo producto, creando un círculo virtuoso de reutilización.
+                Cada vez que termina una campaña, el material se recicla y vuelve a usarse. Así se crea un ciclo que no tiene fin.
               </p>
             </div>
             
@@ -255,48 +255,48 @@ export default function TrazabilidadDetalle() {
             {/* Balance de CO2 - datos clave */}
             <div className="mt-6 grid grid-cols-2 gap-3">
               <div className="bg-red-50 rounded-lg p-3 text-center border border-red-100">
-                <div className="text-xs text-red-600 font-medium mb-1">CO₂ Generado</div>
+                <div className="text-xs text-red-600 font-medium mb-1">CO₂ que sí se emitió</div>
                 <div className="text-xl font-bold text-red-600">{stats.totalEmissions.toFixed(0)}</div>
-                <div className="text-[10px] text-red-500">kg CO₂e</div>
+                <div className="text-[10px] text-red-500">kg CO₂</div>
               </div>
               <div className="bg-emerald-50 rounded-lg p-3 text-center border border-emerald-100">
-                <div className="text-xs text-emerald-600 font-medium mb-1">CO₂ Evitado</div>
+                <div className="text-xs text-emerald-600 font-medium mb-1">CO₂ que se evitó</div>
                 <div className="text-xl font-bold text-emerald-600">{stats.emissionsAvoided.toFixed(0)}</div>
-                <div className="text-[10px] text-emerald-500">kg CO₂e</div>
+                <div className="text-[10px] text-emerald-500">kg CO₂</div>
               </div>
             </div>
             
             {/* Balance Neto */}
             <div className="mt-3 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-lg p-4 text-center text-white">
-              <div className="text-xs font-medium opacity-90 mb-1">Balance Neto de CO₂</div>
+              <div className="text-xs font-medium opacity-90 mb-1">Al final, te ahorraste</div>
               <div className="text-2xl font-bold">
-                {(stats.totalEmissions - stats.emissionsAvoided).toFixed(0)} kg
+                {(stats.totalEmissions - stats.emissionsAvoided).toFixed(0)} kg CO₂
               </div>
               <div className="text-xs opacity-80 mt-1">
-                {stats.totalWeight.toFixed(0)} kg de materia prima virgen evitada
+                Y no usaste {stats.totalWeight.toFixed(0)} kg de material nuevo
               </div>
             </div>
           </div>
 
           {/* Promedios por ciclo */}
           <div className="bg-white rounded-xl border border-gray-200 p-4">
-            <h3 className="text-sm font-medium text-gray-700 mb-3">Promedios por Ciclo</h3>
+            <h3 className="text-sm font-medium text-gray-700 mb-3">Cada vez que reciclas...</h3>
             <div className="grid grid-cols-4 gap-4">
               <div className="text-center p-3 bg-gray-50 rounded-lg">
                 <div className="text-lg font-semibold text-gray-700">{emissionsPerCycle}</div>
-                <div className="text-xs text-gray-500">kg CO2/ciclo</div>
+                <div className="text-xs text-gray-500">kg CO₂</div>
               </div>
               <div className="text-center p-3 bg-gray-50 rounded-lg">
                 <div className="text-lg font-semibold text-gray-700">{weightPerCycle}</div>
-                <div className="text-xs text-gray-500">kg mat./ciclo</div>
+                <div className="text-xs text-gray-500">kg de material</div>
               </div>
               <div className="text-center p-3 bg-gray-50 rounded-lg">
                 <div className="text-lg font-semibold text-gray-700">{distancePerCycle}</div>
-                <div className="text-xs text-gray-500">km/ciclo</div>
+                <div className="text-xs text-gray-500">km de transporte</div>
               </div>
               <div className="text-center p-3 bg-emerald-50 rounded-lg">
                 <div className="text-lg font-bold text-emerald-600">-{savingsVsTraditional}%</div>
-                <div className="text-xs text-gray-500">vs tradicional</div>
+                <div className="text-xs text-gray-500">vs no reciclar</div>
               </div>
             </div>
           </div>
@@ -331,8 +331,8 @@ export default function TrazabilidadDetalle() {
               {activeTab === 'evidence' && (
                 <div className="space-y-6">
                   <div className="text-center mb-4">
-                    <h3 className="text-lg font-medium text-gray-600">Evidencia Fotográfica del Proceso</h3>
-                    <p className="text-sm text-gray-500">Trazabilidad visual del reciclaje de gráficos</p>
+                    <h3 className="text-lg font-medium text-gray-600">Fotos del Proceso</h3>
+                    <p className="text-sm text-gray-500">Así se ve el reciclaje paso a paso</p>
                   </div>
                   
                   <div className="grid grid-cols-3 gap-4">
@@ -357,7 +357,7 @@ export default function TrazabilidadDetalle() {
 
                   <div className="bg-emerald-50 rounded-lg p-4 text-center">
                     <p className="text-sm text-emerald-700">
-                      📸 Las fotos reales del proceso de reciclaje se actualizan en cada ciclo
+                      📸 Las fotos se actualizan cada vez que reciclamos
                     </p>
                   </div>
                 </div>
@@ -369,7 +369,7 @@ export default function TrazabilidadDetalle() {
         {/* Sidebar */}
         <div className="lg:col-span-1 space-y-4">
           <div className="bg-white rounded-xl border border-gray-200 p-4">
-            <h3 className="text-sm font-medium text-gray-700 mb-3">Ubicacion</h3>
+            <h3 className="text-sm font-medium text-gray-700 mb-3">¿Dónde está?</h3>
             <div className="space-y-3 text-sm">
               <div className="flex items-start space-x-2">
                 <MapPin className="w-4 h-4 text-gray-400 mt-0.5" />
@@ -384,7 +384,7 @@ export default function TrazabilidadDetalle() {
               </div>
               <div className="flex items-center space-x-2">
                 <Package className="w-4 h-4 text-gray-400" />
-                <span className="text-gray-600">{exhibitor.recycledContent}% reciclado</span>
+                <span className="text-gray-600">{exhibitor.recycledContent}% es reciclado</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Palette className="w-4 h-4 text-gray-400" />
@@ -395,7 +395,7 @@ export default function TrazabilidadDetalle() {
 
           <div className="bg-white rounded-xl border border-gray-200 p-4">
             <div className="flex items-center justify-between text-sm mb-2">
-              <span className="text-gray-600">Vida util</span>
+              <span className="text-gray-600">¿Cuánto le queda?</span>
               <span className="text-emerald-600 font-medium">{lifeProgress.toFixed(0)}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
@@ -408,7 +408,7 @@ export default function TrazabilidadDetalle() {
           </div>
 
           <div className="bg-white rounded-xl border border-gray-200 p-4">
-            <h3 className="text-sm font-medium text-gray-700 mb-3">Destino</h3>
+            <h3 className="text-sm font-medium text-gray-700 mb-3">¿En qué se convirtió?</h3>
             <div className="flex items-center justify-center mb-3">
               <div className="w-20 h-20 rounded-full border-4 border-emerald-500 flex items-center justify-center bg-emerald-50">
                 <span className="text-2xl font-bold text-emerald-600">{stats.totalCycles}</span>
@@ -418,14 +418,14 @@ export default function TrazabilidadDetalle() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <div className="w-3 h-3 rounded bg-blue-500"></div>
-                  <span className="text-gray-600">Exhibidores</span>
+                  <span className="text-gray-600">Exhibidores nuevos</span>
                 </div>
                 <span className="font-medium">{stats.recycledToExhibitors}</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <div className="w-3 h-3 rounded bg-emerald-500"></div>
-                  <span className="text-gray-600">Graficos</span>
+                  <span className="text-gray-600">Gráficos nuevos</span>
                 </div>
                 <span className="font-medium">{stats.recycledToGraphics}</span>
               </div>

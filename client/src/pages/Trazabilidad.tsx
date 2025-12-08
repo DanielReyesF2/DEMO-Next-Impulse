@@ -130,12 +130,12 @@ export default function Trazabilidad() {
                 <div className="bg-gradient-to-br from-emerald-600 to-emerald-700 rounded-2xl p-8 mb-8 text-white">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h1 className="text-3xl font-bold mb-2">Trazabilidad Circular</h1>
-                      <p className="text-emerald-100 text-lg">Tu impacto ambiental en tiempo real</p>
+                      <h1 className="text-3xl font-bold mb-2">¿A dónde va tu material?</h1>
+                      <p className="text-emerald-100 text-lg">Todo lo que has logrado reciclando</p>
                     </div>
                     <div className="text-right">
                       <div className="text-5xl font-bold">-{(totalEmissionsAvoided/1000).toFixed(1)}t</div>
-                      <div className="text-emerald-200">CO₂e evitado</div>
+                      <div className="text-emerald-200">CO₂ que no se emitió</div>
                     </div>
                   </div>
                   
@@ -153,7 +153,7 @@ export default function Trazabilidad() {
                         <RefreshCw className="w-5 h-5 text-emerald-200" />
                       </div>
                       <div className="text-3xl font-bold">{totalCycles}</div>
-                      <div className="text-emerald-200 text-sm">Ciclos completados</div>
+                      <div className="text-emerald-200 text-sm">Veces reciclado</div>
                     </div>
                     <div className="text-center">
                       <div className="flex items-center justify-center gap-2 mb-2">
@@ -167,7 +167,7 @@ export default function Trazabilidad() {
                         <Zap className="w-5 h-5 text-emerald-200" />
                       </div>
                       <div className="text-3xl font-bold">100%</div>
-                      <div className="text-emerald-200 text-sm">Tasa de recuperación</div>
+                      <div className="text-emerald-200 text-sm">Se recicla todo</div>
                     </div>
                   </div>
                 </div>
@@ -180,16 +180,16 @@ export default function Trazabilidad() {
                         <Recycle className="w-6 h-6 text-emerald-600" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900">Gráficos → Gráficos</h3>
-                        <p className="text-sm text-gray-500">Ciclo más frecuente</p>
+                        <h3 className="font-semibold text-gray-900">Gráfico → Gráfico</h3>
+                        <p className="text-sm text-gray-500">Lo más común</p>
                       </div>
                     </div>
                     <div className="text-4xl font-bold text-emerald-600">{graphicsToGraphics}</div>
-                    <div className="text-sm text-gray-500 mt-1">ciclos registrados</div>
+                    <div className="text-sm text-gray-500 mt-1">veces</div>
                     <div className="mt-4 pt-4 border-t border-gray-100">
                       <div className="flex items-center text-sm text-gray-600">
                         <span className="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>
-                        Vinilos usados → Nuevos vinilos
+                        Los vinilos usados se hacen nuevos vinilos
                       </div>
                     </div>
                   </div>
@@ -200,16 +200,16 @@ export default function Trazabilidad() {
                         <Factory className="w-6 h-6 text-blue-600" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900">Gráficos → Exhibidores</h3>
-                        <p className="text-sm text-gray-500">Transformación completa</p>
+                        <h3 className="font-semibold text-gray-900">Gráfico → Exhibidor</h3>
+                        <p className="text-sm text-gray-500">Se transforma</p>
                       </div>
                     </div>
                     <div className="text-4xl font-bold text-blue-600">{graphicsToExhibitors}</div>
-                    <div className="text-sm text-gray-500 mt-1">ciclos registrados</div>
+                    <div className="text-sm text-gray-500 mt-1">veces</div>
                     <div className="mt-4 pt-4 border-t border-gray-100">
                       <div className="flex items-center text-sm text-gray-600">
                         <span className="w-2 h-2 rounded-full bg-blue-500 mr-2"></span>
-                        Vinilos usados → Materia prima
+                        Los vinilos usados se hacen exhibidores nuevos
                       </div>
                     </div>
                   </div>
@@ -220,16 +220,16 @@ export default function Trazabilidad() {
                         <TrendingUp className="w-6 h-6 text-purple-600" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900">Proyección 2025</h3>
-                        <p className="text-sm text-gray-500">Impacto esperado</p>
+                        <h3 className="font-semibold text-gray-900">Para 2025</h3>
+                        <p className="text-sm text-gray-500">Lo que esperamos</p>
                       </div>
                     </div>
                     <div className="text-4xl font-bold text-purple-600">+35%</div>
-                    <div className="text-sm text-gray-500 mt-1">crecimiento estimado</div>
+                    <div className="text-sm text-gray-500 mt-1">más que este año</div>
                     <div className="mt-4 pt-4 border-t border-gray-100">
                       <div className="flex items-center text-sm text-gray-600">
                         <span className="w-2 h-2 rounded-full bg-purple-500 mr-2"></span>
-                        ~120 ciclos proyectados
+                        Unos 120 reciclajes más
                       </div>
                     </div>
                   </div>
@@ -238,7 +238,7 @@ export default function Trazabilidad() {
                 {/* Top Exhibidores */}
                 <div className="bg-white rounded-xl border border-gray-200 p-6">
                   <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-lg font-semibold text-gray-900">Top Exhibidores por Impacto</h2>
+                    <h2 className="text-lg font-semibold text-gray-900">Los que más ayudan al planeta</h2>
                     <button 
                       onClick={() => setActiveTab('exhibidores')} 
                       className="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1"
@@ -265,11 +265,11 @@ export default function Trazabilidad() {
                           </div>
                           <div className="text-right">
                             <div className="text-lg font-bold text-emerald-600">{exhibitor.stats.emissionsAvoided.toFixed(0)} kg</div>
-                            <div className="text-xs text-gray-500">CO₂ evitado</div>
+                            <div className="text-xs text-gray-500">CO₂ ahorrado</div>
                           </div>
                           <div className="text-right">
                             <div className="text-lg font-bold text-blue-600">{exhibitor.graphicChanges}</div>
-                            <div className="text-xs text-gray-500">ciclos</div>
+                            <div className="text-xs text-gray-500">veces</div>
                           </div>
                         </div>
                       </Link>
@@ -313,7 +313,7 @@ export default function Trazabilidad() {
                         <div className="grid grid-cols-3 gap-2 pt-3 border-t border-gray-100">
                           <div className="text-center">
                             <div className="text-xl font-bold text-blue-600">{exhibitor.graphicChanges}</div>
-                            <div className="text-xs text-gray-500">ciclos</div>
+                            <div className="text-xs text-gray-500">veces</div>
                           </div>
                           <div className="text-center">
                             <div className="text-xl font-bold text-emerald-600">{(exhibitor.stats.emissionsAvoided/1000).toFixed(1)}k</div>
@@ -335,8 +335,8 @@ export default function Trazabilidad() {
             {activeTab === 'reportes' && (
               <>
                 <div className="mb-6">
-                  <h1 className="text-2xl font-semibold text-gray-900">Reportes de Sustentabilidad</h1>
-                  <p className="text-gray-500">Genera reportes en diferentes estándares</p>
+                  <h1 className="text-2xl font-semibold text-gray-900">Genera tu Reporte</h1>
+                  <p className="text-gray-500">Elige el formato que necesitas</p>
                 </div>
 
                 {/* Selector de estándares */}
@@ -377,7 +377,7 @@ export default function Trazabilidad() {
                     </div>
                     <div className="flex items-center gap-3">
                       <button onClick={() => setShowReport(true)} className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-                        <Eye className="w-4 h-4" />Vista previa
+                        <Eye className="w-4 h-4" />Ver primero
                       </button>
                       <button className="flex items-center gap-2 px-5 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors">
                         <Download className="w-4 h-4" />Descargar PDF
@@ -390,7 +390,7 @@ export default function Trazabilidad() {
                 <div className="bg-white rounded-xl border border-gray-200">
                   <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
                     <Clock className="w-4 h-4 text-gray-400" />
-                    <h3 className="font-semibold text-gray-700">Reportes generados</h3>
+                    <h3 className="font-semibold text-gray-700">Reportes que ya hiciste</h3>
                   </div>
                   <div className="divide-y divide-gray-100">
                     {reportHistory.map((report) => {
