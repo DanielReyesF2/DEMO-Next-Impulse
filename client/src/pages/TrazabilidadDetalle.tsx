@@ -111,20 +111,23 @@ export default function TrazabilidadDetalle() {
         <span className="text-gray-600">{exhibitor.id}</span>
       </nav>
 
-      {/* Banner Narrativo Sutil */}
-      <div data-tour="trazabilidad-banner" className="bg-gradient-to-r from-emerald-50 to-blue-50 rounded-xl border border-emerald-200 p-4 mb-6">
-        <div className="flex items-start gap-3">
-          <Recycle className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" />
-          <div className="flex-1 text-sm text-gray-700 space-y-2">
-            <p>
-              Este exhibidor empezó el <span className="font-semibold text-gray-900">{firstCycleDate}</span> con <span className="font-semibold text-gray-900">{initialWeight} kg</span> de vinilos usados.
+      {/* Banner Narrativo Principal */}
+      <div data-tour="trazabilidad-banner" className="bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-2xl p-6 mb-6 text-white">
+        <div className="flex items-center gap-4">
+          <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
+            <Recycle className="w-8 h-8 text-white" />
+          </div>
+          <div className="flex-1">
+            <h2 className="text-xl font-bold mb-1">
+              {stats.totalCycles} veces reciclado
+            </h2>
+            <p className="text-emerald-100 text-sm">
+              Empezó el <span className="font-semibold text-white">{firstCycleDate}</span> con <span className="font-semibold text-white">{initialWeight} kg</span> de vinilos usados
             </p>
-            <p>
-              Ya se recicló <span className="font-semibold text-gray-900">{stats.totalCycles} veces</span> en <span className="font-semibold text-gray-900">{exhibitor.yearsInOperation.toFixed(1)} años</span>. Cada vez que cambia una campaña, el material vuelve a usarse.
-            </p>
-            <p className="text-xs text-gray-600 pt-1 border-t border-emerald-200">
-              <span className="font-medium text-gray-700">¿Cómo funciona?</span> Cuando termina una campaña, recogemos los gráficos y los reciclamos. Ese material se convierte en nuevos gráficos o en exhibidores nuevos. Así se usa una y otra vez.
-            </p>
+          </div>
+          <div className="text-right">
+            <div className="text-3xl font-bold">-{stats.netBalance.toFixed(0)}</div>
+            <div className="text-emerald-100 text-xs">kg CO₂ ahorrados</div>
           </div>
         </div>
       </div>
@@ -316,7 +319,7 @@ export default function TrazabilidadDetalle() {
                 <div className="space-y-6">
                   {/* Fotos del proceso */}
                   <div className="text-center mb-4">
-                    <h3 className="text-lg font-medium text-gray-600">Fotos del Ciclo 23 - {exhibitor.currentGraphic.campaign}</h3>
+                    <h3 className="text-lg font-medium text-gray-600">Fotos del Ciclo {stats.totalCycles} - {exhibitor.currentGraphic.campaign}</h3>
                     <p className="text-sm text-gray-500">Evidencia fotográfica de la producción actual</p>
                   </div>
                   
@@ -441,26 +444,28 @@ export default function TrazabilidadDetalle() {
         {/* Sidebar */}
         <div className="lg:col-span-1 space-y-4">
           <div className="bg-white rounded-xl border border-gray-200 p-4">
-            <h3 className="text-sm font-medium text-gray-700 mb-3">¿Dónde está?</h3>
-            <div className="space-y-3 text-sm">
-              <div className="flex items-start space-x-2">
-                <MapPin className="w-4 h-4 text-gray-400 mt-0.5" />
-                <div>
-                  <div className="text-gray-700">{exhibitor.location.store}</div>
-                  <div className="text-xs text-gray-400">{exhibitor.location.city}</div>
-                </div>
+            <h3 className="text-sm font-medium text-gray-700 mb-3">Cliente</h3>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
+                <Package className="w-6 h-6 text-emerald-600" />
               </div>
-              <div className="flex items-center space-x-2">
-                <Calendar className="w-4 h-4 text-gray-400" />
-                <span className="text-gray-600">Desde {exhibitor.manufactureDate}</span>
+              <div>
+                <div className="font-semibold text-gray-800">{exhibitor.currentGraphic.client}</div>
+                <div className="text-xs text-gray-500">{exhibitor.currentGraphic.campaign}</div>
               </div>
-              <div className="flex items-center space-x-2">
-                <Package className="w-4 h-4 text-gray-400" />
-                <span className="text-gray-600">{exhibitor.recycledContent}% es reciclado</span>
+            </div>
+            <div className="space-y-2 text-sm pt-3 border-t border-gray-100">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-500">Modelo</span>
+                <span className="text-gray-700">{exhibitor.model}</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Palette className="w-4 h-4 text-gray-400" />
-                <span className="text-gray-600 truncate text-xs">{exhibitor.currentGraphic.campaign}</span>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-500">Contenido reciclado</span>
+                <span className="text-emerald-600 font-medium">{exhibitor.recycledContent}%</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-500">En operación desde</span>
+                <span className="text-gray-700">{new Date(exhibitor.manufactureDate).getFullYear()}</span>
               </div>
             </div>
           </div>

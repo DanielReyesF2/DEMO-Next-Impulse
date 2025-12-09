@@ -156,38 +156,70 @@ export function CycleTimeline({ cycles, selectedCycleNumber }: CycleTimelineProp
                 {/* Detalle expandido */}
                 {isExpanded && (
                   <div className="px-4 pb-4 pt-0">
-                    <div className="grid grid-cols-2 gap-4 p-3 bg-white rounded-lg border border-gray-100">
-                      {/* De dónde viene */}
+                    <div className="p-3 bg-white rounded-lg border border-gray-100 space-y-3">
+                      {/* Composición del material */}
                       <div>
-                        <div className="text-xs font-medium text-gray-500 mb-1">📥 ¿De dónde vino?</div>
+                        <div className="text-xs font-medium text-gray-500 mb-2">📥 Composición del material</div>
                         {cycle.sourceFromLotId ? (
-                          <div className="text-sm text-gray-700">
-                            <span className="font-semibold">{cycle.materialRecovered} kg</span> del reciclaje anterior
-                            <div className="text-xs text-gray-400 font-mono">{cycle.sourceFromLotId}</div>
+                          <div className="space-y-1">
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-gray-600">Del ciclo anterior:</span>
+                              <span className="font-semibold text-emerald-600">{cycle.materialRecovered} kg</span>
+                            </div>
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-gray-600">Material virgen (ajuste):</span>
+                              <span className="font-medium text-blue-600">{(cycle.weight - cycle.materialRecovered).toFixed(1)} kg</span>
+                            </div>
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-gray-600">Master Batch (1%):</span>
+                              <span className="font-medium text-purple-600">{(cycle.weight * 0.01).toFixed(1)} kg</span>
+                            </div>
+                            <div className="text-xs text-gray-400 font-mono mt-1">Origen: {cycle.sourceFromLotId}</div>
                           </div>
                         ) : (
-                          <div className="text-sm text-amber-600">Era el material inicial</div>
+                          <div className="space-y-1">
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-gray-600">Material inicial (residuos):</span>
+                              <span className="font-semibold text-amber-600">{cycle.weight.toFixed(1)} kg</span>
+                            </div>
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-gray-600">Master Batch (1%):</span>
+                              <span className="font-medium text-purple-600">{(cycle.weight * 0.01).toFixed(1)} kg</span>
+                            </div>
+                            <div className="text-xs text-amber-500 mt-1">⭐ Primer ciclo - origen del exhibidor</div>
+                          </div>
                         )}
                       </div>
                       
                       {/* A dónde va */}
-                      <div>
-                        <div className="text-xs font-medium text-gray-500 mb-1">📤 ¿A dónde fue?</div>
+                      <div className="pt-2 border-t border-gray-100">
+                        <div className="text-xs font-medium text-gray-500 mb-2">📤 ¿A dónde fue?</div>
                         {cycle.recycledInto ? (
-                          <div className="text-sm text-gray-700">
-                            <span className="font-semibold">{cycle.materialSent} kg</span> → {cycle.recycledInto === 'graphic' ? 'Gráficos nuevos' : 'Exhibidor nuevo'}
-                            <div className="text-xs text-gray-400 font-mono">{cycle.recycledToLotId}</div>
+                          <div className="flex items-center gap-3">
+                            <img 
+                              src="/images/jarritos/produccion-planta.jpg" 
+                              alt="Producto" 
+                              className="w-12 h-12 rounded-lg object-cover border border-gray-200"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.style.display = 'none';
+                              }}
+                            />
+                            <div className="text-sm text-gray-700">
+                              <span className="font-semibold">{cycle.materialSent} kg</span> → {cycle.recycledInto === 'graphic' ? 'Nuevos gráficos' : 'Nuevo exhibidor'}
+                              <div className="text-xs text-gray-400 font-mono">{cycle.recycledToLotId}</div>
+                            </div>
                           </div>
                         ) : (
-                          <div className="text-sm text-amber-600">Todavía está en uso</div>
+                          <div className="text-sm text-amber-600 font-medium">🔄 Actualmente en uso</div>
                         )}
                       </div>
                       
                       {/* Impacto */}
-                      <div className="col-span-2 pt-2 border-t border-gray-100">
+                      <div className="pt-2 border-t border-gray-100">
                         <div className="flex items-center justify-between text-sm">
-                          <span className="text-gray-500">Lo que ahorraste:</span>
-                          <span className="font-semibold text-emerald-600">-{cycle.savingsVsVirgin.toFixed(1)} kg CO₂</span>
+                          <span className="text-gray-500">CO₂ evitado este ciclo:</span>
+                          <span className="font-bold text-emerald-600">-{cycle.savingsVsVirgin.toFixed(1)} kg</span>
                         </div>
                       </div>
                     </div>

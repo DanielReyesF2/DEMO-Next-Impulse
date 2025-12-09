@@ -54,94 +54,93 @@ export default function Dashboard() {
 
       {/* KPIs principales - 2 filas */}
       <div data-tour="dashboard-kpis" className="grid grid-cols-4 gap-4 mb-6">
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <div className="flex items-center justify-between mb-2">
-            <Package className="w-5 h-5 text-emerald-500" />
-            <span className="text-xs text-emerald-600 flex items-center"><TrendingUp className="w-3 h-3 mr-1" />+2 este año</span>
-            </div>
-          <div className="text-2xl font-semibold text-gray-700">{totalExhibitors}</div>
-          <div className="text-xs text-gray-500">Exhibidores</div>
+        <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <div className="flex items-center justify-between mb-3">
+            <Package className="w-6 h-6 text-emerald-500" />
+            <span className="text-xs text-emerald-600 flex items-center"><TrendingUp className="w-3 h-3 mr-1" />+1 este año</span>
           </div>
+          <div className="text-3xl font-bold text-gray-800">{totalExhibitors}</div>
+          <div className="text-sm text-gray-500 mt-1">Exhibidores activos</div>
+        </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <div className="flex items-center justify-between mb-2">
-            <Recycle className="w-5 h-5 text-blue-500" />
+        <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <div className="flex items-center justify-between mb-3">
+            <Recycle className="w-6 h-6 text-blue-500" />
             <span className="text-xs text-emerald-600 flex items-center"><TrendingUp className="w-3 h-3 mr-1" />+23%</span>
-                  </div>
-          <div className="text-2xl font-semibold text-gray-700">{totalGraphicsRecycled}</div>
-          <div className="text-xs text-gray-500">Veces que reciclaste (2024)</div>
-                  </div>
+          </div>
+          <div className="text-3xl font-bold text-gray-800">{totalCycles}</div>
+          <div className="text-sm text-gray-500 mt-1">Veces reciclado (total)</div>
+        </div>
         
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <div className="flex items-center justify-between mb-2">
-            <Clock className="w-5 h-5 text-purple-500" />
-                </div>
-          <div className="text-2xl font-semibold text-gray-700">{avgCyclesPerExhibitor}</div>
-          <div className="text-xs text-gray-500">Promedio por exhibidor</div>
-              </div>
+        <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <div className="flex items-center justify-between mb-3">
+            <Clock className="w-6 h-6 text-purple-500" />
+          </div>
+          <div className="text-3xl font-bold text-gray-800">{avgCyclesPerExhibitor}</div>
+          <div className="text-sm text-gray-500 mt-1">Ciclos promedio</div>
+        </div>
         
-        <div className="bg-emerald-50 rounded-xl border border-emerald-200 p-4">
-          <div className="flex items-center justify-between mb-2">
-            <Leaf className="w-5 h-5 text-emerald-600" />
-            <span className="text-xs text-emerald-600">-{emissionsSavings}% vs sin reciclar</span>
-                  </div>
-          <div className="text-2xl font-bold text-emerald-600">-{Math.abs(emissions.netBalance).toFixed(0)} kg</div>
-          <div className="text-xs text-gray-500">CO₂ que ahorraste</div>
-                </div>
-              </div>
+        <div className="bg-emerald-50 rounded-xl border border-emerald-200 p-5">
+          <div className="flex items-center justify-between mb-3">
+            <Leaf className="w-6 h-6 text-emerald-600" />
+            <span className="text-xs text-emerald-600 font-medium">-{emissionsSavings}% vs tradicional</span>
+          </div>
+          <div className="text-3xl font-bold text-emerald-600">-{Math.abs(emissions.netBalance).toFixed(0)}</div>
+          <div className="text-sm text-gray-500 mt-1">kg CO₂ ahorrados</div>
+        </div>
+      </div>
 
       {/* IMPACTO AMBIENTAL EN TIEMPO REAL - Nueva sección */}
       <div data-tour="dashboard-impacto" className="bg-gradient-to-br from-emerald-50 to-blue-50 rounded-xl border border-emerald-200 p-6 mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-emerald-800">🌍 Lo que has logrado - {company}</h3>
-          <span className="text-xs text-emerald-600 bg-emerald-100 px-2 py-1 rounded-full">En tiempo real</span>
-                  </div>
+          <h3 className="text-base font-semibold text-emerald-800">🌍 Tu impacto ambiental</h3>
+          <span className="text-xs text-emerald-600 bg-emerald-100 px-2 py-1 rounded-full">Tiempo real</span>
+        </div>
         
         <div className="grid grid-cols-6 gap-4">
           <div className="bg-white rounded-lg p-4 text-center shadow-sm">
-            <Leaf className="w-6 h-6 mx-auto mb-2 text-emerald-600" />
-            <div className="text-xl font-bold text-emerald-600">{co2Avoided}</div>
-            <div className="text-xs text-gray-500">kg CO₂ no emitidos</div>
-              </div>
+            <Leaf className="w-7 h-7 mx-auto mb-2 text-emerald-600" />
+            <div className="text-2xl font-bold text-emerald-600">{co2Avoided}</div>
+            <div className="text-sm text-gray-500">kg CO₂ evitados</div>
+          </div>
           
           <div className="bg-white rounded-lg p-4 text-center shadow-sm">
-            <Droplets className="w-6 h-6 mx-auto mb-2 text-blue-500" />
-            <div className="text-xl font-bold text-blue-600">{waterSaved.toLocaleString()}</div>
-            <div className="text-xs text-gray-500">litros agua ahorrados</div>
+            <Droplets className="w-7 h-7 mx-auto mb-2 text-blue-500" />
+            <div className="text-2xl font-bold text-blue-600">{waterSaved.toLocaleString()}</div>
+            <div className="text-sm text-gray-500">litros agua</div>
           </div>
 
           <div className="bg-white rounded-lg p-4 text-center shadow-sm">
-            <Zap className="w-6 h-6 mx-auto mb-2 text-yellow-500" />
-            <div className="text-xl font-bold text-yellow-600">{energySaved.toLocaleString()}</div>
-            <div className="text-xs text-gray-500">kWh energía ahorrada</div>
+            <Zap className="w-7 h-7 mx-auto mb-2 text-yellow-500" />
+            <div className="text-2xl font-bold text-yellow-600">{energySaved.toLocaleString()}</div>
+            <div className="text-sm text-gray-500">kWh energía</div>
           </div>
 
           <div className="bg-white rounded-lg p-4 text-center shadow-sm">
-            <TreePine className="w-6 h-6 mx-auto mb-2 text-green-600" />
-            <div className="text-xl font-bold text-green-600">{treesEquivalent}</div>
-            <div className="text-xs text-gray-500">árboles plantados</div>
-              </div>
+            <TreePine className="w-7 h-7 mx-auto mb-2 text-green-600" />
+            <div className="text-2xl font-bold text-green-600">{treesEquivalent}</div>
+            <div className="text-sm text-gray-500">árboles equiv.</div>
+          </div>
               
           <div className="bg-white rounded-lg p-4 text-center shadow-sm">
-            <Car className="w-6 h-6 mx-auto mb-2 text-gray-600" />
-            <div className="text-xl font-bold text-gray-700">{kmCarAvoided.toLocaleString()}</div>
-            <div className="text-xs text-gray-500">km de auto evitados</div>
-                        </div>
+            <Car className="w-7 h-7 mx-auto mb-2 text-gray-600" />
+            <div className="text-2xl font-bold text-gray-700">{kmCarAvoided.toLocaleString()}</div>
+            <div className="text-sm text-gray-500">km no recorridos</div>
+          </div>
                         
           <div className="bg-white rounded-lg p-4 text-center shadow-sm">
-            <Factory className="w-6 h-6 mx-auto mb-2 text-purple-500" />
-            <div className="text-xl font-bold text-purple-600">{plasticDiverted}</div>
-            <div className="text-xs text-gray-500">kg plástico reciclado</div>
-                          </div>
-                        </div>
+            <Factory className="w-7 h-7 mx-auto mb-2 text-purple-500" />
+            <div className="text-2xl font-bold text-purple-600">{plasticDiverted}</div>
+            <div className="text-sm text-gray-500">kg reciclados</div>
+          </div>
+        </div>
                         
         <div className="mt-4 text-center">
-          <p className="text-xs text-gray-500">
-            Es como si <span className="font-medium text-emerald-700">{treesEquivalent} árboles</span> absorbieran CO₂ por 1 año, 
-            {' '}o <span className="font-medium text-blue-700">{kmCarAvoided.toLocaleString()} km</span> que un auto dejó de recorrer
+          <p className="text-sm text-gray-600">
+            Equivale a <span className="font-semibold text-emerald-700">{treesEquivalent} árboles</span> absorbiendo CO₂ por 1 año
           </p>
-                          </div>
-                        </div>
+        </div>
+      </div>
                         
       {/* Comparativa + Gráfico */}
       <div data-tour="dashboard-comparativa" className="grid grid-cols-2 gap-6 mb-6">

@@ -72,6 +72,7 @@ export interface Exhibitor {
   graphicChanges: number;
   graphicHistory: GraphicCycle[];
   condition: 'excellent' | 'good' | 'fair';
+  status: 'active' | 'transit' | 'maintenance';
   recycledContent: number;
   capacityPerShelf: number;
   clientOwner: string;
@@ -114,58 +115,42 @@ const exhibitorLocations: Location[] = [
   { store: "OXXO Reforma", address: "Paseo de la Reforma 222", city: "CDMX" },
 ];
 
-// Generar los 23 ciclos completos para EXH-EGO-001 con storytelling
+// Generar los 15 ciclos para EXH-EGO-001 (Jarritos) con storytelling
 function generateCompleteGraphicHistory(exhibitorId: string): GraphicCycle[] {
   const cycles: GraphicCycle[] = [];
   
-  // Definir los 23 ciclos específicos del exhibidor EXH-EGO-001
+  // Definir los 15 ciclos específicos del exhibidor EXH-EGO-001
   const cycleData = [
-    // Ciclo 1: Lanzamiento (Mar-May 2019)
-    { campaign: "Lanzamiento 4R PLANET", start: "2019-03-15", end: "2019-05-31", location: 0, recycledInto: "graphic" as const },
-    // Ciclo 2: Verano 2019 (Jun-Ago 2019)
-    { campaign: "Verano EGO 2019", start: "2019-06-01", end: "2019-08-15", location: 0, recycledInto: "exhibitor" as const },
-    // Ciclo 3: Back to School 2019 (Ago-Oct 2019)
-    { campaign: "Back to School 2019", start: "2019-08-16", end: "2019-10-31", location: 1, recycledInto: "graphic" as const },
-    // Ciclo 4: Navidad 2019 (Nov-Dic 2019)
-    { campaign: "Navidad EGO 2019", start: "2019-11-01", end: "2019-12-31", location: 1, recycledInto: "exhibitor" as const },
-    // Ciclo 5: Año Nuevo 2020 (Ene-Feb 2020)
-    { campaign: "Año Nuevo EGO 2020", start: "2020-01-01", end: "2020-02-28", location: 1, recycledInto: "graphic" as const },
-    // Ciclo 6: Primavera 2020 (Mar-May 2020)
-    { campaign: "Primavera EGO 2020", start: "2020-03-01", end: "2020-05-15", location: 2, recycledInto: "graphic" as const },
-    // Ciclo 7: Verano 2020 (Jun-Ago 2020)
-    { campaign: "Verano EGO 2020", start: "2020-06-01", end: "2020-08-15", location: 2, recycledInto: "exhibitor" as const },
-    // Ciclo 8: Back to School 2020 (Ago-Oct 2020)
-    { campaign: "Back to School 2020", start: "2020-08-16", end: "2020-10-31", location: 0, recycledInto: "graphic" as const },
-    // Ciclo 9: Navidad 2020 (Nov-Dic 2020)
-    { campaign: "Navidad EGO 2020", start: "2020-11-01", end: "2020-12-31", location: 0, recycledInto: "graphic" as const },
-    // Ciclo 10: Año Nuevo 2021 (Ene-Feb 2021)
-    { campaign: "Año Nuevo EGO 2021", start: "2021-01-01", end: "2021-02-28", location: 0, recycledInto: "exhibitor" as const },
-    // Ciclo 11: Día de las Madres 2021 (Abr-May 2021)
-    { campaign: "Día de las Madres 2021", start: "2021-04-01", end: "2021-05-31", location: 3, recycledInto: "graphic" as const },
-    // Ciclo 12: Verano 2021 (Jun-Ago 2021)
-    { campaign: "Verano EGO 2021", start: "2021-06-01", end: "2021-08-15", location: 3, recycledInto: "graphic" as const },
-    // Ciclo 13: Back to School 2021 (Ago-Oct 2021)
-    { campaign: "Back to School 2021", start: "2021-08-16", end: "2021-10-31", location: 0, recycledInto: "exhibitor" as const },
-    // Ciclo 14: Navidad 2021 (Nov-Dic 2021)
-    { campaign: "Navidad EGO 2021", start: "2021-11-01", end: "2021-12-31", location: 0, recycledInto: "graphic" as const },
-    // Ciclo 15: Año Nuevo 2022 (Ene-Feb 2022)
-    { campaign: "Año Nuevo EGO 2022", start: "2022-01-01", end: "2022-02-28", location: 0, recycledInto: "graphic" as const },
-    // Ciclo 16: Primavera 2022 (Mar-May 2022)
-    { campaign: "Primavera EGO 2022", start: "2022-03-01", end: "2022-05-15", location: 4, recycledInto: "exhibitor" as const },
-    // Ciclo 17: Verano 2022 (Jun-Ago 2022)
-    { campaign: "Verano EGO 2022", start: "2022-06-01", end: "2022-08-15", location: 4, recycledInto: "graphic" as const },
-    // Ciclo 18: Back to School 2022 (Ago-Oct 2022)
+    // Ciclo 1: Lanzamiento (Mar-May 2021)
+    { campaign: "Lanzamiento 4R PLANET", start: "2021-03-15", end: "2021-05-31", location: 0, recycledInto: "graphic" as const },
+    // Ciclo 2: Verano 2021 (Jun-Ago 2021)
+    { campaign: "Verano EGO 2021", start: "2021-06-01", end: "2021-08-15", location: 0, recycledInto: "exhibitor" as const },
+    // Ciclo 3: Back to School 2021 (Ago-Oct 2021)
+    { campaign: "Back to School 2021", start: "2021-08-16", end: "2021-10-31", location: 1, recycledInto: "graphic" as const },
+    // Ciclo 4: Navidad 2021 (Nov-Dic 2021)
+    { campaign: "Navidad EGO 2021", start: "2021-11-01", end: "2021-12-31", location: 1, recycledInto: "exhibitor" as const },
+    // Ciclo 5: Año Nuevo 2022 (Ene-Mar 2022)
+    { campaign: "Año Nuevo EGO 2022", start: "2022-01-01", end: "2022-03-15", location: 1, recycledInto: "graphic" as const },
+    // Ciclo 6: Primavera 2022 (Mar-May 2022)
+    { campaign: "Primavera EGO 2022", start: "2022-03-16", end: "2022-05-31", location: 2, recycledInto: "graphic" as const },
+    // Ciclo 7: Verano 2022 (Jun-Ago 2022)
+    { campaign: "Verano EGO 2022", start: "2022-06-01", end: "2022-08-15", location: 2, recycledInto: "exhibitor" as const },
+    // Ciclo 8: Back to School 2022 (Ago-Oct 2022)
     { campaign: "Back to School 2022", start: "2022-08-16", end: "2022-10-31", location: 0, recycledInto: "graphic" as const },
-    // Ciclo 19: Navidad 2022 (Nov-Dic 2022)
-    { campaign: "Navidad EGO 2022", start: "2022-11-01", end: "2022-12-31", location: 0, recycledInto: "exhibitor" as const },
-    // Ciclo 20: Primavera 2023 (Mar-May 2023)
-    { campaign: "Primavera EGO 2023", start: "2023-03-01", end: "2023-05-15", location: 0, recycledInto: "graphic" as const },
-    // Ciclo 21: Verano 2023 (Jun-Ago 2023)
-    { campaign: "Verano EGO 2023", start: "2023-06-01", end: "2023-08-15", location: 0, recycledInto: "graphic" as const },
-    // Ciclo 22: Back to School 2023 (Ago-Oct 2023)
-    { campaign: "Back to School 2023", start: "2023-08-16", end: "2023-10-31", location: 0, recycledInto: "exhibitor" as const },
-    // Ciclo 23: Navidad 2024 (Nov 2024 - Actual)
-    { campaign: "Navidad EGO 2024", start: "2024-11-01", end: null, location: 0, recycledInto: null },
+    // Ciclo 9: Navidad 2022 (Nov-Dic 2022)
+    { campaign: "Navidad EGO 2022", start: "2022-11-01", end: "2022-12-31", location: 0, recycledInto: "graphic" as const },
+    // Ciclo 10: Primavera 2023 (Mar-May 2023)
+    { campaign: "Primavera EGO 2023", start: "2023-03-01", end: "2023-05-31", location: 0, recycledInto: "exhibitor" as const },
+    // Ciclo 11: Verano 2023 (Jun-Ago 2023)
+    { campaign: "Verano EGO 2023", start: "2023-06-01", end: "2023-08-15", location: 3, recycledInto: "graphic" as const },
+    // Ciclo 12: Back to School 2023 (Ago-Oct 2023)
+    { campaign: "Back to School 2023", start: "2023-08-16", end: "2023-10-31", location: 3, recycledInto: "graphic" as const },
+    // Ciclo 13: Navidad 2023 (Nov-Dic 2023)
+    { campaign: "Navidad EGO 2023", start: "2023-11-01", end: "2023-12-31", location: 0, recycledInto: "exhibitor" as const },
+    // Ciclo 14: Primavera 2024 (Mar-Oct 2024)
+    { campaign: "Primavera EGO 2024", start: "2024-03-01", end: "2024-10-31", location: 0, recycledInto: "graphic" as const },
+    // Ciclo 15: Jarritos 2025 (Dic 2024 - Actual)
+    { campaign: "Jarritos 2025", start: "2024-12-01", end: null, location: 0, recycledInto: null },
   ];
 
   // Primera pasada: crear ciclos base
@@ -219,29 +204,30 @@ function generateCompleteGraphicHistory(exhibitorId: string): GraphicCycle[] {
 }
 
 // Cliente actual del portal
+// Total ciclos: 15 + 7 + 5 + 3 = 30 ciclos
 export const CURRENT_CLIENT: ClientData = {
   company: "EGO",
   industry: "Consumo / Cuidado Personal",
-  totalExhibitors: 23,
-  totalGraphicsRecycled: 156,
-  avgExhibitorAge: 4.2,
+  totalExhibitors: 4,
+  totalGraphicsRecycled: 30,
+  avgExhibitorAge: 2.8,
   emissions: {
-    generated: 42.8,
-    avoided: 385.5,
-    netBalance: -342.7,
+    generated: 18.5,
+    avoided: 165.0,
+    netBalance: -146.5,
   },
   comparison: {
-    traditionalEmissions: 1250,
-    traditionalCost: 185000,
-    traditionalWaste: 385,
-    circularEmissions: 42.8,
-    circularCost: 42000,
+    traditionalEmissions: 540,
+    traditionalCost: 78000,
+    traditionalWaste: 165,
+    circularEmissions: 18.5,
+    circularCost: 18000,
     circularWaste: 0,
   },
   materials: {
-    totalKg: 385,
-    recycledKg: 327,
-    virginKg: 58,
+    totalKg: 165,
+    recycledKg: 140,
+    virginKg: 25,
   }
 };
 
@@ -335,17 +321,18 @@ export const egoExhibitors: Exhibitor[] = [
       address: "Av. Ejército Nacional 843-B",
       city: "CDMX"
     },
-    manufactureDate: "2019-03-15",
-    yearsInOperation: 5.9,
+    manufactureDate: "2021-03-15",
+    yearsInOperation: 3.8,
     currentGraphic: {
       campaign: "Jarritos 2025",
       installedDate: "2024-12-01",
       client: "Jarritos",
       brand: "Jarritos"
     },
-    graphicChanges: 23,
+    graphicChanges: 15,
     graphicHistory: exh001GraphicHistory,
     condition: "excellent",
+    status: "active",
     recycledContent: 60,
     capacityPerShelf: 60,
     clientOwner: "EGO",
@@ -396,17 +383,18 @@ export const egoExhibitors: Exhibitor[] = [
       address: "Paseo de la Reforma 222",
       city: "CDMX"
     },
-    manufactureDate: "2020-06-10",
-    yearsInOperation: 4.5,
+    manufactureDate: "2022-06-10",
+    yearsInOperation: 2.5,
     currentGraphic: {
       campaign: "Navidad EGO 2024",
       installedDate: "2024-11-01",
       client: "EGO",
       brand: "EGO"
     },
-    graphicChanges: 18,
-    graphicHistory: generateGraphicHistoryForExhibitor("EXH-EGO-002", 18, "2020-06-10"),
+    graphicChanges: 7,
+    graphicHistory: generateGraphicHistoryForExhibitor("EXH-EGO-002", 7, "2022-06-10"),
     condition: "excellent",
+    status: "active",
     recycledContent: 60,
     capacityPerShelf: 60,
     clientOwner: "EGO"
@@ -420,17 +408,18 @@ export const egoExhibitors: Exhibitor[] = [
       address: "Blvd. Interlomas 5",
       city: "Huixquilucan"
     },
-    manufactureDate: "2021-01-20",
-    yearsInOperation: 3.9,
+    manufactureDate: "2023-01-20",
+    yearsInOperation: 1.9,
     currentGraphic: {
       campaign: "Navidad EGO 2024",
       installedDate: "2024-11-01",
       client: "EGO",
       brand: "EGO"
     },
-    graphicChanges: 15,
-    graphicHistory: generateGraphicHistoryForExhibitor("EXH-EGO-003", 15, "2021-01-20"),
-    condition: "good",
+    graphicChanges: 5,
+    graphicHistory: generateGraphicHistoryForExhibitor("EXH-EGO-003", 5, "2023-01-20"),
+    condition: "excellent",
+    status: "active",
     recycledContent: 60,
     capacityPerShelf: 60,
     clientOwner: "EGO"
@@ -444,41 +433,18 @@ export const egoExhibitors: Exhibitor[] = [
       address: "Anillo Periférico 4690",
       city: "CDMX"
     },
-    manufactureDate: "2019-08-05",
-    yearsInOperation: 5.4,
+    manufactureDate: "2024-03-05",
+    yearsInOperation: 0.8,
     currentGraphic: {
       campaign: "Holiday Season 2024",
       installedDate: "2024-11-15",
       client: "EGO",
       brand: "EGO"
     },
-    graphicChanges: 21,
-    graphicHistory: generateGraphicHistoryForExhibitor("EXH-EGO-004", 21, "2019-08-05"),
+    graphicChanges: 3,
+    graphicHistory: generateGraphicHistoryForExhibitor("EXH-EGO-004", 3, "2024-03-05"),
     condition: "excellent",
-    recycledContent: 60,
-    capacityPerShelf: 60,
-    clientOwner: "EGO"
-  },
-  {
-    id: "EXH-EGO-005",
-    model: "4R PLANET Trailer",
-    dimensions: "Temático",
-    location: {
-      store: "Chedraui Coyoacán",
-      address: "Av. Coyoacán 1234",
-      city: "CDMX"
-    },
-    manufactureDate: "2022-03-10",
-    yearsInOperation: 2.8,
-    currentGraphic: {
-      campaign: "Navidad EGO 2024",
-      installedDate: "2024-11-01",
-      client: "EGO",
-      brand: "EGO"
-    },
-    graphicChanges: 11,
-    graphicHistory: generateGraphicHistoryForExhibitor("EXH-EGO-005", 11, "2022-03-10"),
-    condition: "excellent",
+    status: "active",
     recycledContent: 60,
     capacityPerShelf: 60,
     clientOwner: "EGO"
