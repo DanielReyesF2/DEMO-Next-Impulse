@@ -1,7 +1,7 @@
 // Definición de los flujos de tour para el walkthrough
 // OBJETIVO: ~3 minutos de exploración interactiva
 
-export type TourFlowType = 'reports' | 'traceability' | 'impact';
+export type TourFlowType = 'reports' | 'traceability' | 'impact' | 'fullDemo';
 
 export interface TourStep {
   element?: string; // data-tour selector
@@ -23,7 +23,115 @@ export interface TourFlow {
   steps: TourStep[];
 }
 
+// Tour completo inmersivo (3 min) - Se inicia desde el botón "Demo Guiado"
+export const fullDemoTour: TourFlow = {
+  id: 'fullDemo',
+  name: 'Recorrido Completo',
+  description: 'Te mostramos todo en 3 minutos',
+  icon: 'Play',
+  steps: [
+    // ACTO 1: Dashboard - El panorama
+    {
+      navigateTo: '/',
+      delay: 700,
+      element: '[data-tour="dashboard-header"]',
+      popover: {
+        title: 'Tu resumen de impacto',
+        description: 'Aquí ves todo tu programa de un vistazo.',
+        side: 'bottom',
+      },
+    },
+    {
+      element: '[data-tour="dashboard-kpis"]',
+      popover: {
+        title: '4 exhibidores, 30 ciclos',
+        description: 'Tus exhibidores en tiendas y las veces que se han reciclado.',
+        side: 'bottom',
+      },
+    },
+    {
+      element: '[data-tour="dashboard-impacto"]',
+      popover: {
+        title: '-9 toneladas de CO₂',
+        description: 'Todo esto no llegó al aire gracias al reciclaje.',
+        side: 'top',
+      },
+    },
+    // ACTO 2: Trazabilidad - Cómo funciona
+    {
+      navigateTo: '/trazabilidad',
+      delay: 900,
+      element: '[data-tour="trazabilidad-header"]',
+      popover: {
+        title: 'Ahora veamos cómo funciona',
+        description: 'Tenemos dos flujos que trabajan juntos.',
+        side: 'bottom',
+      },
+    },
+    {
+      element: '[data-tour="flujo-exhibidores"]',
+      popover: {
+        title: 'El exhibidor es la estructura',
+        description: 'Dura años en la tienda. No se tira, se reutiliza.',
+        side: 'right',
+      },
+    },
+    {
+      element: '[data-tour="flujo-graficos"]',
+      popover: {
+        title: 'El gráfico es lo que se ve',
+        description: 'Se cambia cada campaña con tu marca.',
+        side: 'left',
+      },
+    },
+    {
+      element: '[data-tour="timeline-ciclo"]',
+      popover: {
+        title: '¿Y el gráfico viejo?',
+        description: 'Lo recogemos → lo reciclamos → vuelve como uno nuevo.',
+        side: 'top',
+      },
+    },
+    // ACTO 3: Detalle de un exhibidor
+    {
+      navigateTo: '/trazabilidad/EXH-EGO-001',
+      delay: 1000,
+      element: '[data-tour="trazabilidad-banner"]',
+      popover: {
+        title: 'Mira este exhibidor',
+        description: 'Ya se recicló 15 veces. Cada vez el material regresó.',
+        side: 'bottom',
+      },
+    },
+    {
+      element: '[data-tour="trazabilidad-espiral"]',
+      popover: {
+        title: 'Cada círculo es un ciclo',
+        description: 'Verde = gráfico nuevo. Azul = exhibidor nuevo.',
+        side: 'left',
+      },
+    },
+    {
+      element: '[data-tour="trazabilidad-stats"]',
+      popover: {
+        title: '-4,727 kg de CO₂ evitados',
+        description: 'Como si un carro no manejara 19,000 km.',
+        side: 'right',
+      },
+    },
+    // Final
+    {
+      popover: {
+        title: '¡Eso es todo!',
+        description: 'Ya conoces tu portal. ¿Qué quieres hacer ahora?',
+        side: 'bottom',
+      },
+    },
+  ],
+};
+
 export const tourFlows: TourFlow[] = [
+  fullDemoTour,
   {
     id: 'reports',
     name: 'Generar Reporte',

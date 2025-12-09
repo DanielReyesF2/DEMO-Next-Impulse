@@ -155,7 +155,7 @@ export default function Trazabilidad() {
             {activeTab === 'overview' && (
               <>
                 {/* Header con título y KPIs compactos */}
-                <div className="mb-8">
+                <div className="mb-8" data-tour="trazabilidad-header">
                   <div className="flex items-center justify-between mb-6">
                     <div>
                       <h1 className="text-2xl font-bold text-gray-800">¿Cómo funciona nuestro sistema de trazabilidad?</h1>
@@ -187,7 +187,7 @@ export default function Trazabilidad() {
                   {/* Los dos flujos principales */}
                   <div className="grid grid-cols-2 gap-6 mb-8">
                     {/* Flujo 1: Exhibidores */}
-                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-200">
+                    <div data-tour="flujo-exhibidores" className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-200">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="w-12 h-12 rounded-xl bg-blue-500 flex items-center justify-center">
                           <Package className="w-6 h-6 text-white" />
@@ -218,7 +218,7 @@ export default function Trazabilidad() {
                     </div>
 
                     {/* Flujo 2: Gráficos */}
-                    <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl p-5 border border-emerald-200">
+                    <div data-tour="flujo-graficos" className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl p-5 border border-emerald-200">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="w-12 h-12 rounded-xl bg-emerald-500 flex items-center justify-center">
                           <Recycle className="w-6 h-6 text-white" />
@@ -250,7 +250,7 @@ export default function Trazabilidad() {
                   </div>
 
                   {/* Timeline visual del ciclo */}
-                  <div className="bg-gray-50 rounded-xl p-6">
+                  <div data-tour="timeline-ciclo" className="bg-gray-50 rounded-xl p-6">
                     <h3 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
                       <RefreshCw className="w-5 h-5 text-emerald-600" />
                       Así funciona el ciclo de un gráfico

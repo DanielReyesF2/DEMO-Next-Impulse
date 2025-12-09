@@ -159,7 +159,7 @@ export default function TrazabilidadDetalle() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-3 space-y-6">
           {/* KPIs principales */}
-          <div className="grid grid-cols-6 gap-3">
+          <div data-tour="trazabilidad-stats" className="grid grid-cols-6 gap-3">
             <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
               <Recycle className="w-5 h-5 mx-auto mb-1 text-emerald-500" />
               <div className="text-xl font-semibold text-gray-700">{stats.totalCycles}</div>

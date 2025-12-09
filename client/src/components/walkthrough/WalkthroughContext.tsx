@@ -8,11 +8,14 @@ import { tourFlows, traceabilityDetailSteps, TourFlowType, TourStep, getFlowById
 interface WalkthroughContextType {
   isModalOpen: boolean;
   isLotSearchOpen: boolean;
+  isEndModalOpen: boolean;
   currentFlow: TourFlowType | null;
   openModal: () => void;
   closeModal: () => void;
   openLotSearch: () => void;
   closeLotSearch: () => void;
+  openEndModal: () => void;
+  closeEndModal: () => void;
   startTour: (flowId: TourFlowType, lotId?: string) => void;
   endTour: () => void;
 }
@@ -23,11 +26,14 @@ const WalkthroughContext = createContext<WalkthroughContextType | null>(null);
 const defaultContext: WalkthroughContextType = {
   isModalOpen: false,
   isLotSearchOpen: false,
+  isEndModalOpen: false,
   currentFlow: null,
   openModal: () => {},
   closeModal: () => {},
   openLotSearch: () => {},
   closeLotSearch: () => {},
+  openEndModal: () => {},
+  closeEndModal: () => {},
   startTour: () => {},
   endTour: () => {},
 };
@@ -45,6 +51,7 @@ interface WalkthroughProviderProps {
 export function WalkthroughProvider({ children }: WalkthroughProviderProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLotSearchOpen, setIsLotSearchOpen] = useState(false);
+  const [isEndModalOpen, setIsEndModalOpen] = useState(false);
   const [currentFlow, setCurrentFlow] = useState<TourFlowType | null>(null);
   const [driverInstance, setDriverInstance] = useState<Driver | null>(null);
   const [, navigate] = useLocation();
@@ -53,6 +60,8 @@ export function WalkthroughProvider({ children }: WalkthroughProviderProps) {
   const closeModal = useCallback(() => setIsModalOpen(false), []);
   const openLotSearch = useCallback(() => setIsLotSearchOpen(true), []);
   const closeLotSearch = useCallback(() => setIsLotSearchOpen(false), []);
+  const openEndModal = useCallback(() => setIsEndModalOpen(true), []);
+  const closeEndModal = useCallback(() => setIsEndModalOpen(false), []);
 
   const triggerConfetti = useCallback(() => {
     confetti({
@@ -74,6 +83,7 @@ export function WalkthroughProvider({ children }: WalkthroughProviderProps) {
   const startTour = useCallback(async (flowId: TourFlowType, lotId?: string) => {
     closeModal();
     closeLotSearch();
+    closeEndModal();
     setCurrentFlow(flowId);
 
     const flow = getFlowById(flowId);
@@ -99,16 +109,25 @@ export function WalkthroughProvider({ children }: WalkthroughProviderProps) {
         animate: true,
         smoothScroll: true,
         allowClose: true,
-        overlayColor: 'rgba(0, 0, 0, 0.7)',
-        stagePadding: 10,
-        stageRadius: 8,
+        overlayColor: 'rgba(0, 0, 0, 0.65)',
+        stagePadding: 12,
+        stageRadius: 12,
         popoverClass: 'walkthrough-popover',
         progressText: 'Paso {{current}} de {{total}}',
-        nextBtnText: 'Siguiente',
-        prevBtnText: 'Anterior',
-        doneBtnText: '¡Terminado!',
+        nextBtnText: 'Siguiente →',
+        prevBtnText: '← Anterior',
+        doneBtnText: '¡Listo!',
+        // Animaciones más suaves
+        onHighlightStarted: () => {
+          // Pequeña pausa para que se sienta más natural
+        },
         onDestroyed: () => {
-          triggerConfetti();
+          // Si es fullDemo, mostrar modal de cierre. Si no, confetti
+          if (flowId === 'fullDemo') {
+            setIsEndModalOpen(true);
+          } else {
+            triggerConfetti();
+          }
           setCurrentFlow(null);
           setDriverInstance(null);
         },
@@ -123,8 +142,11 @@ export function WalkthroughProvider({ children }: WalkthroughProviderProps) {
               const nextStep = steps[index + 1];
               if (nextStep?.navigateTo) {
                 navigate(nextStep.navigateTo);
-                // Wait for navigation and page load
-                await new Promise(resolve => setTimeout(resolve, nextStep.delay || 300));
+                // Espera más larga para navegación + carga de página
+                await new Promise(resolve => setTimeout(resolve, nextStep.delay || 800));
+              } else {
+                // Pequeña pausa entre pasos para fluidez
+                await new Promise(resolve => setTimeout(resolve, 150));
               }
               driverObj.moveNext();
             },
@@ -146,18 +168,21 @@ export function WalkthroughProvider({ children }: WalkthroughProviderProps) {
 
     // Small delay to let modal close
     setTimeout(processSteps, 300);
-  }, [closeModal, closeLotSearch, navigate, triggerConfetti]);
+  }, [closeModal, closeLotSearch, closeEndModal, navigate, triggerConfetti]);
 
   return (
     <WalkthroughContext.Provider
       value={{
         isModalOpen,
         isLotSearchOpen,
+        isEndModalOpen,
         currentFlow,
         openModal,
         closeModal,
         openLotSearch,
         closeLotSearch,
+        openEndModal,
+        closeEndModal,
         startTour,
         endTour,
       }}

@@ -33,3 +33,4 @@ export function LotCard({ lot }: LotCardProps) {
   );
 }
 
+

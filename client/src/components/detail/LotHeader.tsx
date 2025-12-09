@@ -22,3 +22,4 @@ export function LotHeader({ lot }: LotHeaderProps) {
   );
 }
 
+

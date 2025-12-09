@@ -359,18 +359,11 @@ export const egoExhibitors: Exhibitor[] = [
       },
       {
         id: 2,
-        title: "Producción en planta",
-        description: "Charolas recién salidas de inyectora Haitian",
+        title: "Material reciclado",
+        description: "Pellets HDPE procesados listos para inyección",
         imageUrl: "/images/jarritos/produccion-planta.jpg",
         date: "Dic 2024",
-        weight: "975 gr c/u"
-      },
-      {
-        id: 3,
-        title: "Hoja de proceso",
-        description: "Especificaciones técnicas OT-90A-2025",
-        imageUrl: "/images/jarritos/hoja-proceso.jpg",
-        date: "Dic 2024"
+        weight: "7,722 kg"
       }
     ]
   },

@@ -43,3 +43,4 @@ export function ReportMetrics({ lot }: ReportMetricsProps) {
   );
 }
 
+

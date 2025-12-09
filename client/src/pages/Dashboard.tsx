@@ -47,7 +47,7 @@ export default function Dashboard() {
   return (
     <AppLayout>
       {/* Header con fecha */}
-      <div className="flex items-center justify-between mb-6">
+      <div data-tour="dashboard-header" className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-semibold text-gray-900">Tu Resumen</h1>
         <span className="text-sm text-gray-400">Actualizado: {new Date().toLocaleDateString('es-MX')}</span>
             </div>
